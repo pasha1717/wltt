@@ -1,0 +1,4 @@
+node_modules/
+cikti/
+pano*.jpg
+.env
