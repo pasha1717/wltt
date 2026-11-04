@@ -1,6 +1,6 @@
 # Sahne planı: Kalem kapağındaki delik
 
-Durum: plan onaylandı. 0-2. satırlar kodlandı, çizim dili onayı bekleniyor. Satır numaraları metin.txt satırlarıyla (c) aynı.
+Durum: plan onaylandı, bütün satırlar kodlandı. Sesli izleme ve son onay bekleniyor. Satır numaraları metin.txt satırlarıyla (c) aynı.
 
 ## Görsel dünya
 - Öğrenci masası ve kareli defter. Açıklamaları kalemin kendisi tükenmez mavisiyle deftere çizer.
