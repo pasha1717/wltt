@@ -20,7 +20,7 @@ const TABAK = {x: 540, y: 1000, r: 360};
 type Kamera = {cx: number; cy: number; s: number; fy: number};
 const DURAKLAR: {t0: number; sure: number; k: Kamera}[] = [
   {t0: an(1, 0) - 0.3, sure: 1.1, k: {cx: 540, cy: 1000, s: 1.0, fy: 900}},
-  {t0: an(2, 0) - 0.3, sure: 1.2, k: {cx: 540, cy: 280, s: 1.15, fy: 820}},
+  {t0: an(2, 0) - 0.3, sure: 1.2, k: {cx: 540, cy: -150, s: 1.15, fy: 820}},
   {t0: an(5, 0) - 0.4, sure: 1.3, k: {cx: 540, cy: 1720, s: 1.1, fy: 820}},
   {t0: an(6, 0) - 0.3, sure: 1.1, k: {cx: 540, cy: 2200, s: 1.1, fy: 820}},
   {t0: an(7, 0) - 0.4, sure: 1.4, k: {cx: 540, cy: 900, s: 1.0, fy: 860}},
@@ -121,7 +121,7 @@ const Karpuz: React.FC<{u: number}> = ({u}) => (
   </g>
 );
 const Bal = () => (
-  <g transform="translate(900,600)">
+  <g transform="translate(880,1440)">
     <rect x={-60} y={-70} width={120} height={140} rx={24} fill="#f2a31c" opacity={0.9} />
     <rect x={-66} y={-92} width={132} height={30} rx={8} fill="#8a5a2b" />
     <rect x={-40} y={-30} width={80} height={50} rx={6} fill="#fff3d6" opacity={0.8} />
@@ -151,7 +151,7 @@ const Kart: React.FC<{t: number}> = ({t}) => {
   const muhur = gir(t, an(3, 6) - 0.05, 0.25);
   const cizik = gir(t, an(4, 3) - 0.05, 0.4);
   return (
-    <g transform={`translate(${karis(-500, 540, gel)},300) rotate(-3)`}>
+    <g transform={`translate(${karis(-500, 540, gel)},-150) rotate(-3)`}>
       <rect x={-380} y={-190} width={760} height={380} rx={14} fill="#fbf6ea" stroke="#d8ccb0" strokeWidth={4} />
       <text x={-330} y={-110} fontFamily="Caladea, Georgia, serif" fontSize={120} fill="#c9b994">“</text>
       <text textAnchor="middle" fontFamily="Caladea, Georgia, serif" fontWeight={700} fill={RENK.koyu}>
@@ -218,7 +218,7 @@ const Pasta: React.FC<{t: number}> = ({t}) => {
       <circle cx={x} cy={y} r={r} fill="#b9b2a6" />
       <path d={dilim(x, y, r, 0, Math.max(0.001, 0.6 * u))} fill="#e3c36a" />
       <path d={dilim(x, y, r, 0.6, 0.6 + Math.max(0.001, 0.35 * u))} fill="#e2725b" opacity={u} />
-      <text x={x - 70} y={y + 80} textAnchor="middle" fontFamily="Caladea, Georgia, serif" fontWeight={700} fontSize={74} fill={RENK.koyu} opacity={u}>%60</text>
+      <text x={x + 95} y={y + 10} textAnchor="middle" fontFamily="Caladea, Georgia, serif" fontWeight={700} fontSize={74} fill={RENK.koyu} opacity={u}>%60</text>
     </g>
   );
 };
