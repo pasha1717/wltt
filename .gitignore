@@ -2,3 +2,5 @@ node_modules/
 cikti/
 pano*.jpg
 .env
+# Local secrets written by `elevenlabs onboard`
+/.env.local
