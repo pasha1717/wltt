@@ -15,7 +15,7 @@ Ay'ı gece lambası sanıyoruz. Oysa o, Dünya'nın dengesini tutan el. Hem de t
 
 Takip et, her gün bir "ne olurdu?" 🔁
 
-#ay #uzay #bilim #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+#ay #uzay #bilim #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
 ```
 
 ## Arılar yok olsaydı (`arilar.mp4`)
@@ -47,7 +47,7 @@ Yani her gün, fark etmeden bir yolculuk yapıyorsun. Ve bu yolculuk, hiç durmu
 
 Takip et, her gün bir "ne olurdu?" 🔁
 
-#dünya #fizik #bilim #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+#dünya #fizik #bilim #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
 ```
 
 ## Toz olmasaydı (`toz.mp4`)
@@ -527,7 +527,7 @@ Yani yazı, sadece kâğıttaki işaretler değil. Zamanı aşan bir ses.
 
 Takip et, her gün bir "ne olurdu?" 🔁
 
-#yazı #tarih #bilgi #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+#yazı #tarih #bilgi #neolurdu #bilim #keşfet #reels #ilginçbilgiler
 ```
 
 ## Sıfır olmasaydı (`sifir.mp4`)
@@ -735,5 +735,5 @@ Yani elektrik, sadece prizden gelen bir şey değil. Modern dünyanın görünme
 
 Takip et, her gün bir "ne olurdu?" 🔁
 
-#elektrik #icat #bilim #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+#elektrik #icat #bilim #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
 ```
