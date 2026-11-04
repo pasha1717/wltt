@@ -196,7 +196,7 @@ const Tahillar: React.FC<{t: number}> = ({t}) => {
         <path d="M 0 -110 Q 50 -160 40 -240 M 0 -110 Q -10 -180 20 -235" fill="none" stroke="#7fb04a" strokeWidth={10} />
       </g>
       {[0, 1, 2].map((i) => (
-        <path key={i} d={`M ${60} ${1600 + i * 70} q 120 -40 240 0 t 240 0 q 60 20 30 -40`} fill="none" stroke={RENK.krem} strokeWidth={5} strokeLinecap="round" opacity={0.7} {...ciz(gir(t, an(5, 4) + i * 0.15, 0.9), 700)} strokeDashoffset={700 * (1 - gir(t, an(5, 4) + i * 0.15, 0.9)) - ((t * 120) % 700) * ruzgar * 0} />
+        <path key={i} d={`M ${60} ${1600 + i * 70} q 120 -40 240 0 t 240 0 q 60 20 30 -40`} fill="none" stroke={RENK.krem} strokeWidth={5} strokeLinecap="round" {...ciz(gir(t, an(5, 4) + i * 0.15, 0.9), 700)} />
       ))}
     </g>
   );
