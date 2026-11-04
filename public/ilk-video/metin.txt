@@ -1,2 +1,12 @@
-[calm, warm storyteller, unhurried] Adam altı ay kuyu kazmış. Su çıkmamış.
-[pause] Çünkü suyu aşağıda değil, yanında aramalıydı.
+[curious, warm storyteller, unhurried] Kalem kapağına bu deliği bir kural açtırdı.
+[pause] Mürekkep kurumasın diye mi?
+[pause] Değil.
+[calm, serious] Çocuklar kapağı ağızlarında tutar. Bazen de yanlışlıkla yutar.
+Kapak nefes borusuna kaçarsa, yolu bir tıpa gibi kapatabilir.
+[pause] Bu yüzden uluslararası bir güvenlik standardı şart koydu:
+Çocukların kullanabileceği kalemlerde, kapaktan hava geçmeli.
+Delik bu yüzden var. Kapak takılsa bile, nefes geçebilsin diye.
+Kapak yutulamayacak kadar büyükse, delik şart bile değil.
+[slowly] Yani o minicik delik, kalem için açılmadı.
+[softly] Senin için açıldı.
+[pause] Bunu bilmeyen birine gönder.
