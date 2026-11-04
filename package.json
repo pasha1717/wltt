@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "studio": "remotion studio src/ilk-video/index.ts",
-    "render": "remotion render src/ilk-video/index.ts Video cikti/ilk-video.mp4 --concurrency=2"
+    "render": "remotion render src/ilk-video/index.ts Video cikti/ilk-video.mp4 --concurrency=2",
+    "studio:ay": "remotion studio src/ay-olmasaydi/index.ts",
+    "render:ay": "remotion render src/ay-olmasaydi/index.ts Video cikti/ay-olmasaydi.mp4 --concurrency=2"
   },
   "dependencies": {
     "@remotion/cli": "4.0.540",
