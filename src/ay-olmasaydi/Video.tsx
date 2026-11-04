@@ -496,7 +496,9 @@ const Video: React.FC = () => {
         </g>
 
         <g transform={donusum}>
-          {/* uzay */}
+          {/* uzay: kamera kıyıdayken hiç çizilmez (dev ölçekte tarayıcıyı kilitliyor) */}
+          {uzayGor > 0 && (
+          <>
           <circle cx={GUNES_UZAY.x} cy={GUNES_UZAY.y} r={560} fill="url(#uzayGunes)" opacity={uzayGor} />
           <circle cx={GUNES_UZAY.x} cy={GUNES_UZAY.y} r={GUNES_UZAY.r} fill="#fff1c9" opacity={uzayGor} />
           <ellipse cx={DUNYA.x} cy={DUNYA.y} rx={440} ry={130} transform={`rotate(-18 ${DUNYA.x} ${DUNYA.y})`} fill="none" stroke={RENK.krem} strokeWidth={2} strokeDasharray="6 12" opacity={0.35 * uzayGor * eksen} />
@@ -518,6 +520,8 @@ const Video: React.FC = () => {
             <circle cx={16} cy={16} r={9} fill={RENK.ayKoyu} opacity={ayVar} />
             <circle r={AY_UZAY.r} fill="none" stroke={RENK.krem} strokeWidth={3} strokeDasharray="10 9" opacity={0.6 * (1 - ayVar) * uzayGor} />
           </g>
+          </>
+          )}
 
           {/* kıyı: küre üstündeki nokta */}
           {kiyiGor > 0 && (
