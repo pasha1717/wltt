@@ -108,12 +108,12 @@ const DevYazi: React.FC<{t: number; kelimeler: DevKelime[]; cikis: number; boyut
   if (t < ilk - 0.1 || t > cikis + 0.45) return null;
   const cik = 1 - gir(t, cikis, 0.45);
   return (
-    <div style={{position: 'absolute', left: 50, right: 50, top: 230, textAlign: 'center', fontFamily: 'Caladea, Georgia, serif', fontWeight: 700, fontSize: boyut, lineHeight: 1.16, color: RENK.krem, opacity: cik, textShadow: '0 4px 22px rgba(5,10,30,.85)'}}>
+    <div style={{position: 'absolute', left: 50, right: 50, top: 230, textAlign: 'center', fontFamily: 'Caladea, Georgia, serif', fontWeight: 700, fontSize: boyut, lineHeight: 1.16, color: RENK.koyu, opacity: cik, textShadow: '0 0 6px #fff, 0 0 18px #fff, 0 0 30px rgba(255,255,255,.9)'}}>
       {kelimeler.map((k, i) => {
         if (!k) return <br key={i} />;
         const u = gir(t, k.s - 0.06, 0.3);
         return (
-          <span key={i} style={{display: 'inline-block', margin: '0 12px', opacity: u, transform: `translateY(${karis(18, 0, u)}px)`, color: k.w === vurgu ? RENK.vurgu : undefined}}>
+          <span key={i} style={{display: 'inline-block', margin: '0 12px', opacity: u, transform: `translateY(${karis(18, 0, u)}px)`, color: k.w === vurgu ? '#c0392b' : undefined}}>
             {k.w}
           </span>
         );
@@ -209,7 +209,7 @@ const Video: React.FC = () => {
             {Array.from({length: 60}, (_, i) => {
               const u = ((i / 60 + akis * 1.2) % 1) * Math.min(1, akis * 1.5);
               const [x, y] = yol(u);
-              return <circle key={i} cx={x + Math.sin(i) * 60} cy={y + Math.cos(i * 1.7) * 60} r={14} fill={RENK.toz} opacity={0.75} />;
+              return <circle key={i} cx={x + Math.sin(i) * 60} cy={y + Math.cos(i * 1.7) * 60} r={42} fill={RENK.toz} opacity={0.7} />;
             })}
           </g>
           {/* fosfor toprağa iner */}
