@@ -81,7 +81,7 @@ const DURAKLAR: {t0: number; sure: number; k: Kamera}[] = [
   {t0: 0, sure: an(1, 0), k: kiyidan({...K_YAKIN, s: 2.15})},
   {t0: an(1, 0) - 0.35, sure: 1.5, k: kiyidan(K_GENIS)},
   {t0: an(3, 0) - 0.3, sure: 1.3, k: kiyidan({cx: CETVEL.x - 20, cy: 1540, s: 2.3, fx: 540, fy: 820})},
-  {t0: an(4, 0) - 0.2, sure: 1.5, k: kiyidan({cx: 540, cy: 2500, s: 1.0, fx: 540, fy: 900})},
+  {t0: an(4, 0) - 0.2, sure: 1.5, k: kiyidan({cx: 545, cy: 2600, s: 1.55, fx: 540, fy: 900})},
   {t0: an(5, 0) - 0.25, sure: 1.1, k: kiyidan(K_GENIS)},
   {t0: an(5, 3) - 0.1, sure: 1.9, k: UZAY},
   {t0: an(9, 10) - 0.3, sure: 1.8, k: kiyidan({...K_YAKIN, s: 2.1})},
@@ -200,8 +200,8 @@ const Derin: React.FC<{t: number; yumurta: number}> = ({t, yumurta}) => (
           ))}
           {dallar(m.h).map(([, , x2, y2], j) => (
             <g key={`u${j}`}>
-              <circle cx={x2} cy={y2} r={9} fill="#9fc7c9" opacity={0.8} />
-              {yumurta > 0 && <circle cx={x2} cy={y2 - 14 * yumurta} r={8 * yumurta} fill={RENK.mercan} />}
+              <circle cx={x2} cy={y2} r={11} fill="#9fc7c9" opacity={0.85} />
+              {yumurta > 0 && <circle cx={x2} cy={y2 - 22 * yumurta} r={14 * yumurta} fill={RENK.mercan} />}
             </g>
           ))}
         </g>
@@ -222,7 +222,7 @@ const Kiyi: React.FC = () => (
 );
 
 // Gelgit cetveli: su düzeyi inip çıkar. "üçte birine" de aralık küçülür, eski sınırlar kesik çizgi olarak kalır.
-const Cetvel: React.FC<{t: number; genlik: number; iz: number}> = ({t, genlik, iz}) => {
+const Cetvel: React.FC<{t: number; genlik: number; iz: number; suGor: number}> = ({t, genlik, iz, suGor}) => {
   const su = CETVEL.orta + genlik * Math.sin((t * 2 * Math.PI) / 1.8);
   const x = CETVEL.x;
   const cizgiler: React.ReactNode[] = [];
@@ -233,13 +233,15 @@ const Cetvel: React.FC<{t: number; genlik: number; iz: number}> = ({t, genlik, i
   return (
     <g>
       <rect x={x - 8} y={CETVEL.ust - 20} width={10} height={CETVEL.alt - CETVEL.ust + 20} fill={RENK.kara} />
-      <rect x={x} y={CETVEL.ust} width={34} height={CETVEL.alt - CETVEL.ust} rx={2} fill="#e9dfc2" />
+      <rect x={x} y={CETVEL.ust} width={34} height={CETVEL.alt - CETVEL.ust} rx={2} fill="#e9dfc2" opacity={karis(0.35, 1, suGor)} />
       {cizgiler}
       {[CETVEL.orta - 60, CETVEL.orta + 60].map((y) => (
-        <path key={y} d={`M ${x - 60} ${y} L ${x + 94} ${y}`} stroke={RENK.krem} strokeWidth={3} strokeDasharray="10 8" opacity={0.8 * iz} />
+        <path key={y} d={`M ${x - 60} ${y} L ${x + 94} ${y}`} stroke={RENK.krem} strokeWidth={3} strokeDasharray="10 8" opacity={0.8 * iz * suGor} />
       ))}
-      <rect x={x - 70} y={su} width={174} height={CETVEL.alt + 60 - su} fill="#163a73" opacity={0.78} />
-      <path d={`M ${x - 70} ${su} q 22 -6 44 0 t 44 0 t 44 0 t 42 0`} fill="none" stroke="#bcd6f2" strokeWidth={3.5} strokeLinecap="round" />
+      <g opacity={suGor}>
+        <rect x={-600} y={su} width={2300} height={CETVEL.alt + 200 - su} fill="#1d4782" opacity={0.7} />
+        <path d={`M -600 ${su} ${Array.from({length: 46}, () => 'q 25 -6 50 0').join(' ')}`} fill="none" stroke="#bcd6f2" strokeWidth={3} strokeLinecap="round" />
+      </g>
     </g>
   );
 };
@@ -532,7 +534,7 @@ const Video: React.FC = () => {
                 <Deniz t={t} yol={yol} gun={gun} sakin={sakin} />
                 <Derin t={t} yumurta={yumurta} />
                 <Kiyi />
-                <Cetvel t={t} genlik={genlik} iz={iz} />
+                <Cetvel t={t} genlik={genlik} iz={iz} suGor={gun} />
               </g>
               <rect x={-600} y={-1200} width={2300} height={4900} fill="#02040c" opacity={0.28 * karanlik} />
             </g>
