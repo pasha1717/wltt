@@ -88,7 +88,7 @@ const Deniz: React.FC<{t: number; dalga: number; ucus: number}> = ({t, dalga, uc
       {[0, 1].map(() => null)}
       <g transform={`translate(${ucus * 300},0)`}>
         <path d={`M 0 4 ${Array.from({length: 12}, (_, i) => `Q ${i * 40 + 20} ${-8 + Math.sin(t * 3 + i) * 4} ${(i + 1) * 40} 4`).join(' ')} L 480 60 L 0 60 Z`} fill={RENK.deniz} />
-        {dalga > 0 && dalga < 1 && <path d={`M ${tepeX - 120} 4 Q ${tepeX - 30} -150 ${tepeX + 20} -120 Q ${tepeX + 60} -100 ${tepeX + 80} -60 Q ${tepeX + 60} -20 ${tepeX + 120} 4 Z`} fill="#3d86d8" opacity={Math.sin(dalga * Math.PI)} />}
+        {dalga > 0 && dalga < 1 && <path d={`M ${tepeX - 120} 4 Q ${tepeX - 30} -150 ${tepeX + 20} -120 Q ${tepeX + 60} -100 ${tepeX + 80} -60 Q ${tepeX + 60} -20 ${tepeX + 120} 4 Z`} fill="#7fc0ff" stroke="#e8f4ff" strokeWidth={6} opacity={Math.sin(dalga * Math.PI)} transform="scale(1.6)" />}
       </g>
     </g>
   );
@@ -172,7 +172,7 @@ const Video: React.FC = () => {
   const sayGor = gir(t, an(0, 5) - 0.2, 0.3) * (1 - gir(t, an(1, 0) - 0.4, 0.4));
   const bar1 = gir(t, an(5, 4) - 0.1, 0.9) * (1 - gir(t, an(7, 0) - 0.2, 0.5));
   const bar2 = gir(t, an(6, 4) - 0.1, 0.9) * (1 - gir(t, an(7, 0) - 0.2, 0.5));
-  const ucan = (x: number, i: number) => ({transform: `translate(${ucus * (1400 + i * 120)},${-ucus * (120 + i * 30)}) rotate(${ucus * (20 + i * 10)})`, opacity: 1 - firla * (1 - geri) * 0.9});
+  const ucan = (x: number, i: number) => ({transform: `translate(${ucus * (1400 + i * 120)},${-ucus * (160 + i * 40)}) rotate(${ucus * (25 + i * 12)})`, opacity: 1 - gir(t, an(4, 3) + 0.5, 0.5) * (1 - geri)});
 
   return (
     <AbsoluteFill style={{background: RENK.gokUst}}>
@@ -208,29 +208,32 @@ const Video: React.FC = () => {
               })}
             </g>
             {/* bizim kıyımız: tepedeki kara parçası */}
-            <path d={`M ${G.x - 700} ${G.y - G.r + 30} L ${G.x + 240} ${G.y - G.r + 30} L ${G.x + 240} ${G.y - G.r + 800} L ${G.x - 700} ${G.y - G.r + 800} Z`} fill={RENK.kara} />
+            <path d={(() => {
+              const n = (a: number, r: number) => `${G.x + r * Math.sin((a * Math.PI) / 180)} ${G.y - r * Math.cos((a * Math.PI) / 180)}`;
+              return `M ${n(-22, G.r + 5)} A ${G.r + 5} ${G.r + 5} 0 0 1 ${n(5.6, G.r + 5)} C ${n(6.5, G.r - 200)} ${n(4, G.r - 600)} ${n(2, G.r - 900)} L ${n(-22, G.r - 900)} Z`;
+            })()} fill={RENK.kara} />
           </g>
           <circle cx={G.x} cy={G.y} r={G.r} fill="none" stroke={RENK.karaKoyu} strokeWidth={6} />
           {/* yüzeydeki nesneler */}
           <Yuzey aci={6.2}>
-            <Deniz t={t} dalga={dalga} ucus={ucus} />
+            <Deniz t={t} dalga={dalga} ucus={0} />
           </Yuzey>
           <Yuzey aci={-9}>
-            <g style={ucan(0, 0)}>
+            <g {...ucan(0, 0)}>
               <g transform={`scale(${1 + 0.15 * vurgu(1)})`}>
                 <Agac />
               </g>
             </g>
           </Yuzey>
           <Yuzey aci={3}>
-            <g style={ucan(0, 1)}>
+            <g {...ucan(0, 1)}>
               <g transform={`scale(${1 + 0.15 * vurgu(1)})`}>
                 <Ev />
               </g>
             </g>
           </Yuzey>
           <Yuzey aci={-3.5}>
-            <g style={ucan(0, 2)}>
+            <g {...ucan(0, 2)}>
               <g transform={`scale(${1 + 0.18 * vurgu(0)})`}>
                 <Bank t={t} />
               </g>
