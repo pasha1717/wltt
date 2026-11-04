@@ -9,7 +9,8 @@
     "render:ay": "remotion render src/ay-olmasaydi/index.ts Video cikti/ay-olmasaydi.mp4 --concurrency=2",
     "render:ari": "remotion render src/arilar/index.ts Video cikti/arilar.mp4 --concurrency=2",
     "render:dunya": "remotion render src/dunya-dursaydi/index.ts Video cikti/dunya-dursaydi.mp4 --concurrency=2",
-    "render:toz": "remotion render src/toz/index.ts Video cikti/toz.mp4 --concurrency=2"
+    "render:toz": "remotion render src/toz/index.ts Video cikti/toz.mp4 --concurrency=2",
+    "render:uyku": "remotion render src/uyku/index.ts Video cikti/uyku.mp4 --concurrency=2"
   },
   "dependencies": {
     "@remotion/cli": "4.0.540",
