@@ -20,8 +20,7 @@ Video ve açıklama üretirken aşağıdaki becerileri kullan:
 - **code-simplification**: Ortak kalıp (`src/ortak/Kalip.tsx`) ya da video kodları büyüyüp karmaşıklaşınca.
 
 ## Üretim akışı (kısa)
-1. Konu: idea-refine ile seç. Metin 13 satır: kanca, soru, yaygın tahmin, dönüş, açıklama, ders (10-11), yorum çağrısı (12).
-2. Doğrulama: doubt-driven + source-driven.
+1. Konu ve doğrulama: `konu-arastirmaci` alt ajanını çalıştır (idea-refine + doubt-driven + source-driven onun içinde). Sonucundaki DOĞRULANDI/YUMUŞAT iddiaları kullan, ÇIKAR olanları kullanma. Metin 13 satır: kanca, soru, yaygın tahmin, dönüş, açıklama, ders (10-11), yorum çağrısı (12).
 3. Metni humanizer ile düzelt, `public/<ad>/metin.txt` olarak yaz.
 4. Ses + sessizlik.
 5. Görüntü: `src/<ad>/ayar.ts` (ortak kalıp) ya da özel `Video.tsx`.
