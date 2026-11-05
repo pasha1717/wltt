@@ -6,7 +6,7 @@ Ayrıntılı yöntem: `Claude_Animasyon_Sistemi.md`.
 ## Kullanıcının kalıcı tercihleri
 - Onay isteme: metni, sahne planını ve videoyu doğrudan üret, bitince teslim et.
 - Kısa rapor ver, az token harca. Her adımı mesajla anlatma.
-- Toplu üretimde videoları tek bir zip dosyasında teslim et (`cikti/` içinde).
+- Toplu üretimde videoları tek bir zip dosyasında teslim et (`cikti/` içinde). Zip'e o partinin Instagram açıklamalarını da `aciklamalar.md` olarak ekle (yalnız o partideki videolar).
 - Ses: ElevenLabs "Deniz" (`KAGDtM2gzDrjWlUp2KNe`), model `eleven_v4`.
 - Seslendirmede satır aralarına sessizlik ekle: `python3 ses.py public/<ad> <ses_id>` sonra `python3 sessizlik.py public/<ad>`.
 - Format: Reels (dikey, 60 sn altı). Uzun video yok.
