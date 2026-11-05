@@ -1,10 +1,14 @@
 // "Ne olurdu?" videolarından çıkarılmış sorular. Her bilgi, videonun doğrulanmış metninden alındı.
 // d: doğru cevap, y: yanlış şıklar (çoğu, videodaki "yaygın tahmin"), a: cevaptan sonra gösterilen açıklama.
 
+import { EK1 } from "./sorular-ek1";
+import { EK2 } from "./sorular-ek2";
+import { EK3 } from "./sorular-ek3";
+
 export type Kategori = "Uzay" | "Doğa" | "Vücut" | "İcatlar" | "Dünya";
 export type Soru = { id: string; k: Kategori; s: string; d: string; y: [string, string]; a: string };
 
-export const SORULAR: Soru[] = [
+const TEMEL: Soru[] = [
   // ---------- Uzay ----------
   { id: "ay-olmasaydi", k: "Uzay", s: "Ay bir gece kaybolsa, uzun vadede en büyük sorun ne olurdu?", d: "Dünya'nın eğimi dengesizleşirdi", y: ["Geceler sonsuza dek aydınlık kalırdı", "Okyanuslar tamamen kururdu"], a: "Ay, Dünya'nın eğimini sabit tutar. Bugün eğim yalnızca 2,5 derece oynar; Ay olmasa bu oynama on binlerce yılda onlarca dereceye çıkabilirdi." },
   { id: "gunes", k: "Uzay", s: "Güneş şu an sönse, bunu ne zaman fark ederdin?", d: "Yaklaşık 8 dakika sonra", y: ["Hemen, aynı saniyede", "Yaklaşık 8 saat sonra"], a: "Güneş'in ışığı bize yaklaşık 8 dakikada ulaşır. O süre boyunca hiçbir şey değişmezdi." },
@@ -89,3 +93,5 @@ export const SORULAR: Soru[] = [
 ];
 
 export const KATEGORILER: Kategori[] = ["Uzay", "Doğa", "Vücut", "İcatlar", "Dünya"];
+
+export const SORULAR: Soru[] = [...TEMEL, ...EK1, ...EK2, ...EK3];
