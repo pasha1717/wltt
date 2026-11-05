@@ -10,6 +10,7 @@ Ayrıntılı yöntem: `Claude_Animasyon_Sistemi.md`.
 - Ses: ElevenLabs "Deniz" (`KAGDtM2gzDrjWlUp2KNe`), model `eleven_v4`.
 - Seslendirmede satır aralarına sessizlik ekle: `python3 ses.py public/<ad> <ses_id>` sonra `python3 sessizlik.py public/<ad>`.
 - Format: Reels (dikey, 60 sn altı). Uzun video yok.
+- Sesi hızlandırma (atempo vb. kullanma). Video 60 sn'yi aşarsa metni kısaltıp sesi yeniden üret.
 
 ## Becerileri (skills) bu işte nasıl kullan
 Video ve açıklama üretirken aşağıdaki becerileri kullan:
