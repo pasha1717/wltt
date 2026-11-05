@@ -39,7 +39,42 @@
           ]
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "backgroundColor": "#070b0f"
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#8fe3f0"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "NOVA hava durumunu bulunduğun yere göre söylemek için konumunu kullanır."
+        }
+      ],
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "NOVA istediğin kişiyi arayabilmek için rehberine bakar."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "NOVA feneri açıp kapatmak için kamera flaşını kullanır.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ]
     ],
     "backgroundColor": "#070b0f"
   }

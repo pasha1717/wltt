@@ -1,140 +1,285 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  KeyboardAvoidingView, Modal, type ScrollViewInstance, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput,
-  useWindowDimensions, Vibration, View,
+  KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, type ScrollViewInstance, StyleSheet, Switch, Text,
+  TextInput, useWindowDimensions, Vibration, View,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import * as Speech from "expo-speech";
 import * as SecureStore from "expo-secure-store";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { ExpoSpeechRecognitionModule, useSpeechRecognitionEvent } from "expo-speech-recognition";
 import { Cekirdek, Durum, durumRengi } from "./src/Cekirdek";
-import { hataMetni, Mesaj, sor } from "./src/claude";
+import { hataMetni, sistemMetni, sor, SohbetDurumu } from "./src/claude";
 import { yerelKomut } from "./src/komutlar";
+import { bildirimGelince, zamanlayiciKur } from "./src/bildirim";
+import { hafiza, Satir } from "./src/hafiza";
 
 const R = { bg: "#070b0f", panel: "#0e151c", cizgi: "#1c2a35", buz: "#8fe3f0", kehribar: "#f2b45a", metin: "#dbe6ec", soluk: "#7b8f9c", kirmizi: "#ff7a6b" };
 const mono = Platform.select({ ios: "Menlo", default: "monospace" });
 const durumAdi: Record<Durum, string> = { hazir: "Hazır", dinliyor: "Dinliyorum", dusunuyor: "Düşünüyorum", konusuyor: "Konuşuyorum" };
-const oneriler = ["Saat kaç?", "5 dakikalık zamanlayıcı kur", "Bugün için bir motivasyon cümlesi", "Karadelikleri tek cümlede anlat"];
+const oneriler = ["Yarın sabah 9'da su içmemi hatırlat", "Hava nasıl?", "Feneri aç", "Benim adım ne, hatırlıyor musun?"];
+const KARSILAMA = "Merhaba, ben NOVA. Konuşabilir ya da yazabilirsin. Zamanlayıcı, hatırlatma, hava durumu, arama ve fener işlerini de hallederim.";
+const MAKS_MESAJ = 60; // sohbet bu kadar uzayınca yeni sohbete geçilir
+const UYANMA = /(?:^|\s)(?:hey\s+|hay\s+|hei\s+)?nova[a-zçğıöşü'’]*[,.!?]?\s*(.*)$/i;
 
-type Satir = { id: number; kim: "ben" | "nova" | "sistem"; metin: string };
-let sayac = 0;
+let sayac = Date.now();
 const satir = (kim: Satir["kim"], metin: string): Satir => ({ id: ++sayac, kim, metin });
+
+type DinlemeTipi = "tek" | "surekli" | null;
 
 function Nova() {
   const { width, height } = useWindowDimensions();
   const [durum, setDurum] = useState<Durum>("hazir");
-  const [satirlar, setSatirlar] = useState<Satir[]>([
-    satir("nova", "Merhaba, ben NOVA. Mikrofona dokunup konuşabilir ya da yazabilirsin. Saat, tarih ve zamanlayıcıyı hemen hallederim, gerisini düşünüp cevaplarım."),
-  ]);
+  const [satirlar, setSatirlar] = useState<Satir[]>([]);
   const [girdi, setGirdi] = useState("");
   const [saat, setSaat] = useState("");
   const [ayarAcik, setAyarAcik] = useState(false);
   const [apiKey, setApiKey] = useState("");
   const [sesli, setSesli] = useState(true);
-  const gecmis = useRef<Mesaj[]>([]);
-  const mesgul = useRef(false);
-  const kaydirma = useRef<ScrollViewInstance>(null);
-  const sonDinlenen = useRef("");
+  const [ellerSerbest, setEllerSerbest] = useState(false);
+  const [fener, setFener] = useState(false);
+  const [bilgiler, setBilgiler] = useState<string[]>([]);
+  const [kameraIzni, kameraIzniIste] = useCameraPermissions();
 
+  const sohbet = useRef<SohbetDurumu | null>(null);
+  const kaydirma = useRef<ScrollViewInstance>(null);
+  const yuklendi = useRef(false);
+  const mesgul = useRef(false);
+  const konusuyor = useRef(false);
+  const sesliRef = useRef(sesli);
+  const surekli = useRef(false);
+  const dinleme = useRef<DinlemeTipi>(null);
+  const sonDinlenen = useRef("");
+  const komutBekleniyor = useRef(0);
+  const isleRef = useRef<(m: string) => void>(() => {});
+
+  // ---- Açılışta kayıtlı verileri yükle ----
   useEffect(() => {
-    SecureStore.getItemAsync("apiKey").then((k) => k && setApiKey(k));
-    SecureStore.getItemAsync("sesli").then((v) => v && setSesli(v === "1"));
+    (async () => {
+      const [k, s, ss, sat, soh, bil] = await Promise.all([
+        SecureStore.getItemAsync("apiKey"), hafiza.ayar("sesli", true), hafiza.ayar("ellerSerbest", false),
+        hafiza.satirlar(), hafiza.sohbet(), hafiza.bilgiler(),
+      ]);
+      if (k) setApiKey(k);
+      setSesli(s); sesliRef.current = s;
+      setSatirlar(sat.length ? sat : [satir("nova", KARSILAMA)]);
+      sohbet.current = soh;
+      setBilgiler(bil);
+      yuklendi.current = true;
+      if (ss) setEllerSerbest(true);
+    })();
     const t = setInterval(() => setSaat(new Date().toLocaleTimeString("tr-TR")), 1000);
     return () => clearInterval(t);
   }, []);
 
+  useEffect(() => { if (yuklendi.current) hafiza.satirlarYaz(satirlar); }, [satirlar]);
+  useEffect(() => { sesliRef.current = sesli; }, [sesli]);
+
   const ekle = (s: Satir) => setSatirlar((x) => [...x, s]);
+  const guncelle = (id: number, metin: string) => setSatirlar((x) => x.map((s) => (s.id === id ? { ...s, metin } : s)));
+
+  // ---- Dinleme ----
+  const dinle = useCallback((tip: Exclude<DinlemeTipi, null>) => {
+    dinleme.current = tip;
+    ExpoSpeechRecognitionModule.start({
+      lang: "tr-TR", interimResults: true, continuous: tip === "surekli",
+      androidIntentOptions: { EXTRA_LANGUAGE_MODEL: "web_search" },
+    });
+  }, []);
+
+  const durdur = useCallback(() => {
+    if (dinleme.current) { dinleme.current = null; ExpoSpeechRecognitionModule.abort(); }
+  }, []);
+
+  // Eller serbest moddaysa ve meşgul değilsek dinlemeye geri dön.
+  const devamEt = useCallback(() => {
+    if (surekli.current && !mesgul.current && !konusuyor.current && !dinleme.current) {
+      setTimeout(() => {
+        if (surekli.current && !mesgul.current && !konusuyor.current && !dinleme.current) dinle("surekli");
+      }, 350);
+    }
+  }, [dinle]);
 
   const konus = useCallback((metin: string) => {
-    if (!sesli) { setDurum("hazir"); return; }
+    if (!sesliRef.current || !metin) { setDurum("hazir"); devamEt(); return; }
+    durdur(); // kendi sesini duymasın
     Speech.stop();
+    konusuyor.current = true;
+    const bitti = () => { konusuyor.current = false; setDurum("hazir"); devamEt(); };
     Speech.speak(metin, {
       language: "tr-TR", rate: 1.0, pitch: 0.95,
-      onStart: () => setDurum("konusuyor"),
-      onDone: () => setDurum("hazir"),
-      onStopped: () => setDurum("hazir"),
-      onError: () => setDurum("hazir"),
+      onStart: () => setDurum("konusuyor"), onDone: bitti, onStopped: bitti, onError: bitti,
     });
-  }, [sesli]);
+  }, [devamEt, durdur]);
+
+  const fenerAyarla = useCallback(async (acik: boolean) => {
+    if (acik && !kameraIzni?.granted) {
+      const iz = await kameraIzniIste();
+      if (!iz.granted) throw new Error("Kamera izni olmadan feneri açamıyorum.");
+    }
+    setFener(acik);
+  }, [kameraIzni, kameraIzniIste]);
 
   const isle = useCallback(async (ham: string) => {
     const metin = ham.trim();
     if (!metin || mesgul.current) return;
+    mesgul.current = true;
+    durdur();
     Speech.stop();
     setGirdi("");
     ekle(satir("ben", metin));
 
-    const yerel = yerelKomut(metin);
-    if (yerel) {
-      ekle(satir("nova", yerel.metin));
-      konus(yerel.metin);
-      if (yerel.zamanlayici) {
-        const { saniye, etiket } = yerel.zamanlayici;
-        setTimeout(() => {
-          Vibration.vibrate([0, 400, 200, 400, 200, 400]);
-          const m = `${etiket} doldu.`;
-          ekle(satir("nova", m));
-          konus(m);
-        }, saniye * 1000);
-      }
-      return;
-    }
-
-    mesgul.current = true;
-    setDurum("dusunuyor");
-    gecmis.current = [...gecmis.current, { role: "user" as const, content: metin }].slice(-12);
-    while (gecmis.current.length && gecmis.current[0].role !== "user") gecmis.current.shift();
     try {
-      const cevap = await sor(apiKey, gecmis.current);
-      gecmis.current.push({ role: "assistant", content: cevap });
-      ekle(satir("nova", cevap));
+      const yerel = yerelKomut(metin);
+      if (yerel) {
+        if (yerel.zamanlayici) await zamanlayiciKur(yerel.zamanlayici.saniye, yerel.zamanlayici.etiket);
+        ekle(satir("nova", yerel.metin));
+        mesgul.current = false;
+        konus(yerel.metin);
+        return;
+      }
+
+      setDurum("dusunuyor");
+      if (!sohbet.current || sohbet.current.mesajlar.length > MAKS_MESAJ) {
+        sohbet.current = { sistem: sistemMetni(await hafiza.bilgiler()), mesajlar: [] };
+      }
+      const cevapSatiri = satir("nova", "…");
+      ekle(cevapSatiri);
+      const cevap = await sor(apiKey, sohbet.current, metin, { fenerAyarla }, (t) => guncelle(cevapSatiri.id, t || "…"));
+      guncelle(cevapSatiri.id, cevap || "Tamam.");
+      await hafiza.sohbetYaz(sohbet.current);
+      setBilgiler(await hafiza.bilgiler());
+      mesgul.current = false;
       konus(cevap);
     } catch (e) {
-      gecmis.current.pop();
       ekle(satir("nova", hataMetni(e)));
-      setDurum("hazir");
-    } finally {
       mesgul.current = false;
+      setDurum("hazir");
+      devamEt();
     }
-  }, [apiKey, konus]);
+  }, [apiKey, konus, durdur, devamEt, fenerAyarla]);
 
-  // ---- Ses tanıma ----
-  useSpeechRecognitionEvent("start", () => { sonDinlenen.current = ""; setDurum("dinliyor"); });
+  useEffect(() => { isleRef.current = isle; }, [isle]);
+
+  // Uygulama açıkken gelen hatırlatmayı sesli söyle.
+  useEffect(() => {
+    const abone = bildirimGelince((m) => { if (m) { ekle(satir("nova", m)); konus(m); } });
+    return () => abone.remove();
+  }, [konus]);
+
+  // Sürekli modda: "Nova ..." diye başlayan cümleyi komut olarak al.
+  const surekliSonuc = (t: string) => {
+    const bekliyor = Date.now() < komutBekleniyor.current;
+    const m = t.toLocaleLowerCase("tr").match(UYANMA);
+    let komut = "";
+    if (m) komut = m[1].trim();
+    else if (bekliyor) komut = t.trim();
+    else return;
+    if (komut.length > 1) {
+      komutBekleniyor.current = 0;
+      durdur();
+      isleRef.current(komut);
+    } else {
+      komutBekleniyor.current = Date.now() + 8000;
+      Vibration.vibrate(60);
+      setDurum("dinliyor");
+    }
+  };
+
+  useSpeechRecognitionEvent("start", () => {
+    sonDinlenen.current = "";
+    if (dinleme.current === "tek") setDurum("dinliyor");
+  });
   useSpeechRecognitionEvent("result", (e) => {
     const t = e.results[0]?.transcript ?? "";
-    setGirdi(t);
-    if (e.isFinal) sonDinlenen.current = t;
+    if (dinleme.current === "tek") {
+      setGirdi(t);
+      if (e.isFinal) sonDinlenen.current = t;
+    } else if (dinleme.current === "surekli" && e.isFinal) {
+      surekliSonuc(t);
+    }
   });
   useSpeechRecognitionEvent("end", () => {
-    setDurum((d) => (d === "dinliyor" ? "hazir" : d));
-    if (sonDinlenen.current) isle(sonDinlenen.current);
+    const tip = dinleme.current;
+    dinleme.current = null;
+    setDurum((d) => (d === "dinliyor" && Date.now() >= komutBekleniyor.current ? "hazir" : d));
+    if (tip === "tek" && sonDinlenen.current) { isleRef.current(sonDinlenen.current); return; }
+    devamEt();
   });
   useSpeechRecognitionEvent("error", (e) => {
-    if (e.error === "no-speech" || e.error === "aborted") return;
-    ekle(satir("sistem", e.error === "not-allowed" ? "Mikrofon izni verilmedi. Telefon ayarlarından açabilirsin." : `Ses tanıma hatası: ${e.message}`));
+    if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+      surekli.current = false;
+      setEllerSerbest(false);
+      ekle(satir("sistem", "Mikrofon izni verilmedi. Telefon ayarlarından açabilirsin."));
+      return;
+    }
+    if (e.error === "no-speech" || e.error === "aborted" || e.error === "speech-timeout" || surekli.current) return;
+    ekle(satir("sistem", `Ses tanıma hatası: ${e.message}`));
   });
 
+  // ---- Eller serbest modu aç/kapat ----
+  useEffect(() => {
+    if (!yuklendi.current) return;
+    hafiza.ayarYaz("ellerSerbest", ellerSerbest);
+    surekli.current = ellerSerbest;
+    (async () => {
+      if (ellerSerbest) {
+        const iz = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+        if (!iz.granted) { setEllerSerbest(false); ekle(satir("sistem", "Mikrofon izni verilmedi.")); return; }
+        await activateKeepAwakeAsync("nova");
+        devamEt();
+      } else {
+        deactivateKeepAwake("nova");
+        if (dinleme.current === "surekli") durdur();
+      }
+    })();
+  }, [ellerSerbest, devamEt, durdur]);
+
   const mikrofon = async () => {
-    if (durum === "dinliyor") { ExpoSpeechRecognitionModule.stop(); return; }
     Speech.stop();
+    if (surekli.current) {
+      // Eller serbest açıkken düğme "Nova" demekle aynı işi görür.
+      komutBekleniyor.current = Date.now() + 8000;
+      setDurum("dinliyor");
+      if (!dinleme.current) dinle("surekli");
+      return;
+    }
+    if (dinleme.current === "tek") { ExpoSpeechRecognitionModule.stop(); return; }
     const izin = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
     if (!izin.granted) { ekle(satir("sistem", "Mikrofon izni verilmedi. Telefon ayarlarından açabilirsin.")); return; }
-    ExpoSpeechRecognitionModule.start({ lang: "tr-TR", interimResults: true, continuous: false });
+    dinle("tek");
   };
 
   const ayarKaydet = async () => {
     await SecureStore.setItemAsync("apiKey", apiKey.trim());
-    await SecureStore.setItemAsync("sesli", sesli ? "1" : "0");
+    await hafiza.ayarYaz("sesli", sesli);
     setAyarAcik(false);
   };
 
-  const cekirdekBoyu = Math.min(width - 32, height * 0.34, 300);
+  const sohbetiTemizle = async () => {
+    sohbet.current = null;
+    await hafiza.sohbetYaz(null);
+    setSatirlar([satir("sistem", "Sohbet temizlendi.")]);
+    setAyarAcik(false);
+  };
+
+  const bilgiSil = async (b: string) => {
+    await hafiza.bilgiSil(b);
+    setBilgiler(await hafiza.bilgiler());
+    sohbet.current = null; // silinen bilgi eski sohbette kalmasın
+    await hafiza.sohbetYaz(null);
+  };
+
+  const cekirdekBoyu = Math.min(width - 32, height * 0.32, 300);
   const renk = durumRengi[durum];
+  const ilkAcilis = satirlar.length <= 1;
 
   return (
     <SafeAreaView style={s.ekran} edges={["top", "bottom", "left", "right"]}>
       <StatusBar style="light" />
+      {fener && <CameraView style={s.gizliKamera} facing="back" enableTorch />}
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
         <View style={s.ust}>
           <Text style={s.marka}>NOVA</Text>
@@ -142,14 +287,22 @@ function Nova() {
             <View style={[s.nokta, { backgroundColor: renk }]} />
             <Text style={s.durumYazi}>{durumAdi[durum].toLocaleUpperCase("tr")}</Text>
           </View>
-          <Pressable style={s.ikon} onPress={() => setAyarAcik(true)} accessibilityLabel="Ayarlar">
-            <Text style={{ color: R.soluk, fontSize: 18 }}>⚙</Text>
-          </Pressable>
+          <View style={{ flexDirection: "row", gap: 6 }}>
+            <Pressable style={[s.ikon, ellerSerbest && s.ikonAcik]} onPress={() => setEllerSerbest((v) => !v)}
+              accessibilityLabel="Eller serbest mod">
+              <Text style={{ color: ellerSerbest ? R.bg : R.soluk, fontSize: 15 }}>👂</Text>
+            </Pressable>
+            <Pressable style={s.ikon} onPress={() => setAyarAcik(true)} accessibilityLabel="Ayarlar">
+              <Text style={{ color: R.soluk, fontSize: 18 }}>⚙</Text>
+            </Pressable>
+          </View>
         </View>
 
         <View style={s.merkez}>
           <Cekirdek durum={durum} boyut={cekirdekBoyu} />
-          <Text style={s.okuma}>{saat} · SİSTEM ÇEVRİMİÇİ</Text>
+          <Text style={s.okuma}>
+            {saat} · {ellerSerbest ? "\"NOVA\" DE, DİNLİYORUM" : "SİSTEM ÇEVRİMİÇİ"}{fener ? " · FENER AÇIK" : ""}
+          </Text>
         </View>
 
         <ScrollView ref={kaydirma} style={{ flex: 1 }} contentContainerStyle={s.akis}
@@ -164,8 +317,7 @@ function Nova() {
               </View>
             ),
           )}
-          {durum === "dusunuyor" && <Text style={s.sistem}>…</Text>}
-          {satirlar.length === 1 && (
+          {ilkAcilis && (
             <View style={s.cipler}>
               {oneriler.map((o) => (
                 <Pressable key={o} style={s.cip} onPress={() => isle(o)}><Text style={s.cipYazi}>{o}</Text></Pressable>
@@ -189,23 +341,44 @@ function Nova() {
 
       <Modal visible={ayarAcik} transparent animationType="fade" onRequestClose={() => setAyarAcik(false)}>
         <View style={s.perde}>
-          <View style={s.pencere}>
+          <ScrollView contentContainerStyle={s.pencere}>
             <Text style={s.baslik}>AYARLAR</Text>
             <View style={s.satirAyar}>
               <Text style={s.metin}>Cevapları sesli oku</Text>
               <Switch value={sesli} onValueChange={setSesli} trackColor={{ true: R.buz, false: R.cizgi }} />
             </View>
+            <View style={s.satirAyar}>
+              <View style={{ flex: 1 }}>
+                <Text style={s.metin}>Eller serbest ("Nova" diye seslen)</Text>
+                <Text style={s.not}>Uygulama açıkken sürekli dinler, ekranı açık tutar. Pil tüketir.</Text>
+              </View>
+              <Switch value={ellerSerbest} onValueChange={setEllerSerbest} trackColor={{ true: R.buz, false: R.cizgi }} />
+            </View>
+
             <Text style={s.etiket}>Anthropic API anahtarı</Text>
             <TextInput style={s.anahtar} value={apiKey} onChangeText={setApiKey} placeholder="sk-ant-…"
               placeholderTextColor={R.soluk} secureTextEntry autoCapitalize="none" autoCorrect={false} />
             <Text style={s.not}>Anahtar yalnızca bu telefonda, şifreli depoda saklanır. console.anthropic.com adresinden alabilirsin.</Text>
+
+            <Text style={s.etiket}>NOVA'nın hatırladıkları</Text>
+            {bilgiler.length === 0 ? (
+              <Text style={s.not}>Henüz bir şey yok. "Adımı hatırla, ben Salih" gibi söyleyebilirsin.</Text>
+            ) : (
+              bilgiler.map((b) => (
+                <View key={b} style={s.bilgi}>
+                  <Text style={[s.metin, { flex: 1, fontSize: 14 }]}>{b}</Text>
+                  <Pressable onPress={() => bilgiSil(b)} accessibilityLabel="Sil" hitSlop={8}>
+                    <Text style={{ color: R.kirmizi, fontSize: 16 }}>✕</Text>
+                  </Pressable>
+                </View>
+              ))
+            )}
+
             <View style={s.butonlar}>
-              <Pressable style={s.ikincil} onPress={() => { gecmis.current = []; setSatirlar([satir("sistem", "Sohbet temizlendi.")]); setAyarAcik(false); }}>
-                <Text style={s.metin}>Sohbeti temizle</Text>
-              </Pressable>
+              <Pressable style={s.ikincil} onPress={sohbetiTemizle}><Text style={s.metin}>Sohbeti temizle</Text></Pressable>
               <Pressable style={s.birincil} onPress={ayarKaydet}><Text style={{ color: R.bg, fontWeight: "600" }}>Kaydet</Text></Pressable>
             </View>
-          </View>
+          </ScrollView>
         </View>
       </Modal>
     </SafeAreaView>
@@ -218,14 +391,16 @@ export default function App() {
 
 const s = StyleSheet.create({
   ekran: { flex: 1, backgroundColor: R.bg, paddingHorizontal: 16 },
+  gizliKamera: { position: "absolute", width: 1, height: 1, opacity: 0 },
   ust: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 8 },
   marka: { color: R.buz, fontSize: 18, fontWeight: "700", letterSpacing: 6 },
   durum: { flexDirection: "row", alignItems: "center", gap: 8 },
   nokta: { width: 7, height: 7, borderRadius: 4 },
   durumYazi: { color: R.soluk, fontFamily: mono, fontSize: 11, letterSpacing: 1.5 },
   ikon: { width: 36, height: 36, borderRadius: 8, borderWidth: 1, borderColor: R.cizgi, alignItems: "center", justifyContent: "center" },
+  ikonAcik: { backgroundColor: R.buz, borderColor: R.buz },
   merkez: { alignItems: "center", paddingVertical: 6 },
-  okuma: { color: R.soluk, fontFamily: mono, fontSize: 11, letterSpacing: 1.2, marginTop: 2 },
+  okuma: { color: R.soluk, fontFamily: mono, fontSize: 11, letterSpacing: 1.2, marginTop: 2, textAlign: "center" },
   akis: { gap: 12, paddingVertical: 8 },
   nova: { borderLeftWidth: 2, borderLeftColor: R.buz, paddingLeft: 10, maxWidth: "88%" },
   ben: { alignSelf: "flex-end", maxWidth: "88%", alignItems: "flex-end" },
@@ -242,11 +417,12 @@ const s = StyleSheet.create({
   perde: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "center", padding: 16 },
   pencere: { backgroundColor: R.panel, borderRadius: 14, borderWidth: 1, borderColor: R.cizgi, padding: 18, gap: 10 },
   baslik: { color: R.buz, fontSize: 16, fontWeight: "600", letterSpacing: 2 },
-  satirAyar: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-  etiket: { color: R.soluk, fontSize: 13 },
+  satirAyar: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 },
+  etiket: { color: R.soluk, fontSize: 13, marginTop: 6 },
   anahtar: { height: 42, backgroundColor: R.bg, borderWidth: 1, borderColor: R.cizgi, borderRadius: 8, color: R.metin, paddingHorizontal: 10, fontFamily: mono },
   not: { color: R.soluk, fontSize: 12, lineHeight: 18 },
-  butonlar: { flexDirection: "row", justifyContent: "flex-end", gap: 8, marginTop: 4 },
+  bilgi: { flexDirection: "row", alignItems: "center", gap: 10, borderBottomWidth: 1, borderBottomColor: R.cizgi, paddingVertical: 6 },
+  butonlar: { flexDirection: "row", justifyContent: "flex-end", gap: 8, marginTop: 8 },
   ikincil: { height: 40, paddingHorizontal: 14, borderRadius: 8, borderWidth: 1, borderColor: R.cizgi, justifyContent: "center" },
   birincil: { height: 40, paddingHorizontal: 18, borderRadius: 8, backgroundColor: R.buz, justifyContent: "center" },
 });
