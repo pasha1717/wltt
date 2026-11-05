@@ -21,9 +21,9 @@ Video ve açıklama üretirken aşağıdaki becerileri kullan:
 
 ## Üretim akışı (kısa)
 1. Konu ve doğrulama: `konu-arastirmaci` alt ajanını çalıştır (idea-refine + doubt-driven + source-driven onun içinde). Sonucundaki DOĞRULANDI/YUMUŞAT iddiaları kullan, ÇIKAR olanları kullanma. Metin 13 satır: kanca, soru, yaygın tahmin, dönüş, açıklama, ders (10-11), yorum çağrısı (12).
-3. Metni humanizer ile düzelt, `public/<ad>/metin.txt` olarak yaz.
-4. Ses + sessizlik.
-5. Görüntü: `src/<ad>/ayar.ts` (ortak kalıp) ya da özel `Video.tsx`.
-6. Render: `npx remotion render src/<ad>/index.ts Video cikti/<ad>.mp4 --concurrency=2`.
-7. Açıklama: `aciklamalar.md` dosyasına humanizer'dan geçmiş Instagram açıklaması ekle.
-8. Commit ve push.
+2. Metni humanizer ile düzelt, `public/<ad>/metin.txt` olarak yaz.
+3. Ses + sessizlik.
+4. Görüntü: `src/<ad>/ayar.ts` (ortak kalıp) ya da özel `Video.tsx`.
+5. Render: `npx remotion render src/<ad>/index.ts Video cikti/<ad>.mp4 --concurrency=2`.
+6. Açıklama: `aciklamalar.md` dosyasına humanizer'dan geçmiş Instagram açıklaması ekle.
+7. Commit ve push.
