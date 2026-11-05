@@ -1,3 +1,4 @@
+import { HataSiniri } from "./src/Hata";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Image, Linking, Pressable, ScrollView, StyleSheet, Switch, Text, Vibration, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +19,9 @@ import { PaylasDugmesi } from "./src/Paylasim";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
+// Reklam/mağaza hataları sessizce kaydedilir (uygulamayı durdurmaz, hata ekranı da açmaz).
+const hataKaydetSessiz = (e: unknown) => { if (__DEV__) console.warn(e); };
+
 // Videolardaki marka renkleri: gece laciverti, gezegen mavisi, soru işareti sarısı, krem kart.
 const R = {
   gece: "#111c3d", derin: "#0b1430", gezegen: "#3f7fe0", sari: "#ffcf4a", krem: "#fff6e2",
@@ -33,6 +37,10 @@ type Ekran =
   | { ad: "magaza" };
 
 export default function App() {
+  return <HataSiniri><Uygulama /></HataSiniri>;
+}
+
+function Uygulama() {
   const [fontlar] = useFonts({ Caladea_400Regular, Caladea_700Bold });
   const [ilerleme, setIlerleme] = useState<Ilerleme | null>(null);
   const [ekran, setEkran] = useState<Ekran>({ ad: "ana" });
@@ -58,13 +66,21 @@ export default function App() {
     hata: goster,
   }), [guncelle, goster]);
   useEffect(() => {
-    magazayiBaslat(dinleyiciler).then(setUrunler).catch(() => {});
-    return magazayiKapat;
+    // İlk ekran çizildikten sonra başlat; mağaza hatası uygulamayı durdurmasın.
+    const t = setTimeout(() => {
+      try { magazayiBaslat(dinleyiciler).then(setUrunler).catch(hataKaydetSessiz); } catch (e) { hataKaydetSessiz(e); }
+    }, 1500);
+    return () => { clearTimeout(t); try { magazayiKapat(); } catch {} };
   }, [dinleyiciler]);
 
   // Reklamlar (onaydan sonra)
   useEffect(() => {
-    reklamlariBaslat().then((ok) => { setReklamHazir(ok); gizlilikSecenegiGerekli().then(setGizlilikGerekli); });
+    const t = setTimeout(() => {
+      reklamlariBaslat()
+        .then((ok) => { setReklamHazir(ok); return gizlilikSecenegiGerekli().then(setGizlilikGerekli); })
+        .catch(hataKaydetSessiz);
+    }, 800);
+    return () => clearTimeout(t);
   }, []);
   const reklamsiz = ilerleme?.reklamsiz ?? false;
   const gecis = useInterstitialAd(reklamHazir && !reklamsiz ? REKLAM.gecis : null);
@@ -95,7 +111,9 @@ export default function App() {
 
   // Sonuç ekranından çıkarken, belirli sıklıkta geçiş reklamı
   const anaya = () => {
-    if (!reklamsiz && gecis.isLoaded && ilerleme.oyunSayisi % KURALLAR.gecisSikligi === 0) gecis.show();
+    if (!reklamsiz && gecis.isLoaded && ilerleme.oyunSayisi % KURALLAR.gecisSikligi === 0) {
+      try { gecis.show(); } catch (e) { hataKaydetSessiz(e); }
+    }
     setEkran({ ad: "ana" });
   };
 
@@ -114,7 +132,7 @@ export default function App() {
     if (bugunkuOdullu(ilerleme) >= KURALLAR.gunlukReklamSiniri) { goster("Bugünlük reklam hakkın doldu."); return; }
     if (!odullu.isLoaded) { goster("Reklam henüz hazır değil, biraz sonra dene."); return; }
     odulVerildi.current = false;
-    odullu.show();
+    try { odullu.show(); } catch (e) { hataKaydetSessiz(e); goster("Reklam açılamadı."); }
   };
 
   const banner = reklamHazir && !reklamsiz ? (

@@ -4,8 +4,9 @@
 import { EK1 } from "./sorular-ek1";
 import { EK2 } from "./sorular-ek2";
 import { EK3 } from "./sorular-ek3";
+import { PAKETLER } from "./paketler";
 
-export type Kategori = "Uzay" | "Doğa" | "Vücut" | "İcatlar" | "Dünya";
+export type Kategori = "Uzay" | "Doğa" | "Vücut" | "İcatlar" | "Dünya" | "Bilim";
 export type Soru = { id: string; k: Kategori; s: string; d: string; y: [string, string]; a: string };
 
 const TEMEL: Soru[] = [
@@ -38,7 +39,7 @@ const TEMEL: Soru[] = [
   { id: "mercan", k: "Doğa", s: "Mercan resifleri okyanus tabanının ne kadarını kaplar?", d: "Yüzde birden azını", y: ["Yaklaşık yarısını", "Yaklaşık dörtte birini"], a: "Yüzde birden az yer kaplasalar da deniz türlerinin yaklaşık dörtte birine ev sahipliği yaparlar." },
   { id: "ot", k: "Doğa", s: "Buğday, pirinç ve mısır hangi bitki ailesinden?", d: "Otlar (buğdaygiller)", y: ["Baklagiller", "Ağaçlar"], a: "Hepsi ot. Bir hesaba göre insanların aldığı kalorinin yaklaşık yarısı bu ailedeki bitkilerden geliyor." },
   { id: "plankton", k: "Doğa", s: "Bilinen en küçük fotosentetik canlı hangisi?", d: "Prochlorococcus", y: ["Yosun", "Kril"], a: "Bu minicik plankton, biyosferdeki oksijenin yüzde yirmisine kadarını üretiyor olabilir." },
-  { id: "sivrisinek", k: "Doğa", s: "Sivrisineklerden hangileri kan emer?", d: "Yalnız dişiler, yumurtaları için", y: ["Hepsi", "Yalnız erkekler"], a: "Asıl besinleri çiçek nektarı. Sıtma yalnız 2023'te yaklaşık 600 bin kişinin ölümüne yol açtı." },
+  { id: "sivrisinek", k: "Doğa", s: "Sivrisineklerden hangileri kan emer?", d: "Yalnız dişiler, yumurtaları için", y: ["Erkekler de dişiler de", "Yalnız erkekler"], a: "Asıl besinleri çiçek nektarı. Sıtma yalnız 2023'te yaklaşık 600 bin kişinin ölümüne yol açtı." },
   { id: "solucan", k: "Doğa", s: "Darwin hayatının son kitabını hangi canlıya ayırdı?", d: "Solucanlara", y: ["İspinozlara", "Kaplumbağalara"], a: "Solucanlar toprağı sürekli karıştırır, yaprakları bitkilerin kullanabileceği besine çevirir." },
   { id: "yarasa", k: "Doğa", s: "Bazı yarasalar hangi bitkileri tozlaştırır?", d: "Muz ve agav", y: ["Buğday ve arpa", "Çam ve köknar"], a: "Yarasalar zararlı böcekleri yer, bazıları çiçekleri tozlaştırır, meyve yarasaları da tohum taşır." },
   { id: "mikrop", k: "Doğa", s: "Bütün mikroplar yok olsa, inekler için ne değişirdi?", d: "Otu sindiremezlerdi", y: ["Daha çok süt verirlerdi", "Hiçbir şey değişmezdi"], a: "İneklerin otu sindirmesini midelerindeki mikroplar sağlar. Mikropsuz bir dünyada ölen hiçbir şey de çürümezdi." },
@@ -92,6 +93,6 @@ const TEMEL: Soru[] = [
   { id: "yagmur", k: "Dünya", s: "Toprağın yağmur kokusu aslında neden gelir?", d: "Bir bakteri ürününden", y: ["Yağmur damlalarındaki tuzdan", "Şimşeğin yaktığı havadan"], a: "Yağmur, karadaki tatlı suyun asıl kaynağıdır; nehirler, göller ve yeraltı suları onunla dolar." },
 ];
 
-export const KATEGORILER: Kategori[] = ["Uzay", "Doğa", "Vücut", "İcatlar", "Dünya"];
+export const KATEGORILER: Kategori[] = ["Uzay", "Doğa", "Vücut", "İcatlar", "Dünya", "Bilim"];
 
-export const SORULAR: Soru[] = [...TEMEL, ...EK1, ...EK2, ...EK3];
+export const SORULAR: Soru[] = [...TEMEL, ...EK1, ...EK2, ...EK3, ...PAKETLER];

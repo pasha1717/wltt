@@ -4,7 +4,7 @@ import type { Soru } from "./sorular";
 export const EK2: Soru[] = [
   // arilar
   { id: "arilar-2", k: "Doğa", s: "\"Arılar yok olursa insanlığın dört yılı kalır\" sözünü Einstein mı söyledi?", d: "Buna dair hiçbir kanıt yok", y: ["Evet, 1940'ta", "Evet, ama 10 yıl dedi"], a: "Söz hem Einstein'a ait görünmüyor hem de doğru değil." },
-  { id: "arilar-3", k: "Doğa", s: "Dünyadaki gıdanın ne kadarı arıya hiç ihtiyaç duymaz?", d: "Yarıdan fazlası", y: ["Hiçbiri", "Yaklaşık onda biri"], a: "Buğday, pirinç ve mısır gibi temel ürünleri rüzgâr tozlaştırır." },
+  { id: "arilar-3", k: "Doğa", s: "Dünyadaki gıdanın ne kadarı arıya hiç ihtiyaç duymaz?", d: "Yarıdan fazlası", y: ["Neredeyse hiçbiri", "Yaklaşık onda biri"], a: "Buğday, pirinç ve mısır gibi temel ürünleri rüzgâr tozlaştırır." },
   { id: "arilar-4", k: "Doğa", s: "Arılar yok olsa hangisi çok azalırdı?", d: "Badem", y: ["Pirinç", "Buğday"], a: "Elma, badem, kiraz ve karpuz hayvan tozlaşmasına muhtaç." },
   // agac
   { id: "agac-2", k: "Doğa", s: "Dünyada yaklaşık kaç ağaç var?", d: "Yaklaşık 3 trilyon", y: ["Yaklaşık 3 milyar", "Yaklaşık 300 milyon"], a: "Bir çalışmaya göre insanlar her yıl yaklaşık 15 milyar ağaç kesiyor." },
