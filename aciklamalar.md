@@ -737,3 +737,83 @@ Takip et, her gün bir "ne olurdu?" 🔁
 
 #elektrik #icat #bilim #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
 ```
+
+## Sürtünme olmasaydı (`surtunme.mp4`)
+
+```text
+Yürüyebilmen, ayakkabının yeri kavramasına bağlı.
+
+Dünya'da sürtünme bir anda yok olsaydı, ne olurdu?
+
+Sürtünmeyi hep işleri yavaşlatan bir engel sanırız. Oysa her adımımız ona yaslanıyor.
+
+Sence sürtünmesiz bir dünyada ilk ne olurdu? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#sürtünme #fizik #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Acı hissetmeseydik (`aci.mp4`)
+
+```text
+Bazı insanlar doğuştan hiç acı hissetmiyor.
+
+Hiç acı hissetmeseydik, ne olurdu?
+
+Acıyı çoğu zaman bir ceza gibi görürüz. Aslında bizi kollayan bir bekçi.
+
+Sence vücudun en akıllı alarmı hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#acı #vücut #sağlık #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Antibiyotik olmasaydı (`antibiyotik.mp4`)
+
+```text
+Bin dokuz yüz yirmi sekizde, unutulan bir petri kabı tıbbı değiştirdi.
+
+Antibiyotikler hiç bulunmasaydı, ne olurdu?
+
+Küçük bir kaptaki küf, milyonlarca hayat kurtardı. Onu korumak da bizim elimizde.
+
+Sence tıbbın en büyük buluşu hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#antibiyotik #tıp #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## GPS zamanı düzeltmeseydi (`gps.mp4`)
+
+```text
+Telefonundaki harita, Einstein'ın görelilik teorisi olmadan yolunu şaşırırdı.
+
+GPS uyduları zamanı düzeltmeseydi, ne olurdu?
+
+Görelilik, kara tahtadaki karmaşık bir formül gibi görünür. Seni eve götüren de o formül.
+
+Sence en işe yarayan bilim buluşu hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#gps #görelilik #einstein #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Renkleri göremeseydik (`renk.mp4`)
+
+```text
+Köpekler dünyayı büyük ölçüde mavi ve sarı tonlarında görüyor.
+
+Renkleri hiç göremeseydik, ne olurdu?
+
+Renkleri, beynimiz gelen ışıktan üretiyor. Gördüğün her gökkuşağı, gözünle beyninin ortak eseri.
+
+Sence en güzel renk hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#renk #göz #beyin #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```

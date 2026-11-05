@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Telefonundaki harita, Einstein'ın görelilik teorisi olmadan yolunu şaşırırdı.
+[pause] GPS uyduları zamanı düzeltmeseydi, ne olurdu?
+Çoğu kişi, GPS'in sadece uydu sinyaliyle çalıştığını düşünür.
+[pause] O sinyal de çok hassas saatlerle ölçülen zamana dayanıyor.
+[calm] Telefonun, sinyalin uydudan gelme süresini ölçerek konumunu bulur.
+Uydulardaki saatler, zayıf yerçekimi yüzünden Dünya'dakilerden biraz hızlı çalışır.
+Yüksek hızları ise onları biraz yavaşlatır. Toplamda günde yaklaşık otuz sekiz mikrosaniye öne geçerler.
+Bu fark düzeltilmeseydi, konum hatası her gün yaklaşık on kilometre büyürdü.
+[pause] Bu yüzden uydu saatleri, görelilik hesaba katılarak ayarlanıyor.
+Yani bir fizik teorisi, her gün cebinde çalışıyor.
+[slowly] Görelilik, kara tahtadaki karmaşık bir formül gibi görünür.
+[softly] Seni eve götüren de o formül.
+[pause] Sence en işe yarayan bilim buluşu hangisi? Yorumlara yaz.
