@@ -1,6 +1,7 @@
 // Oyun mantığı ve cihazda kalıcı ilerleme. İnternet ya da sunucu kullanmaz.
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Kategori, Soru, SORULAR } from "./sorular";
+import { KURALLAR } from "./yapilandirma";
 
 export const GUNLUK_SORU = 5;
 export const SERBEST_SORU = 10;
@@ -58,9 +59,16 @@ export type Ilerleme = {
   enIyiSeri: number;
   sonGun: string;
   hatirlatma: boolean;
+  kredi: number;
+  reklamsiz: boolean;
+  oyunSayisi: number; // geçiş reklamı sıklığı için
+  odullu: { tarih: string; sayi: number }; // bugün izlenen ödüllü reklam
 };
 
-const BOS: Ilerleme = { bilinenler: [], gunluk: {}, seri: 0, enIyiSeri: 0, sonGun: "", hatirlatma: false };
+const BOS: Ilerleme = {
+  bilinenler: [], gunluk: {}, seri: 0, enIyiSeri: 0, sonGun: "", hatirlatma: false,
+  kredi: KURALLAR.baslangicKredisi, reklamsiz: false, oyunSayisi: 0, odullu: { tarih: "", sayi: 0 },
+};
 const ANAHTAR = "neolurdu.ilerleme";
 
 export async function ilerlemeOku(): Promise<Ilerleme> {
@@ -82,10 +90,11 @@ export const guncelSeri = (i: Ilerleme) => (i.sonGun === bugun() || i.sonGun ===
 export function sonucuKaydet(i: Ilerleme, sorular: OyunSorusu[], sonuclar: boolean[], gunlukMu: boolean): Ilerleme {
   const bilinen = new Set(i.bilinenler);
   sorular.forEach((s, n) => { if (sonuclar[n]) bilinen.add(s.id); });
-  const yeni: Ilerleme = { ...i, bilinenler: [...bilinen] };
+  const yeni: Ilerleme = { ...i, bilinenler: [...bilinen], oyunSayisi: i.oyunSayisi + 1 };
   if (gunlukMu) {
     const t = bugun();
     if (!i.gunluk[t]) {
+      yeni.kredi = i.kredi + KURALLAR.gunlukOdul;
       const seri = i.sonGun === dun() ? i.seri + 1 : i.sonGun === t ? i.seri : 1;
       yeni.seri = seri;
       yeni.enIyiSeri = Math.max(i.enIyiSeri, seri);
@@ -102,3 +111,5 @@ export function paylasimMetni(sonuclar: boolean[], seri: number): string {
   const tarih = new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long" });
   return `Ne Olurdu? · ${tarih}\n${kareler} ${dogru}/${sonuclar.length}\nSeri: ${seri} gün`;
 }
+
+export const bugunkuOdullu = (i: Ilerleme) => (i.odullu.tarih === bugun() ? i.odullu.sayi : 0);
