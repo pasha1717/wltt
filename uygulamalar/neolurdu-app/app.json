@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "Ne Olurdu?",
+    "slug": "ne-olurdu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.neolurdu.oyun"
+    },
+    "android": {
+      "package": "com.neolurdu.oyun",
+      "adaptiveIcon": {
+        "backgroundColor": "#111c3d",
+        "foregroundImage": "./assets/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#111c3d"
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#ffcf4a"
+        }
+      ],
+      "expo-font"
+    ],
+    "backgroundColor": "#111c3d"
+  }
+}
