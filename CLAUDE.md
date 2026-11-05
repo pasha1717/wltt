@@ -1,6 +1,6 @@
 # Proje: "Ne olurdu?" Reels videoları
 
-Dikey (1080x1920, 30 fps, 60 sn altı) animasyon videoları. Görüntü React + SVG (Remotion), ses ElevenLabs.
+Dikey (1080x1920, 30 fps, yaklaşık 60 sn) animasyon videoları. Görüntü React + SVG (Remotion), ses ElevenLabs.
 Ayrıntılı yöntem: `Claude_Animasyon_Sistemi.md`.
 
 ## Kullanıcının kalıcı tercihleri
@@ -9,8 +9,8 @@ Ayrıntılı yöntem: `Claude_Animasyon_Sistemi.md`.
 - Toplu üretimde videoları tek bir zip dosyasında teslim et (`cikti/` içinde). Zip'e o partinin Instagram açıklamalarını da `aciklamalar.md` olarak ekle (yalnız o partideki videolar).
 - Ses: ElevenLabs "Deniz" (`KAGDtM2gzDrjWlUp2KNe`), model `eleven_v4`.
 - Seslendirmede satır aralarına sessizlik ekle: `python3 ses.py public/<ad> <ses_id>` sonra `python3 sessizlik.py public/<ad>`.
-- Format: Reels (dikey, 60 sn altı). Uzun video yok.
-- Sesi hızlandırma (atempo vb. kullanma). Video 60 sn'yi aşarsa metni kısaltıp sesi yeniden üret.
+- Format: Reels (dikey). Hedef 60 sn civarı; biraz aşması sorun değil. Uzun video yok.
+- Sesi hızlandırma (atempo vb. kullanma). Süreyi kısaltmak için metni kısalt.
 
 ## Becerileri (skills) bu işte nasıl kullan
 Video ve açıklama üretirken aşağıdaki becerileri kullan:
