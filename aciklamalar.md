@@ -897,3 +897,163 @@ Her gün yeni bir "ne olurdu?" için takip et.
 
 #sabun #hijyen #sağlık #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
 ```
+
+## Sivrisinekler yok olsaydı (`sivrisinek.mp4`)
+
+```text
+En çok insan öldüren hayvan köpekbalığı değil, minicik bir sivrisinek.
+
+Dünyadaki bütün sivrisinekler yok olsaydı, ne olurdu?
+
+Bilim insanlarının çoğuna göre doğa bu boşluğu büyük ölçüde doldururdu. Sıtma ise yalnız 2023'te yaklaşık 600 bin can aldı.
+
+Sence doğadan tek bir canlıyı silebilsen, hangisi olurdu? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#sivrisinek #sıtma #doğa #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Dünya eğik olmasaydı (`mevsim.mp4`)
+
+```text
+Ocakta Güneş'e yılın en yakın noktasındayız. Yine de kuzeyde kış yaşıyoruz.
+
+Dünya'nın ekseni hiç eğik olmasaydı, ne olurdu?
+
+Mevsimleri uzaklık belirlemiyor. Eksen yaklaşık 23,5 derece eğik, ışığın geliş açısı da bu yüzden yıl boyu değişiyor.
+
+Sen en çok hangi mevsimi seviyorsun? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#mevsimler #dünya #güneş #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Jüpiter olmasaydı (`jupiter.mp4`)
+
+```text
+Jüpiter'in bizi göktaşlarından koruduğu yıllarca anlatıldı.
+
+Güneş Sistemi'nde hiç Jüpiter olmasaydı, ne olurdu?
+
+Simülasyonlar daha karışık bir şey gösteriyor. Jüpiter bazı kuyruklu yıldızları uzaklaştırıyor, bazı göktaşlarını da bize doğru itebiliyor.
+
+Sence Güneş Sistemi'nin en ilginç gezegeni hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#jüpiter #uzay #gezegen #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Sera etkisi olmasaydı (`sera.mp4`)
+
+```text
+Sera etkisini hep kötü bir şey olarak duyduk.
+
+Dünya'da hiç sera etkisi olmasaydı, ne olurdu?
+
+Ortalama sıcaklık 15 dereceden yaklaşık eksi 18 dereceye düşerdi. Sorun sera etkisinin kendisinde değil, onu hızla artırmamızda.
+
+Sence iklim hakkında en çok yanlış bilinen şey ne? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#seraetkisi #iklim #dünya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Otlar yok olsaydı (`ot.mp4`)
+
+```text
+Bu sabah yediğin ekmeği bir ota borçlusun.
+
+Dünyadaki bütün otlar yok olsaydı, ne olurdu?
+
+Buğday, pirinç ve mısır da birer ot. Bir hesaba göre aldığımız kalorinin yaklaşık yarısı bu aileden geliyor.
+
+Sence hangi yiyecek olmadan yaşayamazdın? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#buğday #bitkiler #beslenme #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Gözlük olmasaydı (`gozluk.mp4`)
+
+```text
+Kırk yaşından sonra yakını bulanık görmek, eskiden çaresizdi.
+
+Gözlük hiç icat edilmeseydi, ne olurdu?
+
+İlk gözlükler 1280'lerde İtalya'da yapıldı, mucidi hâlâ bilinmiyor. Bugün en az 2,2 milyar insanın bir görme sorunu var.
+
+Sen gözlük kullanıyor musun? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#gözlük #göz #icat #neolurdu #bilgi #tarih #keşfet #reels #ilginçbilgiler
+```
+
+## Buzdolabı olmasaydı (`buzdolabi.mp4`)
+
+```text
+Bir adam Karayipler'e gemi dolusu buz götürdü ve alıcı bulamadı.
+
+Buzdolabı hiç olmasaydı, ne olurdu?
+
+Bugün bile yetersiz soğutma yüzünden üretilen gıdanın yaklaşık yüzde 12'si kayboluyor. Aşıların çoğu da 2 ile 8 derece arasında durmak zorunda.
+
+Sence evdeki en önemli alet hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#buzdolabı #icat #sağlık #neolurdu #bilgi #tarih #keşfet #reels #ilginçbilgiler
+```
+
+## Matbaa olmasaydı (`matbaa.mp4`)
+
+```text
+Matbaadan önce tek bir kitabı çoğaltmak aylar sürerdi.
+
+Matbaa hiç icat edilmeseydi, ne olurdu?
+
+Bir kâtip günde yaklaşık üç bin kelime yazabiliyordu. 1500'e gelindiğinde Avrupa'da milyonlarca kitap basılmıştı.
+
+Sence hayatını en çok değiştiren kitap hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#matbaa #kitap #gutenberg #neolurdu #bilgi #tarih #keşfet #reels #ilginçbilgiler
+```
+
+## Kanalizasyon olmasaydı (`kanalizasyon.mp4`)
+
+```text
+1858 yazında Londra öyle koktu ki, meclis taşınmayı konuştu.
+
+Şehirlerin altında hiç kanalizasyon olmasaydı, ne olurdu?
+
+Kanalizasyon ve temiz su, tarihte en çok can kurtaran buluşlardan biri. Bugün hâlâ 3,4 milyar insanın güvenli bir tuvaleti yok.
+
+Sence en çok hafife alınan icat hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#kanalizasyon #temizsu #sağlık #neolurdu #bilgi #tarih #keşfet #reels #ilginçbilgiler
+```
+
+## Kemikler yenilenmeseydi (`kemik.mp4`)
+
+```text
+Şu an taşıdığın iskeletin büyük kısmı on yıl önce yoktu.
+
+Kemiklerimiz kendini hiç yenilemeseydi, ne olurdu?
+
+Kemik her gün yıkılıp yeniden yapılan canlı bir doku. Vücuttaki kalsiyumun da yüzde 99'dan fazlasını saklıyor.
+
+Sen hiç kemik kırdın mı? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#kemik #iskelet #vücut #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
