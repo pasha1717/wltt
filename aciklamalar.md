@@ -817,3 +817,83 @@ Her gün yeni bir "ne olurdu?" için takip et.
 
 #renk #göz #beyin #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
 ```
+
+## Terleyemeseydik (`ter.mp4`)
+
+```text
+İnsanı uzun koşularda bu kadar dayanıklı yapan şey, derisinde saklı.
+
+Hiç terleyemeseydik, ne olurdu?
+
+Derimizde milyonlarca ter bezi var ve her biri küçük bir soğutucu gibi çalışıyor. Utandığımız o ıslak lekeler, çalışan bir motorun izi.
+
+Sence vücudun en şaşırtıcı yeteneği hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#ter #vücut #evrim #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Cam icat edilmeseydi (`cam.mp4`)
+
+```text
+Baktığın ekranın camı, büyük ölçüde erimiş kum.
+
+Cam hiç icat edilmeseydi, ne olurdu?
+
+Gözlük, mikroskop, teleskop ve denizin altından geçen internet kabloları. Bilimin gördüklerinin çoğunu bu şeffaf malzemeye borçluyuz.
+
+Sence camın en önemli işi hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#cam #icat #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Planktonlar yok olsaydı (`plankton.mp4`)
+
+```text
+Aldığın nefeslerin bir kısmı, göremediğin canlılardan geliyor.
+
+Okyanustaki planktonlar yok olsaydı, ne olurdu?
+
+Dünyadaki oksijenin kabaca yarısı okyanusta üretiliyor, çoğunu da gözle görülmeyen planktonlar üretiyor. En büyük sistemler, en küçük canlılara yaslanıyor.
+
+Sence okyanusun en şaşırtıcı canlısı hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#plankton #okyanus #oksijen #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Tükürük olmasaydı (`tukuruk.mp4`)
+
+```text
+Ağzın her gün yaklaşık bir şişe su kadar tükürük üretiyor.
+
+Hiç tükürüğümüz olmasaydı, ne olurdu?
+
+Sindirim ilk lokmada başlıyor, dişleri koruyan da o sıradan sıvı. Bu akşam ekmeği uzun çiğne, hafif bir tatlılık hissedeceksin.
+
+Sence vücudun en hafife alınan parçası hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#tükürük #ağız #sağlık #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Sabun olmasaydı (`sabun.mp4`)
+
+```text
+Pek çok hayat kurtaran bir buluş, lavabonun kenarında duruyor.
+
+Sabun hiç olmasaydı, ne olurdu?
+
+Sabun mikropları söküp suyla birlikte götürüyor. Hayat kurtaran şey bazen sadece bir alışkanlık.
+
+Sence en önemli sağlık alışkanlığı ne? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#sabun #hijyen #sağlık #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
