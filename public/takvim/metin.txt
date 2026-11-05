@@ -1,0 +1,13 @@
+[calm] 1582'de|Bin_beş_yüz_seksen_ikide insanlar dört ekimde uyudu, on beş ekimde uyandı.
+[pause] Takvimden on gün birden silinseydi, ne olurdu?
+Çoğu kişi, bir yılın tam üç yüz altmış beş gün altı saat olduğunu düşünür.
+[pause] Oysa gerçek yıl, bundan yaklaşık on bir dakika kısa.
+Eski Jülyen takvimi bu küçük farkı yok sayıyordu.
+Fark yüzyıllar boyunca birikti ve ilkbahar ekinoksu on gün kaydı.
+Papa On Üçüncü Gregorius, bu yüzden takvimden on gün attırdı.
+Britanya geç kaldı. 1752'de|bin_yedi_yüz_elli_ikide geçtiğinde fark on bir gün olmuştu.
+Osmanlı da 1917'de|bin_dokuz_yüz_on_yedide takvimden on üç gün attı.
+Bugünkü takvim de kusursuz değil, ama yaklaşık üç bin yılda bir gün kayıyor.
+[slowly] Küçük bir hata,
+[softly] yeterince beklenirse günler kaybettirir.
+[pause] Sen hangi günü takvimden silmek isterdin? Yorumlara yaz.

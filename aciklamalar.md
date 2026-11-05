@@ -1057,3 +1057,83 @@ Her gün yeni bir "ne olurdu?" için takip et.
 
 #kemik #iskelet #vücut #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
 ```
+
+## Mide kendini korumasaydı (`mide.mp4`)
+
+```text
+Midendeki asit eti sindiriyor. Oysa mide de etten yapılmış.
+
+Mide kendini korumasaydı, ne olurdu?
+
+Duvarı kalın bir mukus tabakası kaplıyor, iç yüzey de birkaç günde bir yenileniyor. Bu koruma bozulunca ülser başlıyor.
+
+Sence vücudun en şaşırtıcı organı hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#mide #sindirim #vücut #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Kolların kendi aklı olsaydı (`ahtapot.mp4`)
+
+```text
+Kopmuş bir ahtapot kolu, yiyecek yakalamaya devam edebiliyor.
+
+Kollarımızın kendi aklı olsaydı, ne olurdu?
+
+Ahtapotun nöronlarının yaklaşık üçte ikisi kollarında. Üç kalbi ve mavi kanı da cabası.
+
+Sence en zeki hayvan hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#ahtapot #deniz #hayvanlar #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Konserve açacağı olmasaydı (`konserve.mp4`)
+
+```text
+Konserve kutusu icat edildi, açacağı ise neredeyse elli yıl bekledi.
+
+Konserve açacağı hiç icat edilmeseydi, ne olurdu?
+
+Teneke kutunun patenti 1810'da alındı. İlk açacaklar 1850'lerde geldi, o güne kadar kutular çekiç ve keskiyle açıldı.
+
+Sence en hafife alınan mutfak aleti hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#konserve #icat #tarih #neolurdu #bilgi #mutfak #keşfet #reels #ilginçbilgiler
+```
+
+## Takvimden 10 gün silinseydi (`takvim.mp4`)
+
+```text
+1582'de insanlar 4 Ekim'de uyudu, 15 Ekim'de uyandı.
+
+Takvimden on gün birden silinseydi, ne olurdu?
+
+Eski takvim yılı yaklaşık 11 dakika uzun sayıyordu. Fark yüzyıllarca birikti. Osmanlı da 1917'de takvimden 13 gün attı.
+
+Sen hangi günü takvimden silmek isterdin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#takvim #tarih #zaman #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Bir gün bir yıldan uzun sürseydi (`venus.mp4`)
+
+```text
+Venüs'te kendi çevresinde bir tur dönmek, bir yıldan uzun sürüyor.
+
+Bir gün, bir yıldan uzun sürseydi, ne olurdu?
+
+Venüs Güneş'e Merkür'den uzak ama yüzeyi yaklaşık 465 derece. Kalın karbondioksit örtüsü ısıyı bırakmıyor.
+
+Sence hangi gezegeni ziyaret etmek isterdin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#venüs #uzay #gezegen #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
