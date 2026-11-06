@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "expo.modules.playgames.play-games-release-2:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml",
+        "source": "expo.modules.playgames.play-games-appcompat-1.7.0-31:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "expo.modules.playgames.play-games-release-2:/layout-watch-v20/abc_alert_dialog_title_material.xml",
+        "source": "expo.modules.playgames.play-games-appcompat-1.7.0-31:/layout-watch-v20/abc_alert_dialog_title_material.xml"
+    }
+]

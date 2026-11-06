@@ -59,7 +59,9 @@ export type Ilerleme = {
   enIyiSeri: number;
   sonGun: string;
   hatirlatma: boolean;
-  kredi: number;
+  kredi: number; // = kazanilan - harcanan
+  kazanilan: number; // başlangıç + satın alınan + ödül olarak kazanılan toplam kredi (hiç azalmaz)
+  harcanan: number; // jokerle harcanan toplam kredi (hiç azalmaz)
   reklamsiz: boolean;
   oyunSayisi: number; // geçiş reklamı sıklığı için
   odullu: { tarih: string; sayi: number }; // bugün izlenen ödüllü reklam
@@ -67,14 +69,18 @@ export type Ilerleme = {
 
 const BOS: Ilerleme = {
   bilinenler: [], gunluk: {}, seri: 0, enIyiSeri: 0, sonGun: "", hatirlatma: false,
-  kredi: KURALLAR.baslangicKredisi, reklamsiz: false, oyunSayisi: 0, odullu: { tarih: "", sayi: 0 },
+  kredi: KURALLAR.baslangicKredisi, kazanilan: KURALLAR.baslangicKredisi, harcanan: 0, reklamsiz: false, oyunSayisi: 0, odullu: { tarih: "", sayi: 0 },
 };
 const ANAHTAR = "neolurdu.ilerleme";
 
 export async function ilerlemeOku(): Promise<Ilerleme> {
   try {
     const v = await AsyncStorage.getItem(ANAHTAR);
-    return v ? { ...BOS, ...JSON.parse(v) } : BOS;
+    if (!v) return BOS;
+    const i = { ...BOS, ...JSON.parse(v) } as Ilerleme;
+    // Sayaçlardan önceki sürümden gelen kayıt: mevcut bakiyeyi kazanılan say.
+    if (typeof JSON.parse(v).kazanilan !== "number") { i.kazanilan = i.kredi; i.harcanan = 0; }
+    return i;
   } catch {
     return BOS;
   }
@@ -94,7 +100,7 @@ export function sonucuKaydet(i: Ilerleme, sorular: OyunSorusu[], sonuclar: boole
   if (gunlukMu) {
     const t = bugun();
     if (!i.gunluk[t]) {
-      yeni.kredi = i.kredi + KURALLAR.gunlukOdul;
+      Object.assign(yeni, krediEkle(i, KURALLAR.gunlukOdul));
       const seri = i.sonGun === dun() ? i.seri + 1 : i.sonGun === t ? i.seri : 1;
       yeni.seri = seri;
       yeni.enIyiSeri = Math.max(i.enIyiSeri, seri);
@@ -113,3 +119,46 @@ export function paylasimMetni(sonuclar: boolean[], seri: number): string {
 }
 
 export const bugunkuOdullu = (i: Ilerleme) => (i.odullu.tarih === bugun() ? i.odullu.sayi : 0);
+
+// ---- Kredi: yalnız artan iki sayaçla tutulur, böylece cihazlar/bulut güvenle birleştirilebilir ----
+export const krediEkle = (i: Ilerleme, n: number): Ilerleme =>
+  ({ ...i, kazanilan: i.kazanilan + n, kredi: i.kazanilan + n - i.harcanan });
+export const krediHarca = (i: Ilerleme, n: number): Ilerleme =>
+  ({ ...i, harcanan: i.harcanan + n, kredi: i.kazanilan - (i.harcanan + n) });
+
+/** Telefondaki ve buluttaki ilerlemeyi birleştirir. Hiçbir kazanım kaybolmaz, hiçbir şey iki kez sayılmaz. */
+export function birlestir(yerel: Ilerleme, bulut: Ilerleme): Ilerleme {
+  const gunluk = { ...bulut.gunluk };
+  for (const [g, r] of Object.entries(yerel.gunluk)) if (!gunluk[g] || r.length >= gunluk[g].length) gunluk[g] = r;
+  const seriKaynagi = (bulut.sonGun || "") > (yerel.sonGun || "") ? bulut : yerel;
+  const odullu = yerel.odullu.tarih === bulut.odullu.tarih
+    ? { tarih: yerel.odullu.tarih, sayi: Math.max(yerel.odullu.sayi, bulut.odullu.sayi) }
+    : (yerel.odullu.tarih > bulut.odullu.tarih ? yerel.odullu : bulut.odullu);
+  const kazanilan = Math.max(yerel.kazanilan, bulut.kazanilan ?? 0);
+  const harcanan = Math.max(yerel.harcanan, bulut.harcanan ?? 0);
+  return {
+    ...yerel, // hatırlatma gibi cihaza özel ayarlar yerelden
+    bilinenler: [...new Set([...yerel.bilinenler, ...bulut.bilinenler])],
+    gunluk,
+    seri: seriKaynagi.seri,
+    sonGun: seriKaynagi.sonGun,
+    enIyiSeri: Math.max(yerel.enIyiSeri, bulut.enIyiSeri),
+    reklamsiz: yerel.reklamsiz || bulut.reklamsiz,
+    oyunSayisi: Math.max(yerel.oyunSayisi, bulut.oyunSayisi),
+    odullu,
+    kazanilan,
+    harcanan,
+    kredi: kazanilan - harcanan,
+  };
+}
+
+/** Bulut kaydından gelen JSON'u güvenle ilerlemeye çevirir (eksik alanlar varsayılanla dolar). */
+export function buluttanOku(json: string): Ilerleme | null {
+  try {
+    const v = JSON.parse(json);
+    if (!v || typeof v !== "object" || !Array.isArray(v.bilinenler)) return null;
+    return { ...BOS, ...v, gunluk: v.gunluk ?? {}, odullu: v.odullu ?? BOS.odullu };
+  } catch {
+    return null;
+  }
+}

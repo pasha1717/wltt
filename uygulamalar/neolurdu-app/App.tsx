@@ -9,8 +9,9 @@ import { BannerAd, BannerAdSize, useInterstitialAd, useRewardedAd } from "react-
 import { Kategori, KATEGORILER, SORULAR } from "./src/sorular";
 import {
   bugun, bugunkuOdullu, guncelSeri, gununSorulari, Ilerleme, ilerlemeOku, ilerlemeYaz, OyunSorusu, paylasimMetni,
-  serbestSorular, sonucuKaydet,
+  serbestSorular, sonucuKaydet, krediEkle, krediHarca,
 } from "./src/oyun";
+import { arkaPlanaGecince, bulutVarMi, esitle, oturumAc } from "./src/bulut";
 import { hatirlatmaAc, hatirlatmaKapat } from "./src/hatirlatma";
 import { gizlilikSecenegiGerekli, gizlilikSecenekleriniAc, reklamlariBaslat } from "./src/reklam";
 import { geriYukle, magazayiBaslat, magazayiKapat, satinAl, Urun } from "./src/magaza";
@@ -61,7 +62,7 @@ function Uygulama() {
 
   // Mağaza
   const dinleyiciler = useMemo(() => ({
-    krediEkle: (n: number) => { guncelle((i) => ({ ...i, kredi: i.kredi + n })); goster(`${n} kredi eklendi.`); },
+    krediEkle: (n: number) => { guncelle((i) => krediEkle(i, n)); goster(`${n} kredi eklendi.`); },
     reklamlariKaldir: () => guncelle((i) => (i.reklamsiz ? i : { ...i, reklamsiz: true })),
     hata: goster,
   }), [guncelle, goster]);
@@ -94,12 +95,55 @@ function Uygulama() {
     if (odullu.isEarnedReward && !odulVerildi.current) {
       odulVerildi.current = true;
       guncelle((i) => ({
-        ...i, kredi: i.kredi + KURALLAR.reklamOdulu,
+        ...krediEkle(i, KURALLAR.reklamOdulu),
         odullu: { tarih: bugun(), sayi: bugunkuOdullu(i) + 1 },
       }));
       goster(`${KURALLAR.reklamOdulu} kredi kazandın!`);
     }
   }, [odullu.isEarnedReward, guncelle, goster]);
+
+  // ---- Google Play Games bulut kaydı ----
+  const [bulutBagli, setBulutBagli] = useState(false);
+  const sonIlerleme = useRef<Ilerleme | null>(null);
+  useEffect(() => { sonIlerleme.current = ilerleme; }, [ilerleme]);
+  const esitleniyor = useRef(false);
+  const bulutlaEsitle = useCallback(async () => {
+    const simdi = sonIlerleme.current;
+    if (!simdi || esitleniyor.current) return;
+    esitleniyor.current = true;
+    try {
+      const birlesik = await esitle(simdi);
+      // Yalnız buluttan gerçekten yeni bir şey geldiyse güncelle (yoksa her yazma yeni bir eşitleme tetiklerdi)
+      if (birlesik && JSON.stringify(birlesik) !== JSON.stringify(simdi)) {
+        setIlerleme(birlesik);
+        ilerlemeYaz(birlesik);
+      }
+    } catch (e) { hataKaydetSessiz(e); } finally { esitleniyor.current = false; }
+  }, []);
+  const bulutaBaglan = useCallback(async (giris: boolean) => {
+    const ok = await oturumAc(giris);
+    setBulutBagli(ok);
+    if (ok) await bulutlaEsitle();
+    else if (giris) goster("Google Play Games'e bağlanılamadı.");
+  }, [bulutlaEsitle, goster]);
+  // Açılışta sessizce bağlan ve eşitle
+  const yuklendiMi = ilerleme !== null;
+  useEffect(() => {
+    if (!yuklendiMi || !bulutVarMi()) return;
+    const t = setTimeout(() => { bulutaBaglan(false); }, 2000);
+    return () => clearTimeout(t);
+  }, [yuklendiMi, bulutaBaglan]);
+  // Her değişiklikten birkaç saniye sonra ve uygulama arka plana geçince buluta yaz
+  useEffect(() => {
+    if (!bulutBagli || !ilerleme) return;
+    const t = setTimeout(() => { bulutlaEsitle(); }, 5000);
+    return () => clearTimeout(t);
+  }, [ilerleme, bulutBagli, bulutlaEsitle]);
+  useEffect(() => {
+    if (!bulutBagli) return;
+    const a = arkaPlanaGecince(() => { bulutlaEsitle(); });
+    return () => a.remove();
+  }, [bulutBagli, bulutlaEsitle]);
 
   if (!fontlar || !ilerleme) return null;
 
@@ -124,7 +168,7 @@ function Uygulama() {
 
   const jokerKullan = () => {
     if (ilerleme.kredi < KURALLAR.jokerBedeli) { goster("Yeterli kredin yok."); return false; }
-    guncelle((i) => ({ ...i, kredi: i.kredi - KURALLAR.jokerBedeli }));
+    guncelle((i) => krediHarca(i, KURALLAR.jokerBedeli));
     return true;
   };
 
@@ -144,7 +188,7 @@ function Uygulama() {
       <SafeAreaView style={s.ekran} edges={["top", "bottom", "left", "right"]}>
         <StatusBar style="light" />
         <View style={{ flex: 1 }}>
-          {ekran.ad === "ana" && <Ana ilerleme={ilerleme} git={setEkran} hatirlatmaDegis={hatirlatmaDegis} />}
+          {ekran.ad === "ana" && <Ana ilerleme={ilerleme} git={setEkran} hatirlatmaDegis={hatirlatmaDegis} bulutBagli={bulutBagli} bulutaBaglan={() => bulutaBaglan(true)} />}
           {ekran.ad === "oyun" && (
             <Oyun sorular={ekran.sorular} gunluk={ekran.gunluk} bitir={bitir} cik={() => setEkran({ ad: "ana" })}
               kredi={ilerleme.kredi} jokerKullan={jokerKullan} />
@@ -166,8 +210,9 @@ function Uygulama() {
 }
 
 // ---------------- Ana ekran ----------------
-function Ana({ ilerleme, git, hatirlatmaDegis }: {
+function Ana({ ilerleme, git, hatirlatmaDegis, bulutBagli, bulutaBaglan }: {
   ilerleme: Ilerleme; git: (e: Ekran) => void; hatirlatmaDegis: (a: boolean) => void;
+  bulutBagli: boolean; bulutaBaglan: () => void;
 }) {
   const [kategori, setKategori] = useState<Kategori | null>(null);
   const bugunku = ilerleme.gunluk[bugun()];
@@ -241,6 +286,20 @@ function Ana({ ilerleme, git, hatirlatmaDegis }: {
         <Text style={s.bolumBaslik}>Mağaza →</Text>
         <Text style={s.bolumNot}>Kredi al ya da reklam izleyerek kazan. {ilerleme.reklamsiz ? "Reklamsız sürüm aktif." : "Reklamları kaldırabilirsin."}</Text>
       </Pressable>
+
+      {bulutVarMi() && (
+        <View style={s.bolum}>
+          <Text style={s.bolumBaslik}>Bulut kaydı</Text>
+          {bulutBagli ? (
+            <Text style={s.bolumNot}>Kredin, serin ve koleksiyonun Google Play Games hesabında yedekleniyor. Uygulamayı silip yeniden kursan da geri gelir.</Text>
+          ) : (
+            <>
+              <Text style={s.bolumNot}>Kredin ve ilerlemen yalnız bu telefonda. Google Play Games ile bağlanırsan hesabına yedeklenir.</Text>
+              <Pressable style={s.ikincilButon} onPress={bulutaBaglan}><Text style={s.ikincilYazi}>Google Play Games ile bağlan</Text></Pressable>
+            </>
+          )}
+        </View>
+      )}
 
       <View style={[s.bolum, s.satir]}>
         <View style={{ flex: 1 }}>

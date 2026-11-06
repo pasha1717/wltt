@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "expo.modules.playgames.play-games-release-2:/layout-v21/notification_template_custom_big.xml",
+        "source": "expo.modules.playgames.play-games-core-1.13.1-9:/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "expo.modules.playgames.play-games-release-2:/layout-v21/notification_template_icon_group.xml",
+        "source": "expo.modules.playgames.play-games-core-1.13.1-9:/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "expo.modules.playgames.play-games-release-2:/layout-v21/notification_action.xml",
+        "source": "expo.modules.playgames.play-games-core-1.13.1-9:/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "expo.modules.playgames.play-games-release-2:/layout-v21/notification_action_tombstone.xml",
+        "source": "expo.modules.playgames.play-games-core-1.13.1-9:/layout-v21/notification_action_tombstone.xml"
+    }
+]

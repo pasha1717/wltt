@@ -56,7 +56,13 @@
       "expo-sharing",
       "./plugins/withYayinImzasi",
       "./plugins/withCokmeKaydi",
-      "./plugins/withWorkManager"
+      "./plugins/withWorkManager",
+      [
+        "./plugins/withPlayGames",
+        {
+          "appId": ""
+        }
+      ]
     ],
     "backgroundColor": "#111c3d"
   }

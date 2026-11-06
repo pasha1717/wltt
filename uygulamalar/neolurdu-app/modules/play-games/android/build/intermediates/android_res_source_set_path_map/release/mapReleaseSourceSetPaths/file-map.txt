@@ -1,0 +1,9 @@
+expo.modules.playgames.play-games-pngs-0 /home/user/wltt/uygulamalar/neolurdu-app/modules/play-games/android/build/generated/res/pngs/release
+expo.modules.playgames.play-games-updated_navigation_xml-1 /home/user/wltt/uygulamalar/neolurdu-app/modules/play-games/android/build/generated/updated_navigation_xml/release
+expo.modules.playgames.play-games-mergeReleaseResources-2 /home/user/wltt/uygulamalar/neolurdu-app/modules/play-games/android/build/intermediates/incremental/release/mergeReleaseResources/merged.dir
+expo.modules.playgames.play-games-mergeReleaseResources-3 /home/user/wltt/uygulamalar/neolurdu-app/modules/play-games/android/build/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+expo.modules.playgames.play-games-release-4 /home/user/wltt/uygulamalar/neolurdu-app/modules/play-games/android/build/intermediates/merged_res/release/mergeReleaseResources
+expo.modules.playgames.play-games-release-5 /home/user/wltt/uygulamalar/neolurdu-app/modules/play-games/android/build/intermediates/packaged_res/release/packageReleaseResources
+expo.modules.playgames.play-games-main-6 /home/user/wltt/uygulamalar/neolurdu-app/modules/play-games/android/src/main/res
+expo.modules.playgames.play-games-release-7 /home/user/wltt/uygulamalar/neolurdu-app/modules/play-games/android/src/release/res
+gradleHome-0 /root/.gradle

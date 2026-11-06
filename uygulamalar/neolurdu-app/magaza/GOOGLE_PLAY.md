@@ -81,3 +81,21 @@ Kimlikler **aynen** böyle olmalı:
 - Hedef SDK 36, AAB, yükleme anahtarıyla imzalı.
 - Gereksiz izinler kaldırıldı (pencere üstü çizim, depolama).
 - Reklam içerik sınırı: T (Genç).
+
+## 8. Google Play Games bulut kaydı (kredi ve ilerleme yedeği)
+Uygulama, kullanıcının kredisini, serisini ve koleksiyonunu Play Games "Kayıtlı oyunlar" ile Google hesabına yedekler.
+Kimlik girilene kadar bu özellik kapalıdır (ekranda da görünmez).
+
+1. Play Console > uygulaman > **Büyüt > Play Games Services > Kurulum ve yönetim > Yapılandırma**.
+2. "Hayır, oyunum Google API'lerini kullanmıyor" → oluştur.
+3. **Özellikler**: "Kayıtlı oyunlar" (Saved Games) **açık**.
+4. **Kimlik bilgileri > Kimlik bilgisi ekle > Android**: Google Cloud'da OAuth istemcisi oluşturulur. Burada iki SHA-1 parmak izi gerekir:
+   - Play Console > **Uygulama bütünlüğü > Uygulama imzalama**'daki **uygulama imzalama anahtarı SHA-1**'i (mağazadan yüklenenler için),
+   - **Yükleme anahtarı SHA-1**'i (aynı sayfada) — kendi derlediğin APK'yı test etmek için ayrı bir Android kimlik bilgisi olarak.
+5. **Test kullanıcıları**: kendi Gmail adresini ekle (yayınlanana kadar yalnız test kullanıcıları giriş yapabilir).
+6. Yapılandırma sayfasının üstündeki **Proje kimliği** (yalnız rakamlardan oluşan ~12 haneli sayı) → bunu `app.json` içindeki
+   `["./plugins/withPlayGames", { "appId": "BURAYA" }]` alanına yaz ve yeni sürüm derle.
+7. Play Games Services ayarlarını **Yayınla** (yoksa yalnız test kullanıcıları kullanabilir).
+
+Birleştirme kuralı: kredi "toplam kazanılan" ve "toplam harcanan" iki sayaçla tutulur, telefon ile bulut birleşirken her birinin büyüğü alınır.
+Böylece yeniden kurulumda kredi geri gelir, hiçbir şey iki kez sayılmaz.
