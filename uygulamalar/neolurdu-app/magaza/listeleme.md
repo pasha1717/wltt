@@ -1,7 +1,7 @@
 # Mağaza kaydı metinleri (Türkçe)
 
 ## Uygulama adı (en çok 30 karakter)
-Ne Olurdu? Bilim Bilgi Yarışması
+Ne Olurdu? Bilim Yarışması
 
 ## Kısa açıklama (en çok 80 karakter)
 Ay olmasaydı ne olurdu? Her gün 5 bilim sorusu, seri yap, koleksiyonu doldur.
