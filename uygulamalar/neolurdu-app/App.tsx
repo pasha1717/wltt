@@ -48,6 +48,8 @@ function Uygulama() {
   const [reklamHazir, setReklamHazir] = useState(false);
   const [gizlilikGerekli, setGizlilikGerekli] = useState(false);
   const [urunler, setUrunler] = useState<Urun[]>([]);
+  const [magazaDurum, setMagazaDurum] = useState("");
+  const magazaYukleniyor = useRef(false);
   const [mesaj, setMesaj] = useState("");
 
   const goster = useCallback((m: string) => { setMesaj(m); setTimeout(() => setMesaj(""), 2800); }, []);
@@ -66,13 +68,22 @@ function Uygulama() {
     reklamlariKaldir: () => guncelle((i) => (i.reklamsiz ? i : { ...i, reklamsiz: true })),
     hata: goster,
   }), [guncelle, goster]);
+  const urunleriYukle = useCallback(() => {
+    if (magazaYukleniyor.current) return;
+    magazaYukleniyor.current = true;
+    setMagazaDurum("Mağaza yükleniyor…");
+    magazayiBaslat(dinleyiciler)
+      .then(({ urunler: u, durum }) => { setUrunler(u); setMagazaDurum(durum); })
+      .catch((e) => { hataKaydetSessiz(e); setMagazaDurum("Mağaza açılamadı."); })
+      .finally(() => { magazaYukleniyor.current = false; });
+  }, [dinleyiciler]);
   useEffect(() => {
     // İlk ekran çizildikten sonra başlat; mağaza hatası uygulamayı durdurmasın.
-    const t = setTimeout(() => {
-      try { magazayiBaslat(dinleyiciler).then(setUrunler).catch(hataKaydetSessiz); } catch (e) { hataKaydetSessiz(e); }
-    }, 1500);
+    const t = setTimeout(urunleriYukle, 1500);
     return () => { clearTimeout(t); try { magazayiKapat(); } catch {} };
-  }, [dinleyiciler]);
+  }, [urunleriYukle]);
+  // Mağaza ekranına girerken ürün eksikse yeniden dene (açılışta internet yoksa vb.)
+  useEffect(() => { if (ekran.ad === "magaza" && urunler.length < 3) urunleriYukle(); }, [ekran.ad]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Reklamlar (onaydan sonra)
   useEffect(() => {
@@ -196,7 +207,7 @@ function Uygulama() {
           {ekran.ad === "sonuc" && <Sonuc {...ekran} seri={guncelSeri(ilerleme)} anaya={anaya} />}
           {ekran.ad === "koleksiyon" && <Koleksiyon bilinenler={ilerleme.bilinenler} geri={() => setEkran({ ad: "ana" })} />}
           {ekran.ad === "magaza" && (
-            <Magaza ilerleme={ilerleme} urunler={urunler} geri={() => setEkran({ ad: "ana" })}
+            <Magaza ilerleme={ilerleme} urunler={urunler} durum={magazaDurum} tekrarDene={urunleriYukle} geri={() => setEkran({ ad: "ana" })}
               reklamIzle={reklamIzle} reklamHazir={odullu.isLoaded} gizlilikGerekli={gizlilikGerekli}
               geriYukle={() => geriYukle(dinleyiciler).then(() => goster("Satın almalar kontrol edildi.")).catch(() => goster("Geri yükleme yapılamadı."))}
               satinAl={(id) => satinAl(id).catch(() => goster("Mağazaya bağlanılamadı."))} />
@@ -486,8 +497,8 @@ function Koleksiyon({ bilinenler, geri }: { bilinenler: string[]; geri: () => vo
 }
 
 // ---------------- Mağaza ----------------
-function Magaza({ ilerleme, urunler, geri, reklamIzle, reklamHazir, gizlilikGerekli, geriYukle, satinAl }: {
-  ilerleme: Ilerleme; urunler: Urun[]; geri: () => void; reklamIzle: () => void; reklamHazir: boolean;
+function Magaza({ ilerleme, urunler, durum, tekrarDene, geri, reklamIzle, reklamHazir, gizlilikGerekli, geriYukle, satinAl }: {
+  ilerleme: Ilerleme; urunler: Urun[]; durum: string; tekrarDene: () => void; geri: () => void; reklamIzle: () => void; reklamHazir: boolean;
   gizlilikGerekli: boolean; geriYukle: () => void; satinAl: (id: string) => void;
 }) {
   const fiyat = (id: string) => urunler.find((u) => u.id === id)?.fiyat;
@@ -536,6 +547,10 @@ function Magaza({ ilerleme, urunler, geri, reklamIzle, reklamHazir, gizlilikGere
         )}
       </View>
       {urunler.length === 0 && <Text style={s.bolumNot}>Mağaza şu an kullanılamıyor. Uygulamayı Google Play'den yüklediğinden ve internetinin açık olduğundan emin ol, biraz sonra tekrar dene.</Text>}
+      {durum !== "" && <Text style={s.bolumNot}>{durum}</Text>}
+      {urunler.length < 3 && (
+        <Pressable style={s.ikincilButon} onPress={tekrarDene}><Text style={s.ikincilYazi}>Mağazayı yenile</Text></Pressable>
+      )}
 
       <Pressable style={s.ikincilButon} onPress={geriYukle}><Text style={s.ikincilYazi}>Satın almaları geri yükle</Text></Pressable>
       {gizlilikGerekli && (
