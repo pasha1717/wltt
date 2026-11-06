@@ -55,7 +55,8 @@
       "expo-iap",
       "expo-sharing",
       "./plugins/withYayinImzasi",
-      "./plugins/withCokmeKaydi"
+      "./plugins/withCokmeKaydi",
+      "./plugins/withWorkManager"
     ],
     "backgroundColor": "#111c3d"
   }
