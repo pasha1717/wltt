@@ -1,0 +1,4 @@
+.env
+kayitlar/
+node_modules/
+src/arayuz/public/vendor/

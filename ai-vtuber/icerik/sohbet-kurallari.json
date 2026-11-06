@@ -1,0 +1,23 @@
+[
+  { "grup": "yasak_siyaset", "kelimeler": ["siyaset", "secim", "=parti", "partin", "=baskan", "hukumet", "politik", "milletvekili", "oy ver"] },
+  { "grup": "yasak_din", "kelimeler": ["din", "dinin", "allah", "tanri", "namaz", "kilise", "cami", "ateist"] },
+  { "grup": "yasak_plus18", "kelimeler": ["seks", "sex", "+18", "ciplak", "nude", "sevgilin var", "evlen", "opucuk"] },
+  { "grup": "yasak_kisisel", "kelimeler": ["adresin", "adresim", "telefon", "numaran", "numaram", "instagramin", "hangi okul", "nerede oturuyorsun"] },
+  { "grup": "yasak_marka", "kelimeler": ["reklam", "sponsor", "=marka", "markasi", "rakip"] },
+  { "grup": "sohbet_yapayzeka", "kelimeler": ["yapay zeka", "yapayzeka", "robot", "gercek misin", "insan misin", "bot musun", "ai misin"] },
+  { "grup": "sohbet_nasilsin", "kelimeler": ["nasilsin", "naber", "ne haber", "iyi misin", "nasil gidiyor"] },
+  { "grup": "sohbet_yas", "kelimeler": ["kac yasinda", "yasin kac", "yasin ne"] },
+  { "grup": "sohbet_ne_yapiyorsun", "kelimeler": ["ne yapiyorsun", "napiyorsun", "napiyon", "ne yapiyon"] },
+  { "grup": "sohbet_isim", "kelimeler": ["adin ne", "ismin ne", "sen kimsin", "kimsin"] },
+  { "grup": "sohbet_sarki", "kelimeler": ["sarki", "soyle bir", "sarki soyle"] },
+  { "grup": "sohbet_nerelisin", "kelimeler": ["nerelisin", "neredesin", "nerdesin"] },
+  { "grup": "sohbet_yemek", "kelimeler": ["yemek", "pasta", "aciktim", "ne yedin", "en sevdigin yemek"] },
+  { "grup": "sohbet_iltifat", "kelimeler": ["guzelsin", "tatlisin", "sevimli", "seni seviyorum", "harikasin", "cok iyisin"] },
+  { "grup": "sohbet_gulme", "kelimeler": ["haha", "hahaha", "jsjs", "sjsj", "komik", "xd", "aksjd"] },
+  { "grup": "sohbet_sikildim", "kelimeler": ["sikildim", "sikici", "canim sikildi"] },
+  { "grup": "sohbet_takip", "kelimeler": ["takip", "takipci", "follow"] },
+  { "grup": "sohbet_tesekkur", "kelimeler": ["tesekkur", "sagol", "sag ol", "eyvallah", "thanks"] },
+  { "grup": "sohbet_hosca_kal", "kelimeler": ["gorusuruz", "hoscakal", "hosca kal", "bay bay", "bye", "gidiyorum", "iyi geceler"] },
+  { "grup": "selam", "kelimeler": ["selam", "merhaba", "slm", "mrb", "selamlar", "hey", "sa", "selamun aleykum", "hi", "hello"] },
+  { "grup": "sohbet_soru", "kelimeler": ["neden", "nicin", "sence", "biliyor musun"] }
+]

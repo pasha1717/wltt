@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Neşe - Sahne</title>
+<style>
+  :root { --duvar1: #ffe9d6; --duvar2: #ffd2c2; --zemin: #c98f6b; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; font-family: "Nunito", "Segoe UI", system-ui, sans-serif; }
+  #sahne { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+  #oda { position: absolute; inset: 0; }
+  #karakterKutu { position: absolute; left: 0; top: 380px; width: 1080px; height: 1540px; transform-origin: 50% 95%; }
+  #karakter { width: 100%; height: 100%; display: block; }
+  #efekt { position: absolute; inset: 0; pointer-events: none; }
+  #balon { position: absolute; left: 70px; right: 70px; top: 150px; padding: 34px 44px; background: #fff; color: #3a2a35;
+    border-radius: 48px; font-size: 54px; line-height: 1.25; font-weight: 800; text-align: center;
+    box-shadow: 0 12px 0 #f3b6c8, 0 18px 40px rgba(0,0,0,.18); opacity: 0; transform: translateY(-20px) scale(.96);
+    transition: opacity .25s, transform .25s; }
+  #balon.acik { opacity: 1; transform: none; }
+  #balon::after { content: ""; position: absolute; left: 50%; bottom: -36px; margin-left: -30px; border: 30px solid transparent;
+    border-top-color: #fff; border-bottom: 0; }
+  #balon small { display: block; font-size: 34px; font-weight: 700; color: #c35b84; margin-bottom: 10px; }
+  #balon .tesekkur { display: block; font-size: 38px; color: #c35b84; margin-top: 12px; }
+  #yukleniyor { position: absolute; left: 0; right: 0; bottom: 40px; text-align: center; color: #7a5260; font-size: 30px; }
+
+  /* Hareketler: karakter kutusuna uygulanan CSS animasyonları */
+  .h-zipla   { animation: zipla .5s ease-out 3; }
+  .h-sevinc  { animation: zipla .45s ease-out 2; }
+  .h-korku   { animation: titre .08s linear 10, geri .6s ease-out; }
+  .h-saskin  { animation: geri .5s ease-out; }
+  .h-utanma  { animation: egil 1.6s ease-in-out; }
+  .h-elsalla { animation: salla 1s ease-in-out 2; }
+  .h-dusunme { animation: egil 2s ease-in-out; }
+  .h-dusme   { animation: dus 3.2s cubic-bezier(.3,.0,.3,1); }
+  @keyframes zipla { 0%,100% { transform: translateY(0); } 40% { transform: translateY(-90px) scaleY(1.03); } 80% { transform: translateY(0) scaleY(.97); } }
+  @keyframes titre { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-14px); } 75% { transform: translateX(14px); } }
+  @keyframes geri { 0%,100% { transform: none; } 30% { transform: translateY(-60px) scale(1.04); } }
+  @keyframes egil { 0%,100% { transform: rotate(0); } 30%,70% { transform: rotate(-4deg) translateX(-20px); } }
+  @keyframes salla { 0%,100% { transform: rotate(0); } 25% { transform: rotate(3deg); } 75% { transform: rotate(-3deg); } }
+  /* Düşme: kayar, yere oturur (yalnız başı ve omuzları görünür), sonra kalkar. translate rotate'ten önce gelir. */
+  @keyframes dus { 0% { transform: none; } 12% { transform: translateY(-50px) rotate(6deg); }
+    30%,68% { transform: translateY(560px) rotate(-12deg); } 86% { transform: translateY(-30px) rotate(2deg); } 100% { transform: none; } }
+  .sars { animation: sars .07s linear 8; }
+  @keyframes sars { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-10px,6px); } 75% { transform: translate(10px,-6px); } }
+</style>
+</head>
+<body>
+<div id="sahne">
+  <svg id="oda" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="duvar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--duvar1)"/><stop offset="1" stop-color="var(--duvar2)"/></linearGradient>
+      <linearGradient id="gok" x1="0" y1="0" x2="0" y2="1"><stop id="gok1" offset="0" stop-color="#8fd3ff"/><stop id="gok2" offset="1" stop-color="#d9f1ff"/></linearGradient>
+      <linearGradient id="zemin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9a17a"/><stop offset="1" stop-color="#b57a57"/></linearGradient>
+      <radialGradient id="isik" cx="0.5" cy="0" r="1"><stop offset="0" stop-color="#fff7c2" stop-opacity=".75"/><stop offset="1" stop-color="#fff7c2" stop-opacity="0"/></radialGradient>
+      <pattern id="nokta" width="60" height="60" patternUnits="userSpaceOnUse"><circle cx="30" cy="30" r="5" fill="#ffffff" opacity=".35"/></pattern>
+    </defs>
+    <rect width="1080" height="1920" fill="url(#duvar)"/>
+    <rect width="1080" height="1500" fill="url(#nokta)"/>
+    <!-- pencere -->
+    <g transform="translate(90 330)">
+      <rect x="-18" y="-18" width="396" height="476" rx="26" fill="#fff"/>
+      <rect width="360" height="440" rx="14" fill="url(#gok)"/>
+      <g id="gunes"><circle cx="270" cy="95" r="48" fill="#ffe066"/></g>
+      <g id="ayYildiz" opacity="0"><circle cx="270" cy="95" r="42" fill="#fff6cf"/><circle cx="290" cy="82" r="36" fill="#2b3a6b"/>
+        <circle cx="80" cy="70" r="4" fill="#fff"/><circle cx="160" cy="150" r="3" fill="#fff"/><circle cx="60" cy="260" r="3" fill="#fff"/><circle cx="210" cy="300" r="4" fill="#fff"/></g>
+      <g id="bulut" fill="#fff" opacity=".9"><ellipse cx="110" cy="200" rx="70" ry="30"/><ellipse cx="150" cy="185" rx="50" ry="32"/><ellipse cx="80" cy="190" rx="40" ry="24"/></g>
+      <rect x="172" width="16" height="440" fill="#fff"/><rect y="212" width="360" height="16" fill="#fff"/>
+      <path d="M-30 -40 Q 40 200 -10 480 L -60 480 L -60 -40 Z" fill="#ff9fb8"/><path d="M390 -40 Q 320 200 370 480 L 420 480 L 420 -40 Z" fill="#ff9fb8"/>
+      <rect x="-70" y="-56" width="500" height="22" rx="11" fill="#c35b84"/>
+    </g>
+    <!-- raf, kitaplar, bitki -->
+    <g transform="translate(640 420)">
+      <rect x="0" y="180" width="360" height="22" rx="8" fill="#a4643f"/>
+      <rect x="20" y="70" width="40" height="110" rx="6" fill="#7fb7e8"/><rect x="64" y="90" width="34" height="90" rx="6" fill="#f6c453"/>
+      <rect x="102" y="60" width="44" height="120" rx="6" fill="#e97a8f"/><rect x="150" y="100" width="30" height="80" rx="6" fill="#9ad19a"/>
+      <path d="M250 180 L 240 120 L 320 120 L 310 180 Z" fill="#e8835f"/>
+      <g fill="#5fb36b"><ellipse cx="280" cy="80" rx="18" ry="50" transform="rotate(-25 280 110)"/><ellipse cx="280" cy="75" rx="18" ry="55"/><ellipse cx="280" cy="80" rx="18" ry="50" transform="rotate(25 280 110)"/></g>
+      <rect x="0" y="420" width="360" height="22" rx="8" fill="#a4643f"/>
+      <!-- pasta posteri -->
+      <g transform="translate(110 250)"><rect width="150" height="150" rx="14" fill="#fff" stroke="#f3b6c8" stroke-width="8"/>
+        <rect x="35" y="70" width="80" height="50" rx="10" fill="#f6a5c0"/><rect x="35" y="62" width="80" height="16" rx="8" fill="#fff"/>
+        <circle cx="75" cy="52" r="10" fill="#e8475f"/><text x="75" y="142" font-size="18" text-anchor="middle" fill="#c35b84" font-weight="700">PASTA ♥</text></g>
+    </g>
+    <!-- lamba -->
+    <g transform="translate(980 0)"><rect x="-3" y="0" width="6" height="210" fill="#7a5260"/>
+      <path d="M-70 280 L -40 200 L 40 200 L 70 280 Z" fill="#ffd166"/><ellipse cx="0" cy="560" rx="260" ry="420" fill="url(#isik)" id="lambaIsik"/></g>
+    <!-- zemin ve halı -->
+    <rect y="1500" width="1080" height="420" fill="url(#zemin)"/>
+    <g stroke="#a86d4c" stroke-width="4" opacity=".5"><line x1="0" y1="1600" x2="1080" y2="1600"/><line x1="0" y1="1720" x2="1080" y2="1720"/><line x1="0" y1="1850" x2="1080" y2="1850"/></g>
+    <ellipse cx="540" cy="1760" rx="470" ry="120" fill="#f3b6c8"/><ellipse cx="540" cy="1760" rx="400" ry="90" fill="none" stroke="#fff" stroke-width="10" stroke-dasharray="24 18"/>
+  </svg>
+  <div id="karakterKutu"><canvas id="karakter" width="1080" height="1540"></canvas></div>
+  <canvas id="efekt" width="1080" height="1920"></canvas>
+  <div id="balon"></div>
+  <div id="yukleniyor">Neşe yükleniyor…</div>
+</div>
+<script src="/vendor/live2dcubismcore.min.js"></script>
+<script src="/vendor/pixi.min.js"></script>
+<script src="/vendor/pixi-live2d-cubism4.min.js"></script>
+<script type="module" src="/sahne.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "nese-ai-vtuber",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hazır replikli Live2D yapay zekâ karakteri Neşe için TikTok canlı yayın sistemi",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "basla": "node src/ana.js",
+    "test": "node --test",
+    "anahtarlar": "node src/ayar.js",
+    "denetle": "node araclar/icerik-denetle.js",
+    "ses-uret": "node araclar/ses-uret.js",
+    "obs-kur": "node src/obs/kurulum.js",
+    "saglik": "node araclar/saglik.js",
+    "live2d-indir": "node araclar/live2d-indir.js"
+  },
+  "dependencies": {
+    "obs-websocket-js": "^5.0.8",
+    "tiktok-live-connector": "^2.5.0"
+  }
+}

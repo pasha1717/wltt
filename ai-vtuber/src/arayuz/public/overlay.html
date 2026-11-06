@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Neşe - Overlay</title>
+<style>
+  :root { --pembe: #ff5c8a; --koyu: #3a2a35; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: transparent; font-family: "Nunito", "Segoe UI", system-ui, sans-serif; }
+  .kutu { position: absolute; background: rgba(255,255,255,.92); color: var(--koyu); border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+  #begeni { left: 40px; right: 40px; bottom: 210px; padding: 20px 28px; }
+  #begeni .ust { display: flex; justify-content: space-between; font-weight: 800; font-size: 34px; }
+  #cubuk { height: 30px; margin-top: 12px; border-radius: 15px; background: #ffe1ea; overflow: hidden; }
+  #dolu { height: 100%; width: 0; background: linear-gradient(90deg, #ff8fab, var(--pembe)); border-radius: 15px; transition: width .4s; }
+  #hediyeler { left: 40px; top: 1380px; width: 470px; padding: 18px 24px; font-size: 28px; }
+  #hediyeler h3 { margin: 0 0 8px; font-size: 26px; color: var(--pembe); }
+  #hediyeler div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 4px 0; }
+  #hediyeler div.yeni { animation: gel .5s ease-out; }
+  @keyframes gel { from { transform: translateX(-30px); opacity: 0; } }
+  #ai { left: 40px; right: 40px; bottom: 60px; padding: 16px 24px; text-align: center; font-size: 28px; font-weight: 700; }
+  #ai small { display: block; font-size: 20px; font-weight: 600; color: #7a5260; margin-top: 6px; }
+  #durum { right: 40px; top: 40px; padding: 10px 20px; font-size: 24px; font-weight: 800; display: none; }
+</style>
+</head>
+<body>
+  <div id="durum" class="kutu"></div>
+  <div id="hediyeler" class="kutu"><h3>Son hediyeler</h3><div id="liste"></div></div>
+  <div id="begeni" class="kutu">
+    <div class="ust"><span>❤ Beğeni hedefi</span><span id="sayi">0 / 5</span></div>
+    <div id="cubuk"><div id="dolu"></div></div>
+  </div>
+  <div id="ai" class="kutu">Neşe bir yapay zekâ karakteridir. Konuşmaları önceden hazırlanmıştır.
+    <small>This content uses sample data owned and copyrighted by Live2D Inc.</small></div>
+<script>
+  const $ = (s) => document.querySelector(s);
+  const kacis = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  function durum(d) {
+    const { toplam, sonraki, onceki } = d.begeni;
+    $('#sayi').textContent = `${toplam} / ${sonraki}`;
+    $('#dolu').style.width = Math.min(100, ((toplam - onceki) / (sonraki - onceki)) * 100) + '%';
+    $('#durum').style.display = d.duraklat ? 'block' : 'none';
+    $('#durum').textContent = 'Mola';
+  }
+  function hediye(h) {
+    const el = document.createElement('div');
+    el.className = 'yeni';
+    el.innerHTML = `🎁 <b>${kacis(h.ad)}</b> · ${kacis(h.hediye)} (${h.elmas}💎)`;
+    $('#liste').prepend(el);
+    while ($('#liste').children.length > 4) $('#liste').lastChild.remove();
+  }
+  const kaynak = new EventSource('/olaylar');
+  kaynak.onmessage = (e) => {
+    const m = JSON.parse(e.data);
+    if (m.tur === 'durum') durum(m);
+    else if (m.tur === 'hediye') hediye(m);
+  };
+</script>
+</body>
+</html>

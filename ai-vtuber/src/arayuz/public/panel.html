@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neşe - Operatör paneli</title>
+<style>
+  :root { color-scheme: light dark; --kart: #fff; --zemin: #f6f1f3; --yazi: #2b2025; --vurgu: #d6336c; --cizgi: #e3d5db; }
+  @media (prefers-color-scheme: dark) { :root { --kart: #241c20; --zemin: #17121a; --yazi: #f2e8ec; --cizgi: #3d2f36; } }
+  body { margin: 0; padding: 16px; background: var(--zemin); color: var(--yazi); font: 15px/1.4 system-ui, sans-serif; }
+  h1 { font-size: 20px; margin: 0 0 12px; }
+  .izgara { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  section { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 12px; padding: 14px; }
+  h2 { font-size: 15px; margin: 0 0 10px; }
+  button { font: inherit; padding: 8px 12px; margin: 0 6px 6px 0; border-radius: 8px; border: 1px solid var(--cizgi); background: var(--zemin); color: inherit; cursor: pointer; }
+  button.ana { background: var(--vurgu); color: #fff; border-color: var(--vurgu); }
+  input { font: inherit; padding: 8px; border-radius: 8px; border: 1px solid var(--cizgi); background: var(--zemin); color: inherit; min-width: 0; }
+  form { display: flex; gap: 6px; flex-wrap: wrap; }
+  form input[name=mesaj] { flex: 1 1 160px; }
+  #akis { height: 260px; overflow: auto; font-size: 13px; font-family: ui-monospace, monospace; white-space: pre-wrap; }
+  #durumSatir { font-weight: 600; margin-bottom: 12px; }
+  .uyari { font-size: 13px; opacity: .8; margin-top: 8px; }
+</style>
+</head>
+<body>
+<h1>Neşe · Operatör paneli</h1>
+<div id="durumSatir">Bağlanıyor…</div>
+<div class="izgara">
+  <section>
+    <h2>Yayın</h2>
+    <button class="ana" data-komut="acilis">Açılış</button>
+    <button data-komut="kapanis">Kapanış</button>
+    <button data-komut="konu">Konu anlat</button><br>
+    <button data-komut="duraklat">Duraklat</button>
+    <button data-komut="devam">Devam</button>
+    <button data-komut="kuyrugu_bosalt">Kuyruğu boşalt</button><br>
+    <button id="sustur">Sesi kapat</button>
+    <button data-komut="test_modu">TEST_MODU değiştir</button>
+    <p class="uyari">TikTok'ta yapay zekâ ile üretilen içerik etiketini açmayı unutma.</p>
+  </section>
+  <section>
+    <h2>Sahte sohbet</h2>
+    <form id="sohbet"><input name="ad" value="deneme" size="8" aria-label="Ad"><input name="mesaj" placeholder="Mesaj" aria-label="Mesaj"><button class="ana">Gönder</button></form>
+    <p class="uyari">Örnek: selam · nasılsın · yapay zeka mısın · şarkı söyle · haha</p>
+  </section>
+  <section>
+    <h2>Sahte hediye ve beğeni</h2>
+    <button data-hediye="1">Küçük (1💎)</button>
+    <button data-hediye="10">Orta (10💎)</button>
+    <button data-hediye="100">Büyük (100💎)</button><br>
+    <button data-begeni="1">+1 beğeni</button>
+    <button data-begeni="5">+5 beğeni</button>
+    <button data-begeni="20">+20 beğeni</button>
+  </section>
+  <section>
+    <h2>Şakayı elle dene</h2>
+    <button data-saka="kalp">Kalpler</button><button data-saka="pasta">Pasta</button><button data-saka="su">Su</button>
+    <button data-saka="korku">Korku</button><button data-saka="dusme">Düşme</button><button data-saka="konfeti">Konfeti</button>
+    <button data-saka="begeni">Beğeni yıldızı</button>
+  </section>
+  <section style="grid-column: 1 / -1">
+    <h2>Olay akışı</h2>
+    <div id="akis"></div>
+  </section>
+</div>
+<script>
+  const $ = (s) => document.querySelector(s);
+  let susturuldu = false;
+  const gonder = (o) => fetch('/api/olay', { method: 'POST', body: JSON.stringify(o) }).then((r) => r.json());
+  const yaz = (s) => { const a = $('#akis'); a.textContent = `${new Date().toLocaleTimeString('tr-TR')} ${s}\n` + a.textContent.slice(0, 20000); };
+
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.komut) gonder({ tur: 'komut', ad: b.dataset.komut });
+    if (b.dataset.hediye) gonder({ tur: 'hediye', ad: 'panel', hediye: 'Deneme', elmas: Number(b.dataset.hediye) });
+    if (b.dataset.begeni) gonder({ tur: 'begeni', adet: Number(b.dataset.begeni) });
+    if (b.dataset.saka) gonder({ tur: 'komut', ad: 'saka:' + b.dataset.saka });
+  });
+  $('#sustur').onclick = () => { susturuldu = !susturuldu; gonder({ tur: 'ses', sustur: susturuldu }); $('#sustur').textContent = susturuldu ? 'Sesi aç' : 'Sesi kapat'; };
+  $('#sohbet').onsubmit = (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    gonder({ tur: 'sohbet', ad: f.get('ad'), mesaj: f.get('mesaj') }).then((r) => yaz(`→ eşleşen grup: ${r.cevap ?? 'yok (cevap verilmedi)'}`));
+    e.target.mesaj.value = '';
+  };
+
+  const kaynak = new EventSource('/olaylar');
+  kaynak.onopen = () => yaz('bağlandı');
+  kaynak.onerror = () => { $('#durumSatir').textContent = 'Sunucu bağlantısı yok'; };
+  kaynak.onmessage = (e) => {
+    const m = JSON.parse(e.data);
+    if (m.tur === 'durum') {
+      $('#durumSatir').textContent = `${m.duraklat ? '⏸ Duraklatıldı' : m.oynuyor ? '▶ Oynuyor' : '● Bekliyor'} · kuyruk ${m.kuyruk} · beğeni ${m.begeni.toplam}/${m.begeni.sonraki} · TEST_MODU ${m.testModu ? 'açık' : 'kapalı'} · TikTok ${m.tiktok}`;
+    } else if (m.tur === 'oynat') yaz(`▶ ${m.olay}${m.efekt ? ' / ' + m.efekt : ''}: ${m.replikler.map((r) => r.metin + (r.ses ? '' : ' (sessiz)')).join(' | ')}`);
+    else if (m.tur === 'sohbet') yaz(`💬 ${m.ad}: ${m.mesaj}`);
+    else if (m.tur === 'hediye') yaz(`🎁 ${m.ad}: ${m.hediye} ${m.elmas}💎 (${m.kademe})`);
+  };
+</script>
+</body>
+</html>

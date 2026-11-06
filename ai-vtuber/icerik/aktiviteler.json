@@ -1,0 +1,22 @@
+{
+  "hediye_kademeleri": [
+    { "ad": "kucuk", "min": 1, "max": 9, "sakalar": ["kalp"] },
+    { "ad": "orta", "min": 10, "max": 99, "sakalar": ["pasta", "su", "korku"] },
+    { "ad": "buyuk", "min": 100, "max": 999999, "sakalar": ["dusme", "konfeti"] }
+  ],
+  "sakalar": {
+    "kalp":    { "efekt": "kalpler", "replik": "hediye_kucuk", "sure_ms": 2500 },
+    "pasta":   { "efekt": "pasta",   "replik": "saka_pasta",   "sure_ms": 4500, "carpma_ms": 900 },
+    "su":      { "efekt": "su",      "replik": "saka_su",      "sure_ms": 4500, "carpma_ms": 900 },
+    "korku":   { "efekt": "korku",   "replik": "saka_korku",   "sure_ms": 3500, "carpma_ms": 300 },
+    "dusme":   { "efekt": "dusme",   "replik": "saka_dusme",   "sure_ms": 5500, "carpma_ms": 600, "sonra": "hediye_buyuk_tesekkur" },
+    "konfeti": { "efekt": "konfeti", "replik": "saka_konfeti", "sure_ms": 6000, "carpma_ms": 400, "sonra": "hediye_buyuk_tesekkur" },
+    "begeni":  { "efekt": "yildiz",  "replik": "begeni_hedef", "sure_ms": 2500 }
+  },
+  "oncelik": { "buyuk": 1, "orta": 2, "kucuk": 3, "begeni": 4, "sohbet": 5, "konu": 6 },
+  "olaylar_arasi_ms": 3000,
+  "ayni_izleyici_bekleme_ms": 30000,
+  "sohbet_kuyruk_siniri": 3,
+  "eslesmeyen_mesaja_cevap_orani": 0.15,
+  "tekrar_engeli": 10
+}

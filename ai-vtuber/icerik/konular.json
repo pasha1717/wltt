@@ -1,0 +1,83 @@
+[
+  { "konu": "ahtapot", "kaynak": "Smithsonian Ocean", "satirlar": [
+    { "s": "Biliyor muydun? Ahtapotun üç kalbi var.", "d": "heyecanli", "h": "saskin" },
+    { "s": "İkisi solungaçlara kan pompalar, biri vücudun geri kalanına.", "d": "neseli", "h": "dusunme" },
+    { "s": "Üç kalp! Benim bir tane bile yok, kıskandım.", "d": "neseli", "h": "utanma" }
+  ]},
+  { "konu": "venus", "kaynak": "NASA Venus Facts", "satirlar": [
+    { "s": "Venüs'te bir gün, bir yıldan daha uzun sürer.", "d": "heyecanli", "h": "saskin" },
+    { "s": "Kendi etrafında bir turu, Güneş etrafındaki turundan uzun sürüyor. Ne tembel!", "d": "neseli", "h": "dusunme" }
+  ]},
+  { "konu": "ay", "kaynak": "NASA Lunar Laser Ranging", "satirlar": [
+    { "s": "Ay her yıl Dünya'dan yaklaşık dört santim uzaklaşıyor.", "d": "saskin", "h": "saskin" },
+    { "s": "Tırnakların uzama hızına yakın. Merak etme, yakında bir yere gitmiyor.", "d": "neseli", "h": "elsalla" }
+  ]},
+  { "konu": "flamingo", "kaynak": "National Geographic", "satirlar": [
+    { "s": "Flamingolar pembe doğmaz, biliyor muydun?", "d": "saskin", "h": "dusunme" },
+    { "s": "Rengini yediği karides ve alglerden alır. Ben pasta yesem pembe olur muyum?", "d": "neseli", "h": "utanma" }
+  ]},
+  { "konu": "kelebek", "kaynak": "Smithsonian", "satirlar": [
+    { "s": "Kelebekler tadı ayaklarıyla alır.", "d": "saskin", "h": "saskin" },
+    { "s": "Yani bir çiçeğe konunca önce bir tadına bakıyor. Çok şık!", "d": "neseli", "h": "sevinc" }
+  ]},
+  { "konu": "kedi", "kaynak": "Li ve ark., PLoS Genetics, 2005", "satirlar": [
+    { "s": "Kediler tatlı tadını alamaz.", "d": "uzgun", "h": "dusunme" },
+    { "s": "Tatlı algılayan geni çalışmıyor. Yani pastanın kıymetini bilmezler, yazık!", "d": "neseli", "h": "utanma" }
+  ]},
+  { "konu": "penguen", "kaynak": "Smithsonian National Zoo", "satirlar": [
+    { "s": "Penguenlerin dizleri var, ama tüylerin altında saklı.", "d": "saskin", "h": "saskin" },
+    { "s": "O paytak yürüyüş aslında diz çökmüş hâlde yürümek gibi. Çok tatlı!", "d": "neseli", "h": "sevinc" }
+  ]},
+  { "konu": "mars", "kaynak": "NASA Curiosity", "satirlar": [
+    { "s": "Mars'ta gün batımı mavi görünür.", "d": "heyecanli", "h": "saskin" },
+    { "s": "Havadaki ince toz mavi ışığı güneşin çevresinde toplar. Bir gün görmek isterdim.", "d": "sakin", "h": "dusunme" }
+  ]},
+  { "konu": "ari", "kaynak": "von Frisch, Nobel 1973", "satirlar": [
+    { "s": "Arılar dans ederek birbirine çiçeklerin yerini anlatır.", "d": "heyecanli", "h": "zipla" },
+    { "s": "Buna sallanma dansı deniyor. Ben de dans ederim, ama yol tarif edemem!", "d": "neseli", "h": "zipla" }
+  ]},
+  { "konu": "saturn", "kaynak": "NASA Saturn Facts", "satirlar": [
+    { "s": "Satürn'ün ortalama yoğunluğu sudan daha düşük.", "d": "saskin", "h": "dusunme" },
+    { "s": "Yani dev bir küvet bulsak yüzerdi derler. Küveti kim yıkayacak ama?", "d": "neseli", "h": "utanma" }
+  ]},
+  { "konu": "fil", "kaynak": "Smithsonian National Zoo", "satirlar": [
+    { "s": "Filler zıplayamaz, biliyor muydun?", "d": "saskin", "h": "saskin" },
+    { "s": "Ama koşarken bile bir ayakları hep yerde kalır. Ben zıplarım, bak!", "d": "neseli", "h": "zipla" }
+  ]},
+  { "konu": "yunus", "kaynak": "Janik ve ark., PNAS, 2006", "satirlar": [
+    { "s": "Yunusların her birinin kendine özel bir ıslığı var.", "d": "heyecanli", "h": "sevinc" },
+    { "s": "Bilim insanları bunu bir tür isme benzetiyor. Benimki şöyle olurdu: fiiuuv!", "d": "neseli", "h": "zipla" }
+  ]},
+  { "konu": "super_guc", "satirlar": [
+    { "s": "Bir soru: süper gücün olsa ne seçerdin?", "d": "heyecanli", "h": "dusunme" },
+    { "s": "Ben anında pasta getirmeyi seçerdim. Yazın bakalım sizinkini!", "d": "neseli", "h": "sevinc" }
+  ]},
+  { "konu": "hayvan", "satirlar": [
+    { "s": "En sevdiğin hayvan hangisi? Sohbete yaz!", "d": "neseli", "h": "elsalla" },
+    { "s": "Ben ahtapotu seviyorum, üç kalple çok sevebilir.", "d": "neseli", "h": "utanma" }
+  ]},
+  { "konu": "renk", "satirlar": [
+    { "s": "Oyun zamanı! En sevdiğin rengi yaz, odamı ona göre boyayayım.", "d": "heyecanli", "h": "zipla" },
+    { "s": "Bakalım hangi renk kazanacak. Pembe öne çıkarsa şaşırmam!", "d": "neseli", "h": "dusunme" }
+  ]},
+  { "konu": "tatil", "satirlar": [
+    { "s": "Deniz mi, dağ mı? Sen hangisini seçersin?", "d": "neseli", "h": "dusunme" },
+    { "s": "Ben ekrandan çıkamıyorum ama deniz manzaralı bir duvar kâğıdı isterdim.", "d": "utangac", "h": "utanma" }
+  ]},
+  { "konu": "yemek_oyunu", "satirlar": [
+    { "s": "Hızlı soru: çikolatalı mı, meyveli mi pasta?", "d": "heyecanli", "h": "dusunme" },
+    { "s": "Ben ikisini de seçiyorum, kurallar bana işlemez!", "d": "neseli", "h": "sevinc" }
+  ]},
+  { "konu": "gunun_nasil", "satirlar": [
+    { "s": "Bugün günün nasıl geçti? Bir kelimeyle anlat.", "d": "sakin", "h": "dusunme" },
+    { "s": "Benimki tek kelime: pastasız. Ama sizinle iyi geçiyor!", "d": "neseli", "h": "utanma" }
+  ]},
+  { "konu": "dans", "satirlar": [
+    { "s": "Biraz hareket edelim mi? Beni izle!", "d": "heyecanli", "h": "zipla" },
+    { "s": "Sağa, sola, zıpla! Tamam, yoruldum. Kalp atın, enerji toplayayım.", "d": "neseli", "h": "zipla" }
+  ]},
+  { "konu": "oda", "satirlar": [
+    { "s": "Odamı beğendiniz mi? Raftaki bitkiyi her gün suluyorum.", "d": "neseli", "h": "dusunme" },
+    { "s": "Gerçi o bitki de çizim. Ama yine de iyi bakıyorum!", "d": "neseli", "h": "utanma" }
+  ]}
+]
