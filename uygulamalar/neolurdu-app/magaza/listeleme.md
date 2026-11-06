@@ -36,5 +36,5 @@ Oyun > Bilgi Yarışması (Trivia)
 Bilgi yarışması, Eğitim, Bilim, Tek oyunculu
 
 ## İletişim
-E-posta: [İLETİŞİM E-POSTASI]
-Gizlilik politikası: [GIZLILIK_URL]
+E-posta: hello@toolpano.com
+Gizlilik politikası: https://pasha1717.github.io/wltt/ne-olurdu/gizlilik.html

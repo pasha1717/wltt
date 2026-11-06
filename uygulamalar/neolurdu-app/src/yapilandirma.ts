@@ -35,4 +35,4 @@ export const KURALLAR = {
 };
 
 // Gizlilik politikasının yayınlanacağı adres (Play Console'a da aynı adres girilir).
-export const GIZLILIK_URL = "https://example.com/ne-olurdu/gizlilik";
+export const GIZLILIK_URL = "https://pasha1717.github.io/wltt/ne-olurdu/gizlilik.html";

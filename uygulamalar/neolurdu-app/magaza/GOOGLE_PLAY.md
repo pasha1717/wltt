@@ -6,7 +6,7 @@
 | `app.json` → `react-native-google-mobile-ads.androidAppId` | AdMob'daki **uygulama kimliğin** (`ca-app-pub-…~…`). Şu an Google'ın test kimliği var. |
 | `src/yapilandirma.ts` → `ADMOB` | AdMob'da açtığın 3 reklam biriminin kimliği (banner, geçiş, ödüllü). Boş kalırsa **test reklamı** gösterilir, gelir gelmez. |
 | `src/yapilandirma.ts` → `GIZLILIK_URL` | `magaza/gizlilik.html` sayfasını yayınladığın adres. |
-| `magaza/gizlilik.html` | `[İLETİŞİM E-POSTASI]` yerine e-postanı yaz. |
+| `docs/ne-olurdu/gizlilik.html` | Yayındaki gizlilik sayfası (GitHub Pages). `magaza/gizlilik.html` ile aynı tutulmalı. |
 
 Her yeni sürümde `app.json` içindeki `android.versionCode` bir artırılmalı (1 → 2 → 3…), `version` da istenirse güncellenmeli.
 
