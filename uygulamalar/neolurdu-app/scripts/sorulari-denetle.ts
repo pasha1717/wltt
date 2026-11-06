@@ -4,7 +4,7 @@ import path from "node:path";
 
 type Soru = { id: string; k: string; s: string; d: string; y: string[]; a: string };
 const KAT = ["Uzay", "Doğa", "Vücut", "İcatlar", "Dünya", "Bilim"];
-const norm = (x: string) => x.toLocaleLowerCase("tr").replace(/[^a-zçğıöşü0-9, ]/g, "").replace(/\s+/g, " ").trim();
+const norm = (x: string) => x.toLocaleLowerCase("tr").replace(/[^a-zçğıöşü0-9,\- ]/g, "").replace(/\s+/g, " ").trim();
 
 async function main() {
   const hedef = process.argv[2];
