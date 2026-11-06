@@ -535,7 +535,7 @@ function Magaza({ ilerleme, urunler, geri, reklamIzle, reklamHazir, gizlilikGere
           </Pressable>
         )}
       </View>
-      {urunler.length === 0 && <Text style={s.bolumNot}>Ürünler yüklenemedi. Uygulama Google Play'den yüklendiyse ve internet açıksa birazdan görünür.</Text>}
+      {urunler.length === 0 && <Text style={s.bolumNot}>Mağaza şu an kullanılamıyor. Uygulamayı Google Play'den yüklediğinden ve internetinin açık olduğundan emin ol, biraz sonra tekrar dene.</Text>}
 
       <Pressable style={s.ikincilButon} onPress={geriYukle}><Text style={s.ikincilYazi}>Satın almaları geri yükle</Text></Pressable>
       {gizlilikGerekli && (

@@ -41,7 +41,8 @@ export async function magazayiBaslat(d: Dinleyiciler): Promise<Urun[]> {
   for (const p of onceki) await isle(p, d).catch(() => {});
 
   const urunler = (await fetchProducts({ skus: Object.values(URUN), type: "in-app" })) as Product[];
-  return urunler.map((u) => ({ id: u.id, ad: u.title, fiyat: u.displayPrice }));
+  // Play'de bulunmayan ya da etkin olmayan ürünler boş fiyatla döner; onları gösterme.
+  return urunler.filter((u) => !!u.displayPrice).map((u) => ({ id: u.id, ad: u.title, fiyat: u.displayPrice }));
 }
 
 export const satinAl = (id: string) =>
