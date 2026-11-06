@@ -23,9 +23,9 @@ yaz(['live2dcubismcore.min.js', 'pixi.min.js', 'pixi-live2d-cubism4.min.js', 'Ha
 yaz(existsSync(path.join(KOK, 'src', 'filtre', 'veri', 'kufur-listesi.txt')), 'Küfür listesi');
 const hepsi = tumReplikler();
 const sesli = hepsi.filter((r) => r.ses).length;
-yaz(sesli === hepsi.length ? true : sesli ? null : false, 'Hazır sesler', `${sesli}/${hepsi.length} (eksikse: npm run ses-uret)`);
+yaz(sesli === hepsi.length ? true : sesli ? null : false, 'Hazır sesler', `${sesli}/${hepsi.length} (eksikse: araclar\\voxcpm-uret.ps1, bkz. README)`);
 yaz(existsSync(path.join(KOK, '.env')) || null, '.env dosyası', existsSync(path.join(KOK, '.env')) ? 'var' : 'yok: .env.example dosyasını .env olarak kopyala');
-for (const [k, v] of Object.entries(anahtarDurumu())) yaz(v === 'dolu' || null, k, v);
+for (const [k, v] of Object.entries(anahtarDurumu())) yaz(v === 'dolu' || null, k, k.startsWith('ELEVEN') ? `${v} (yalnız ElevenLabs kullanırsan)` : v);
 yaz(null, 'TEST_MODU', ayar.testModu ? 'açık (TikTok bağlanmaz, yalnız panel/terminal)' : 'kapalı (TikTok okunur)');
 
 const sunucu = await portAcikMi(ayar.port);

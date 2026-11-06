@@ -13,6 +13,7 @@
     "anahtarlar": "node src/ayar.js",
     "denetle": "node araclar/icerik-denetle.js",
     "ses-uret": "node araclar/ses-uret.js",
+    "voxcpm": "node araclar/voxcpm.js",
     "obs-kur": "node src/obs/kurulum.js",
     "saglik": "node araclar/saglik.js",
     "live2d-indir": "node araclar/live2d-indir.js"

@@ -1,5 +1,5 @@
 // Hazır replikleri yükler. Her repliğin kimliği metin + duygudan üretilen kısa bir hash'tir;
-// ses dosyası da bu adla saklanır (sesler/<id>.mp3). Metin değişirse ses yeniden üretilir.
+// ses dosyası da bu adla saklanır (sesler/<id>.mp3 ya da .wav). Metin değişirse ses yeniden üretilir.
 import { readFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -17,10 +17,16 @@ export const sesId = (r) => createHash('sha256').update(`${r.d}|${r.s}`).digest(
 export const ekranMetni = (s) => s.replace(/\[[^\]]+\]\s*/g, '').trim();
 export const sesMetni = (r) => `${DUYGU_ETIKETI[r.d] ?? ''} ${r.s}`.trim();
 
+// Ses dosyası: ElevenLabs mp3 ya da VoxCPM2 wav (sesler/<id>.mp3|wav).
+function sesDosyasi(id) {
+  for (const uz of ['mp3', 'wav']) if (existsSync(path.join(KOK, 'sesler', `${id}.${uz}`))) return `/sesler/${id}.${uz}`;
+  return null;
+}
+
 function hazirla(r, kategori) {
   const id = sesId(r);
   return { id, kategori, metin: ekranMetni(r.s), ham: r.s, duygu: r.d, hareket: r.h,
-    ses: existsSync(path.join(KOK, 'sesler', `${id}.mp3`)) ? `/sesler/${id}.mp3` : null };
+    ses: sesDosyasi(id) };
 }
 
 export function yukle() {
