@@ -3,9 +3,9 @@ import { TestIds } from "react-native-google-mobile-ads";
 
 // AdMob > Uygulamalar > Reklam birimleri. Örnek biçim: "ca-app-pub-1234567890123456/1234567890"
 const ADMOB = {
-  banner: "",
-  gecis: "", // geçiş (interstitial)
-  odullu: "", // ödüllü (rewarded)
+  banner: "ca-app-pub-1392510782822078/9927420817",
+  gecis: "ca-app-pub-1392510782822078/7047152783", // geçiş (interstitial)
+  odullu: "ca-app-pub-1392510782822078/3855827323", // ödüllü (rewarded)
 };
 
 const gercek = (id: string) => !__DEV__ && id.length > 0;
