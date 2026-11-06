@@ -18,3 +18,9 @@ Bu klasör, `wltt` deposundaki Reels projesinden bağımsızdır. Reels kurallar
 
 ## Komutlar
 `npm test` · `npm run denetle` · `npm run saglik` · `npm run basla` · `npm run voxcpm -- hazirla --dene 3` · `npm run obs-kur` · `node araclar/uctan-uca.cjs`
+
+## Android uygulaması (`mobil/`)
+- Capacitor 8 + capacitor-nodejs (nodejs-mobile, **Node 18**). Telefonda `src/` aynen çalışır; giriş `mobil/nodejs-giris/index.js`.
+- Node 18 uyumu korunmalı: `process.loadEnvFile`, regex `v` bayrağı, `Intl`/`toLocale*` (nodejs-mobile'da intl yok) kullanılmaz. TikTok kütüphanesi `got@13` ile kurulur (`hazirla.mjs`).
+- Yazılabilir veri `NESE_VERI` (telefonda eklentinin `DATADIR`'i) altındadır: `ayarlar.json`, `kayitlar/`, yüklenen `sesler/`.
+- Derleme: `cd mobil && npm run apk`. Çıktı `android/app/build/outputs/apk/debug/app-debug.apk` (git'e girmez).

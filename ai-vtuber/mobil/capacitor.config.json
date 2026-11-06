@@ -1,0 +1,13 @@
+{
+  "appId": "com.neseyayin.app",
+  "appName": "Neşe",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true,
+    "allowNavigation": ["127.0.0.1"]
+  },
+  "plugins": {
+    "CapacitorNodeJS": { "nodeDir": "nodejs" }
+  }
+}

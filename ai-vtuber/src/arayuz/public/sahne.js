@@ -1,6 +1,7 @@
 // Sahne: Haru modelini yükler, olay akışını dinler, replikleri sırayla oynatır.
 // Ağız: ses varsa sesin seviyesinden, yoksa (TEST_MODU / üretilmemiş ses) metin süresince yapay dalga.
 import { Efektler } from './efektler.js';
+import { mobilKur } from './mobil.js';
 
 const $ = (s) => document.querySelector(s);
 const kutu = $('#karakterKutu');
@@ -149,5 +150,7 @@ gunIsigi();
 setInterval(gunIsigi, 60_000);
 modelYukle().catch((e) => { $('#yukleniyor').textContent = 'Model yüklenemedi: ' + e.message; console.error(e); });
 bagla();
+// /mobil: telefon modu. Ses bağlamı bir dokunuşla açılır (tarayıcı otomatik oynatma kuralı).
+if (location.pathname === '/mobil') mobilKur({ sesAc: async () => { sesBaglam ??= new AudioContext(); await sesBaglam.resume(); } });
 // Test kancası: uçtan uca test ağız değerini ve zaman kaydını buradan okur.
 window.neseTest = { oynat, efekt, ifade, hareket, olcum, agiz: () => agiz };

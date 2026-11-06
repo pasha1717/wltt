@@ -3,7 +3,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
-import { KOK } from './ayar.js';
+import { KOK, VERI } from './ayar.js';
 
 const oku = (ad) => JSON.parse(readFileSync(path.join(KOK, 'icerik', ad), 'utf8'));
 
@@ -18,8 +18,11 @@ export const ekranMetni = (s) => s.replace(/\[[^\]]+\]\s*/g, '').trim();
 export const sesMetni = (r) => `${DUYGU_ETIKETI[r.d] ?? ''} ${r.s}`.trim();
 
 // Ses dosyası: ElevenLabs mp3 ya da VoxCPM2 wav (sesler/<id>.mp3|wav).
-function sesDosyasi(id) {
-  for (const uz of ['mp3', 'wav']) if (existsSync(path.join(KOK, 'sesler', `${id}.${uz}`))) return `/sesler/${id}.${uz}`;
+// Telefonda yüklenen sesler VERI/sesler içinde durur; önce oraya bakılır.
+export const SES_KLASORLERI = [...new Set([path.join(VERI, 'sesler'), path.join(KOK, 'sesler')])];
+export function sesDosyasi(id) {
+  for (const k of SES_KLASORLERI)
+    for (const uz of ['mp3', 'wav']) if (existsSync(path.join(k, `${id}.${uz}`))) return `/sesler/${id}.${uz}`;
   return null;
 }
 

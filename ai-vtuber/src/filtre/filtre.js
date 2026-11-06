@@ -12,8 +12,12 @@ const TR = { ç: 'c', ğ: 'g', ö: 'o', ş: 's', ü: 'u', â: 'a', î: 'i', û: 
 const LEET = { 0: 'o', 1: 'i', 3: 'e', 4: 'a', 5: 's', 7: 't', '@': 'a', $: 's', '!': 'i' };
 
 // Metni eşleştirme biçimine çevirir: küçük harf, ç/ğ/ö/ş/ü sadeleşir, yalnız harf/rakam/boşluk.
+// Türkçe küçük harf: "I" → "ı", "İ" → "i". toLocaleLowerCase('tr-TR') kullanılmaz, çünkü telefondaki
+// Node (nodejs-mobile) intl desteği olmadan derlendi ve yerel ayarı yok sayar.
+export const trKucuk = (s) => String(s).replace(/I/g, 'ı').replace(/İ/g, 'i').toLowerCase();
+
 export function normalize(s) {
-  return s.toLocaleLowerCase('tr-TR')
+  return trKucuk(s)
     .replace(/[çğöşüâîû]/g, (h) => TR[h])
     .replace(/[013457@$!]/g, (h) => LEET[h])
     .replace(/[^a-zı0-9+\s]/g, ' ')

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Neşe - Ayarlar</title>
+<style>
+  :root { color-scheme: light dark; --zemin: #fbf4f6; --kart: #fff; --yazi: #2b2025; --soluk: #7a6870; --vurgu: #d6336c; --cizgi: #ead9e0; --iyi: #2f9e44; }
+  @media (prefers-color-scheme: dark) { :root { --zemin: #17121a; --kart: #241c20; --yazi: #f2e8ec; --soluk: #b9a6ae; --cizgi: #3d2f36; --iyi: #69db7c; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 16px; padding-top: max(16px, env(safe-area-inset-top)); background: var(--zemin); color: var(--yazi);
+    font: 16px/1.45 system-ui, sans-serif; }
+  h1 { font-size: 22px; margin: 4px 0 2px; }
+  .alt { color: var(--soluk); font-size: 14px; margin: 0 0 14px; }
+  section { background: var(--kart); border: 1px solid var(--cizgi); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+  h2 { font-size: 16px; margin: 0 0 10px; }
+  label { display: block; font-weight: 600; margin: 12px 0 4px; }
+  label:first-of-type { margin-top: 0; }
+  input[type=text], input[type=number] { width: 100%; font: inherit; padding: 12px; border-radius: 10px; border: 1px solid var(--cizgi); background: var(--zemin); color: inherit; }
+  .ipucu { color: var(--soluk); font-size: 13px; margin: 4px 0 0; }
+  .satir { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
+  .satir input { width: 26px; height: 26px; accent-color: var(--vurgu); }
+  button, .dugme { display: block; width: 100%; font: 700 17px system-ui, sans-serif; padding: 14px; border-radius: 12px; border: 1px solid var(--cizgi);
+    background: var(--zemin); color: inherit; text-align: center; text-decoration: none; margin-top: 10px; }
+  button.ana, .dugme.ana { background: var(--vurgu); border-color: var(--vurgu); color: #fff; }
+  #durum { font-weight: 600; }
+  #durum .iyi { color: var(--iyi); }
+  progress { width: 100%; height: 10px; margin-top: 10px; accent-color: var(--vurgu); }
+  #sesSonuc { font-size: 14px; margin-top: 8px; white-space: pre-wrap; }
+  .uyari { font-size: 13px; color: var(--soluk); }
+</style>
+</head>
+<body>
+<h1>Neşe</h1>
+<p class="alt">Hazır replikli yapay zekâ yayıncısı · ayarlar</p>
+
+<section>
+  <div id="durum">Durum yükleniyor…</div>
+  <a class="dugme ana" href="/mobil">Yayın ekranını aç</a>
+  <a class="dugme" href="/panel">Operatör paneli (deneme)</a>
+</section>
+
+<section>
+  <h2>TikTok</h2>
+  <form id="ayarForm">
+    <label for="tiktokKullanici">Kullanıcı adın</label>
+    <input id="tiktokKullanici" name="tiktokKullanici" type="text" autocomplete="off" autocapitalize="none" placeholder="ornek_kullanici">
+    <p class="ipucu">@ olmadan. Yalnız okunur; parola ya da giriş istenmez.</p>
+    <label for="begeniHedefleri">Beğeni hedefleri</label>
+    <input id="begeniHedefleri" name="begeniHedefleri" type="text" inputmode="numeric" placeholder="5,10,20,30">
+    <p class="ipucu">Virgülle ayır. Son hedeften sonra döngü baştan başlar.</p>
+    <label for="sessizlikSn">Sessizlikte konu anlatma (sn)</label>
+    <input id="sessizlikSn" name="sessizlikSn" type="number" min="10" max="600">
+    <div class="satir"><span><b>Test modu</b><br><span class="ipucu">Açıkken TikTok'a bağlanmaz; panelden denersin.</span></span>
+      <input id="testModu" name="testModu" type="checkbox" aria-label="Test modu"></div>
+    <button class="ana" type="submit">Kaydet</button>
+  </form>
+</section>
+
+<section>
+  <h2>Sesler</h2>
+  <p class="ipucu">Bilgisayarda VoxCPM2 ile ürettiğin <b>sesler</b> klasöründeki .wav dosyalarını seç (hepsini birden seçebilirsin).</p>
+  <input id="sesler" type="file" multiple accept=".wav,.mp3,audio/wav,audio/mpeg" hidden>
+  <button type="button" id="sesSec">Sesleri yükle</button>
+  <progress id="ilerleme" value="0" max="1" hidden></progress>
+  <div id="sesSonuc"></div>
+</section>
+
+<section class="uyari">
+  TikTok'ta canlı yayın ayarlarından <b>yapay zekâ ile üretilmiş içerik</b> etiketini aç. Yayın ekranında "Neşe bir yapay zekâ karakteridir" yazısı ve Live2D telif ibaresi sürekli görünür.
+  TikTok bağlantısı resmî olmayan tiktok-live-connector (AGPL-3.0) ile yapılır.
+</section>
+
+<script>
+  const $ = (s) => document.querySelector(s);
+  const api = (o) => fetch('/api/olay', { method: 'POST', body: JSON.stringify(o) }).then((r) => r.json());
+
+  async function yukleAyarlar() {
+    const a = await api({ tur: 'ayarlar' });
+    $('#tiktokKullanici').value = a.tiktokKullanici;
+    $('#begeniHedefleri').value = a.begeniHedefleri.join(',');
+    $('#sessizlikSn').value = a.sessizlikSn;
+    $('#testModu').checked = a.testModu;
+  }
+
+  async function durumYaz() {
+    const [d, r] = await Promise.all([fetch('/api/saglik').then((x) => x.json()), api({ tur: 'replikler' })]);
+    const sesli = r.filter((x) => x.ses).length;
+    $('#durum').innerHTML = `TikTok: <span class="${d.tiktok === 'bağlı' ? 'iyi' : ''}">${d.tiktok}</span> · Test modu: ${d.testModu ? 'açık' : 'kapalı'}<br>`
+      + `Hazır ses: <span class="${sesli === r.length ? 'iyi' : ''}">${sesli}/${r.length}</span>`;
+  }
+
+  $('#ayarForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    await api({ tur: 'ayarlar', degisiklik: {
+      tiktokKullanici: f.get('tiktokKullanici'), begeniHedefleri: f.get('begeniHedefleri'),
+      sessizlikSn: f.get('sessizlikSn'), testModu: $('#testModu').checked } });
+    await yukleAyarlar();
+    await durumYaz();
+    e.submitter.textContent = 'Kaydedildi ✓';
+    setTimeout(() => { e.submitter.textContent = 'Kaydet'; }, 1500);
+  });
+
+  $('#sesSec').addEventListener('click', () => $('#sesler').click());
+  $('#sesler').addEventListener('change', async (e) => {
+    const dosyalar = [...e.target.files];
+    const ilerleme = $('#ilerleme');
+    ilerleme.hidden = false; ilerleme.max = dosyalar.length; ilerleme.value = 0;
+    let tamam = 0; const sorunlar = [];
+    for (const d of dosyalar) {
+      const ad = d.name.toLowerCase();
+      if (!/^[0-9a-f]{12}\.(wav|mp3)$/.test(ad)) { sorunlar.push(`${d.name}: ad replik kimliği değil`); ilerleme.value++; continue; }
+      try {
+        const c = await fetch(`/api/ses/${ad}`, { method: 'POST', body: d }).then((x) => x.json());
+        if (c.tamam) tamam++; else sorunlar.push(`${d.name}: ${c.hata}`);
+      } catch (err) { sorunlar.push(`${d.name}: ${err.message}`); }
+      ilerleme.value++;
+    }
+    $('#sesSonuc').textContent = `${tamam}/${dosyalar.length} ses yüklendi.` + (sorunlar.length ? `\n${sorunlar.slice(0, 8).join('\n')}${sorunlar.length > 8 ? `\n… ${sorunlar.length - 8} sorun daha` : ''}` : '');
+    e.target.value = '';
+    durumYaz();
+  });
+
+  yukleAyarlar();
+  durumYaz();
+  setInterval(durumYaz, 5000);
+</script>
+</body>
+</html>

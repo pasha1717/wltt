@@ -3,14 +3,16 @@ import http from 'node:http';
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { KOK } from '../ayar.js';
+import { SES_KLASORLERI } from '../icerik.js';
 
 const PUBLIC = path.join(KOK, 'src', 'arayuz', 'public');
-const SESLER = path.join(KOK, 'sesler');
 const TURLER = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.json': 'application/json', '.png': 'image/png', '.mp3': 'audio/mpeg', '.svg': 'image/svg+xml', '.wav': 'audio/wav',
 };
-const SAYFALAR = { '/': '/panel.html', '/sahne': '/sahne.html', '/overlay': '/overlay.html', '/panel': '/panel.html' };
+const SAYFALAR = { '/': '/panel.html', '/sahne': '/sahne.html', '/overlay': '/overlay.html', '/panel': '/panel.html',
+  '/mobil': '/sahne.html', '/ayarlar': '/ayarlar.html' };
+const EN_BUYUK_SES = 3 * 1024 * 1024;
 
 // Kök dışına çıkan yolları reddeder.
 function guvenliYol(kok, istek) {
@@ -24,6 +26,14 @@ function dosyaGonder(res, yol) {
   createReadStream(yol).pipe(res);
 }
 
+function hamGovde(req, sinir) {
+  return new Promise((coz, red) => {
+    const parcalar = []; let boy = 0;
+    req.on('data', (p) => { boy += p.length; if (boy > sinir) { red(new Error('dosya çok büyük (en fazla 3 MB)')); req.destroy(); } else parcalar.push(p); });
+    req.on('end', () => coz(Buffer.concat(parcalar)));
+  });
+}
+
 function govdeOku(req, sinir = 10_000) {
   return new Promise((coz, red) => {
     let v = '';
@@ -32,7 +42,7 @@ function govdeOku(req, sinir = 10_000) {
   });
 }
 
-export function sunucuKur({ port, host = '127.0.0.1', islet, durum }) {
+export function sunucuKur({ port, host = '127.0.0.1', islet, durum, sesKaydet }) {
   const istemciler = new Set();
   const yayinla = (mesaj) => {
     const veri = `data: ${JSON.stringify(mesaj)}\n\n`;
@@ -59,7 +69,17 @@ export function sunucuKur({ port, host = '127.0.0.1', islet, durum }) {
         res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify({ ...durum(), istemci: istemciler.size }));
         return;
       }
-      if (p.startsWith('/sesler/')) return dosyaGonder(res, guvenliYol(SESLER, p.slice(8)));
+      // Telefon: ayarlar ekranından ses yükleme (ham gövde, dosya adı = replik kimliği).
+      const yukleme = p.match(/^\/api\/ses\/([0-9a-f]{12})\.(wav|mp3)$/);
+      if (yukleme && req.method === 'POST' && sesKaydet) {
+        const sonuc = await sesKaydet(yukleme[1], yukleme[2], await hamGovde(req, EN_BUYUK_SES));
+        res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(sonuc));
+        return;
+      }
+      if (p.startsWith('/sesler/')) {
+        const bulunan = SES_KLASORLERI.map((k) => guvenliYol(k, p.slice(8))).find((y) => y && existsSync(y));
+        return dosyaGonder(res, bulunan ?? null);
+      }
       return dosyaGonder(res, guvenliYol(PUBLIC, SAYFALAR[p] ?? p));
     } catch (e) {
       res.writeHead(400, { 'Content-Type': 'application/json' }).end(JSON.stringify({ hata: e.message }));

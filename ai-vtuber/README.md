@@ -32,6 +32,8 @@ Neşe, oda sahnesinde duran bir Live2D karakter (Haru örnek modeli). TikTok can
 
 Linux/macOS'ta `./basla.sh` ve `./durdur.sh` kullanılır.
 
+**Telefonda (Android):** Tüm sistem tek bir uygulama olarak da çalışır; yayın TikTok'un ekran paylaşımıyla yapılır. Kurulum ve kullanım: [`mobil/README.md`](mobil/README.md).
+
 ## Sayfalar (yalnız 127.0.0.1)
 
 | Adres | Ne |
@@ -128,7 +130,7 @@ Bulut ortamında yapılan son uçtan uca test (sanal, GPU'suz tarayıcı; ses ye
 ## Bilinen sınırlar
 
 - Sohbet anahtar kelimeyle eşleşir. Alakasız sorulara cevap gelmez; her mesaja cevap verilmez. Aynı kişiye 30 sn içinde bir kez cevap verilir.
-- TikTok bağlantısı ve OBS kurulumu bulut ortamında canlı denenmedi; TikTok'a oradan ulaşılamadı, OBS de yok. OBS betiği sahte bir obs-websocket sunucusuyla, TikTok kombo mantığı birim testiyle doğrulandı. İlk gerçek denemeyi kendi bilgisayarında yap.
+- TikTok bağlantısı bulut ortamında yalnız yayında olmayan gerçek bir hesapla denendi ("yayında değil" cevabı geldi); canlı bir yayından sohbet/hediye akışı henüz denenmedi. OBS orada yok; OBS betiği sahte bir obs-websocket sunucusuyla, TikTok kombo mantığı birim testiyle doğrulandı. İlk gerçek denemeyi kendi bilgisayarında yap.
 - TikTok'ta beğeniler çok hızlı gelir. 5/10/20/30 hedefleri sık tetiklenir; kuyruk ve bekleme bunu yumuşatır. Gerekirse `.env` içindeki `BEGENI_HEDEFLERI` değerini büyüt.
 - Ses dosyası yoksa (TEST_MODU ya da üretilmemiş ses) yalnız balon gösterilir ve ağız metin süresince yapay olarak oynar.
 - Enjeksiyon filtresi gerekmedi, çünkü canlı yapay zekâ çağrısı yok. Mesajlar yalnız ekranda gösterilir, hiçbir zaman seslendirilmez.
