@@ -204,4 +204,3 @@ export const P10: Soru[] = [
   { id: "p10-201", k: "İcatlar", s: "Bilinen en eski fotoğraflardan 'Le Gras'taki Pencereden Görünüm'ü kim çekti?", d: "Nicéphore Niépce", y: ["Louis Lumière", "George Eastman"], a: "Fransız mucit Niépce, 1826-1827 civarında evinin penceresinden görünen manzarayı bitümle kaplı bir levhaya kaydetti. Fotoğraf bugün ABD'de Teksas Üniversitesi'nde saklanıyor." },
   { id: "p10-202", k: "İcatlar", s: "Niépce'nin pencereden çektiği ünlü fotoğrafın pozlama süresi yaklaşık ne kadardı?", d: "Saatlerce", y: ["Bir saniye", "Bir dakika"], a: "Niépce'nin yönteminde levhanın ışıkla sertleşmesi çok uzun sürdü. Pozlamanın saatlerce, belki günlerce sürdüğü düşünülüyor; bu yüzden binaların iki yanı da güneşli görünür." },
 ];
-];
