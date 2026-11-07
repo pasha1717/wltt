@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "code-simplification": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/code-simplification/SKILL.md",
+      "computedHash": "e4c1f0c12274be9981e1301bfbb9b3112b63e2209413071728b132c9b4ee2f5b"
+    },
+    "doubt-driven-development": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/doubt-driven-development/SKILL.md",
+      "computedHash": "f6f4c46da613b9631c666976169d5fdddafe33e072377824da224e8712abfb2c"
+    },
+    "humanizer": {
+      "source": "blader/humanizer",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "1e67c3a4a675bd0c961b1fd8ebb718174f9a61a547d9bedad2ade5eb99cce831"
+    },
+    "idea-refine": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/idea-refine/SKILL.md",
+      "computedHash": "f4400771e231aeaa6d954cc41ea5845b71d96d8f4d1df5e312849cd75bff97dd"
+    },
+    "source-driven-development": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/source-driven-development/SKILL.md",
+      "computedHash": "1397b7866630cda47bb5659d1ebb250012ca930c8217bf12b78200345f3328f6"
+    }
+  }
+}
