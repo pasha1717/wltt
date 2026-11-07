@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Everest'in tepesinde su yaklaşık 70|yetmiş derecede kaynar.
+[pause] Su her yerde 70|yetmiş derecede kaynasaydı, ne olurdu?
+Çoğu kişi suyun daha çabuk kaynayacağını düşünür.
+[pause] Ama birçok yemek doğru düzgün pişmezdi.
+[calm] Kaynama sıcaklığı hava basıncına bağlı. Deniz seviyesinde su 100|yüz derecede kaynar.
+Yükseldikçe basınç düşer, su daha az ısınınca kaynar.
+Ankara'da bile su 100|yüz derecenin biraz altında kaynar.
+Everest'te su fokurdar ama yeterince ısınmaz. Patates de makarna da çok daha geç pişer.
+[pause] Düdüklü tencere bunun tersini yapar, içerideki basıncı artırır.
+İçindeki su yaklaşık 120|yüz_yirmi dereceye çıkar, yemek çabuk pişer.
+[slowly] Mutfakta da hava basıncı çalışıyor.
+[softly] Kaynayan su hep yüz derece olmaz.
+[pause] Sence düdüklü tencere olmasa mutfakta ne değişirdi? Yorumlara yaz.

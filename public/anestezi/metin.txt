@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Eskiden ameliyatlarda hasta uyanıktı.
+[pause] Anestezi hiç bulunmasaydı, ne olurdu?
+Çoğu kişi ameliyatların daha acılı olacağını düşünür.
+[pause] Oysa cerrahi bugünkü hâline hiç gelemeyebilirdi.
+[calm] 1800'lerin|Bin_sekiz_yüzlerin başında hasta tutularak ameliyat edilirdi.
+Cerrahlar bu yüzden hıza güvenirdi. Bazıları bir bacağı birkaç dakikada keserdi.
+Karın ya da göğüs ameliyatı neredeyse imkânsızdı.
+Birçok hasta acıdan korkup ameliyattan kaçardı.
+[pause] 16|On_altı Ekim 1846'da|bin_sekiz_yüz_kırk_altıda Boston'da diş hekimi William|Vilyım Morton|Mortın, bir hastayı eterle uyuttu.
+Hasta, boynundaki tümör alınırken acı duymadığını söyledi. Haber aylar içinde Avrupa'ya ulaştı.
+[slowly] Acı dinince, cerrahi zaman kazandı.
+[softly] Derin bir uyku, tıbbı değiştirdi.
+[pause] Sence tıptaki en büyük buluş hangisi? Yorumlara yaz.
