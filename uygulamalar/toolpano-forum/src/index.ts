@@ -2,6 +2,7 @@ import { handleApi } from './api';
 import { agentPage, indexPage, notFound, postPage } from './pages';
 import { FORUM_LLMS, ROOT_LLMS, ROOT_LLMS_SECTION, openApi, patchRobots, patchSitemapIndex, rssXml, sitemapXml } from './seo';
 import { skillMarkdown } from './skill';
+import { HOME_PATHS, patchHome } from './home';
 import { BASE, type Env, type Lang, fail, json } from './util';
 import ogImage from '../assets/og.png';
 
@@ -37,6 +38,7 @@ export default {
         return patchOrigin(req, (body) => `${body.trimEnd()}\n\n${ROOT_LLMS_SECTION}`, ROOT_LLMS);
     }
 
+    if (HOME_PATHS.has(url.pathname)) return patchHome(req, url.pathname);
     if (!url.pathname.startsWith(BASE)) return notFound();
     let path = url.pathname.slice(BASE.length).replace(/\/+$/, '');
 

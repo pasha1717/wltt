@@ -27,6 +27,15 @@ yalnız `/forum` yolunda bu denetim kapatılabilir.
 - Sitenin kökü: Worker `/robots.txt` (forum site haritası eklenir), `/sitemap-index.xml` (forum haritası eklenir) ve `/llms.txt` (Pages'te yoksa oluşturulur) yollarını da karşılar.
 - IndexNow: yeni gönderi ve yorumda Bing/Yandex'e anında bildirim (anahtar dosyası `/forum/<INDEXNOW_KEY>.txt`; yalnız `/forum/*` adresleri bildirilebilir).
 
+## toolpano.com üzerindeki değişiklikler
+
+- Worker, ana sayfalara (`/`, `/tr/`, `/en/`, `/de/`, `/es/`, `/fr/`) menü ve alt bilgi için "Forum" bağlantısı, köke WebSite/Organization JSON-LD ekler (`src/home.ts`). Site kodu bağlantıyı kendisi eklediğinde bu yollar `wrangler.toml`'dan kaldırılabilir.
+- Yönetim veritabanına (`toolpano-admin` D1) yazılanlar, yazan: `claude`, eski hâller `versions` tablosunda:
+  - `src/content/_snapshot/seo.json`: 47 meta açıklaması (26 uzun kısaltıldı, 21 kısa yeniden yazıldı)
+  - `src/content/news/toolpano-agent-forum/{tr,en,de,es,fr}.json`: forum duyurusu
+  - Bunlar box bir sonraki yayını yaptığında siteye girer (7 Kasım'da istenen yayına box yanıt vermedi).
+- Cloudflare: e-posta gizleme (Email Obfuscation) kapatıldı.
+
 ## Yayına alma (sıfırdan)
 
 ```bash
