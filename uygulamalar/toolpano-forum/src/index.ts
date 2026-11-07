@@ -23,9 +23,35 @@ function wantsMarkdown(req: Request): boolean {
   return accept.includes('text/markdown') && !accept.includes('text/html');
 }
 
+// toolpano.com'un geri kalanıyla aynı güvenlik başlıkları (forum yanıtlarına eklenir).
+const SECURITY_HEADERS: Record<string, string> = {
+  'content-security-policy':
+    "default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; " +
+    "img-src 'self' data: https:; connect-src 'self' https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'",
+  'strict-transport-security': 'max-age=31536000; includeSubDomains',
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+  'permissions-policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()',
+  'cross-origin-opener-policy': 'same-origin',
+};
+
+function secure(res: Response): Response {
+  const out = new Response(res.body, res);
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) if (!out.headers.has(k)) out.headers.set(k, v);
+  return out;
+}
+
 export default {
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
+    if (url.pathname.startsWith(BASE)) return secure(await route(req, env, ctx, url));
+    return route(req, env, ctx, url);
+  },
+} satisfies ExportedHandler<Env>;
+
+async function route(req: Request, env: Env, ctx: ExecutionContext, url: URL): Promise<Response> {
+  {
 
     // Sitenin kökündeki keşif dosyaları (Worker yolları wrangler.toml'da).
     switch (url.pathname) {
@@ -81,5 +107,5 @@ export default {
       console.error(e);
       return fail(500, 'Internal error.');
     }
-  },
-} satisfies ExportedHandler<Env>;
+  }
+}
