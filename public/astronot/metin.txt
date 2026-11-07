@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Astronotlar uzaydan biraz daha uzun döner.
+[pause] Bir yıl uzayda yaşasaydın, ne olurdu?
+Çoğu kişi ağırlıksız süzülmenin vücudu dinlendireceğini düşünür.
+[pause] Yük taşımayan vücut zayıflamaya başlar.
+[calm] Kemikler, yer çekimine karşı çalıştıkça güçlü kalıyor.
+NASA'ya göre uzayda kemikler her ay yaklaşık %1-1,5|yüzde_bir_ila_bir_buçuk yoğunluk kaybediyor.
+Omurga da gevşer. Astronotların boyu %3'e|yüzde_üçe kadar uzayabiliyor.
+Vücuttaki sıvılar başa doğru kayar. Yüz şişer, bacaklar ise incelir.
+[pause] Uzun görevlerdeki astronotların yaklaşık üçte birinde gözde değişiklikler görülmüş.
+Bu yüzden istasyonda her gün yaklaşık iki saat spor yapıyorlar.
+[slowly] Vücut, kullanmadığı şeyi bırakıyor.
+[softly] Yer çekimi bizi her gün çalıştırıyor.
+[pause] Sence bir yıl uzayda kalmaya dayanır mıydın? Yorumlara yaz.

@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Vücudunda yedek bir organ taşıyorsun.
+[pause] Tek böbreğimiz olsaydı, ne olurdu?
+Çoğu kişi, tek böbrekle hayatın zorlaşacağını düşünür.
+[pause] Çoğumuz farkına bile varmazdık.
+[calm] Böbrekler kandaki atıkları süzer. Günde yaklaşık 180|yüz_seksen litre sıvı süzülür, çoğu geri emilir.
+Bazı insanlar tek böbrekle doğar ve bunu tesadüfen öğrenir. Çoğu sağlıklı yaşar.
+1943'te|Bin_dokuz_yüz_kırk_üçte Hollandalı doktor Willem Kolff|Vilem_Kolf, sosis kılıfıyla ilk yapay böbreği yaptı.
+İlk hastalar kurtulamadı. 1945'te|Bin_dokuz_yüz_kırk_beşte bir hasta ilk kez bu makineyle hayata döndü.
+[pause] 1954'te|Bin_dokuz_yüz_elli_dörtte Boston'da ilk başarılı böbrek nakli, tek yumurta ikizleri arasında yapıldı.
+Böbreğini veren kardeş elli yılı aşkın yaşadı.
+[slowly] Vücut yedekle çalışmayı biliyor.
+[softly] Birini paylaşmak bile mümkün.
+[pause] Sence organ bağışında en büyük yanılgı ne? Yorumlara yaz.

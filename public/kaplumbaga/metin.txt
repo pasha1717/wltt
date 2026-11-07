@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Kaplumbağanın cinsiyetini kum belirliyor.
+[pause] Kumsallar biraz daha ısınsaydı, kaplumbağalara ne olurdu?
+Çoğu kişi yavruların sıcaktan öleceğini düşünür.
+[pause] İlk değişen şey, yavruların cinsiyeti olurdu.
+[calm] Deniz kaplumbağalarında cinsiyeti, yumurtanın kumda gördüğü sıcaklık belirliyor.
+Yeşil kaplumbağada eşik yaklaşık 29|yirmi_dokuz derece. Üstünde daha çok dişi, altında daha çok erkek çıkıyor.
+Avustralya'da, Büyük Set Resifi'nin kuzeyinde bilim insanları bunu ölçtü.
+Oradaki genç kaplumbağaların %99'u|yüzde_doksan_dokuzu dişi çıktı.
+[pause] Daha serin güney kumsallarında bu oran yaklaşık üçte iki.
+Bazı kumsallarda yuvaları serinletmek için gölgelik kurmayı deniyorlar.
+[slowly] Küçük bir sıcaklık farkı bile önemli.
+[softly] Kumdaki bir derece, gelecek nesli belirliyor.
+[pause] Sence ısınan dünyada en çok hangi hayvan zorlanır? Yorumlara yaz.

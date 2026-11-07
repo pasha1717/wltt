@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Şu an üstünde görünmez bir ağırlık var.
+[pause] Üstümüzdeki hava basıncı bir anda kalksaydı, ne olurdu?
+Çoğu kişi balon gibi patlayacağımızı düşünür.
+[pause] Patlamazdık. Ama ağzımızdaki su kaynamaya başlardı.
+[calm] Deniz seviyesinde hava, her metrekareye yaklaşık 10|on tonluk bir ağırlıkla bastırıyor.
+Bunu hissetmiyoruz, çünkü vücudumuz da içeriden aynı güçle itiyor.
+Basınç düştükçe su daha düşük sıcaklıkta kaynıyor. Yaklaşık 19|on_dokuz kilometrede bu sıcaklık vücut ısısına iniyor.
+Orada tükürük ve gözyaşı kaynar, damardaki kanı ise kan basıncı korur.
+[pause] 1654'te|bin_altı_yüz_elli_dörtte Otto von Guericke|Gerike, havasını boşalttığı iki metal yarım küreyi birleştirdi.
+Anlatılanlara göre otuz at bile onları ayıramadı.
+[slowly] Görmediğimiz hava, bizi her an tutuyor.
+[softly] Hafif sandığımız şey, aslında ağır.
+[pause] Sence uçakta kulaklar neden tıkanıyor? Yorumlara yaz.

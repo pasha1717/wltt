@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Bir mercek, gökyüzünü baştan yazdı.
+[pause] Teleskop hiç icat edilmeseydi, ne olurdu?
+Çoğu kişi sadece yıldızları daha bulanık göreceğimizi düşünür.
+[pause] Asıl kaybımız, evrendeki yerimizi bilmek olurdu.
+[calm] 1610'da|bin_altı_yüz_onda Galileo, teleskopla Jüpiter'in çevresinde dönen dört uydu gördü.
+Demek ki her şey Dünya'nın etrafında dönmüyordu.
+Uranüs'ü 1781'de|bin_yedi_yüz_seksen_birde William Herschel|Uilyım_Herşel teleskopla buldu. Neptün çıplak gözle hiç görünmez.
+1924'te|bin_dokuz_yüz_yirmi_dörtte Edwin Hubble|Edvin_Habıl, Andromeda'nın ayrı bir galaksi olduğunu gösterdi.
+[pause] O güne kadar birçok astronom evreni Samanyolu'ndan ibaret sanıyordu.
+Teleskop olmasa gökyüzü birkaç bin yıldız ve beş gezegenden ibaret kalırdı.
+[slowly] Gözümüz evrenin küçük bir köşesini görüyor.
+[softly] Gerisini merakımız gösterdi.
+[pause] Sence uzayda bulunan en şaşırtıcı şey ne? Yorumlara yaz.

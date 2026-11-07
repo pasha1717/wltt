@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Mendeleyev tablosuna bilerek boşluk bıraktı.
+[pause] Periyodik tablo hiç yapılmasaydı, ne olurdu?
+Çoğu kişi elementleri yine bulurduk, sadece dağınık dururlardı der.
+[pause] Belki bulurduk, ama bazılarını nerede arayacağımızı bilmezdik.
+[calm] 1869'da|bin_sekiz_yüz_altmış_dokuzda Mendeleyev, bilinen elementleri atom ağırlığına göre sıraladı.
+Benzer özellikler belli aralıklarla tekrar ediyordu.
+Uymayan yerlere boşluk koydu ve oraya gelecek elementlerin özelliklerini önceden yazdı.
+1875'te|bin_sekiz_yüz_yetmiş_beşte galyum bulundu. Yoğunluğu tahmine çok yakındı.
+[pause] 1886'da|bin_sekiz_yüz_seksen_altıda germanyum da onun tarif ettiği yere oturdu.
+Bugün tabloda 118|yüz_on_sekiz element var ve hâlâ aynı mantıkla diziliyor.
+[slowly] Boşluklar da bir şey anlatır.
+[softly] Eksik olan, bazen bir ipucudur.
+[pause] Sence en ilginç element hangisi? Yorumlara yaz.

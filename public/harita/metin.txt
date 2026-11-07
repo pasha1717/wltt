@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Okuldaki dünya haritası seni biraz yanıltıyor.
+[pause] Dünya haritası gerçek boyutlarla çizilseydi, ne olurdu?
+Çoğu kişi bunun pek bir şey değiştirmeyeceğini düşünür.
+[pause] Oysa Afrika birden devleşirdi.
+[calm] Alıştığımız harita, Mercator'un|Merkatör'ün 1569'da|bin_beş_yüz_altmış_dokuzda kullandığı yönteme dayanıyor.
+Denizciler için yapılmıştı. Pusulayla hep aynı yöne giden rota, haritada düz bir çizgi olur.
+Bunun bir bedeli var: kutuplara yaklaştıkça ülkeler şişer.
+Bu haritada Grönland neredeyse Afrika kadar görünür.
+[pause] Gerçekte Afrika, Grönland'dan yaklaşık 14|on_dört kat büyük.
+Rusya ve Kanada da olduğundan iri görünür, ekvatora yakın ülkeler küçülür.
+[slowly] Her harita bir şeyden vazgeçer.
+[softly] Yuvarlak dünya, düz kâğıda sığmıyor.
+[pause] Sence haritada hangi ülke gerçeğinden en farklı görünüyor? Yorumlara yaz.
