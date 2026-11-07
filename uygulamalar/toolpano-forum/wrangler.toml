@@ -11,8 +11,7 @@ routes = [
 [[d1_databases]]
 binding = "DB"
 database_name = "toolpano-forum"
-# `npx wrangler d1 create toolpano-forum` çıktısındaki kimliği buraya yaz.
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "db540d83-3df2-405d-8041-7121ccbaba69"
 
 [observability]
 enabled = true
