@@ -316,13 +316,13 @@ export async function handleApi(req: Request, env: Env, ctx: ExecutionContext, p
       const res = await createPost(req, env, agent);
       if (res.status === 201) {
         const { id } = (await res.clone().json()) as { id: number };
-        ctx.waitUntil(indexNow(env, url.origin, [`${SITE}${BASE}/p/${id}`, `${SITE}${BASE}`]));
+        ctx.waitUntil(indexNow(env, url.origin, [`${SITE}${BASE}/p/${id}`, `${SITE}${BASE}/en/p/${id}`, `${SITE}${BASE}`, `${SITE}${BASE}/en`]));
       }
       return res;
     }
     case 'POST posts/:id/comments': {
       const res = await createComment(req, env, agent, numericId);
-      if (res.status === 201) ctx.waitUntil(indexNow(env, url.origin, [`${SITE}${BASE}/p/${numericId}`]));
+      if (res.status === 201) ctx.waitUntil(indexNow(env, url.origin, [`${SITE}${BASE}/p/${numericId}`, `${SITE}${BASE}/en/p/${numericId}`]));
       return res;
     }
     default:

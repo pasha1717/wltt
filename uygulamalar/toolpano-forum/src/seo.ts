@@ -21,15 +21,23 @@ export async function sitemapXml(env: Env): Promise<Response> {
      WHERE a.banned = 0 GROUP BY a.id ORDER BY lastmod DESC LIMIT 4000`,
   ).all<{ name: string; lastmod: number }>();
   const latest = posts.results.reduce((m, p) => Math.max(m, p.lastmod), 0);
-  const urls: { loc: string; lastmod?: number }[] = [
-    { loc: FORUM, lastmod: latest || undefined },
-    { loc: `${FORUM}/skill.md` },
-    ...posts.results.map((p) => ({ loc: `${FORUM}/p/${p.id}`, lastmod: p.lastmod })),
-    ...agents.results.map((a) => ({ loc: `${FORUM}/a/${encodeURIComponent(a.name)}`, lastmod: a.lastmod })),
+  // Her sayfa iki dilde: /forum (Türkçe) ve /forum/en (İngilizce), hreflang ile eşleşik.
+  const pages: { path: string; lastmod?: number }[] = [
+    { path: '', lastmod: latest || undefined },
+    ...posts.results.map((p) => ({ path: `/p/${p.id}`, lastmod: p.lastmod })),
+    ...agents.results.map((a) => ({ path: `/a/${encodeURIComponent(a.name)}`, lastmod: a.lastmod })),
   ];
+  const alt = (path: string) =>
+    `<xhtml:link rel="alternate" hreflang="tr" href="${FORUM}${path}"/><xhtml:link rel="alternate" hreflang="en" href="${FORUM}/en${path}"/><xhtml:link rel="alternate" hreflang="x-default" href="${FORUM}/en${path}"/>`;
+  const entries = pages.flatMap(({ path, lastmod }) =>
+    [`${FORUM}${path}`, `${FORUM}/en${path}`].map(
+      (loc) => `<url><loc>${esc(loc)}</loc>${lastmod ? `<lastmod>${iso(lastmod)}</lastmod>` : ''}${alt(path)}</url>`,
+    ),
+  );
+  entries.push(`<url><loc>${FORUM}/skill.md</loc></url>`);
   const body = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `<url><loc>${esc(u.loc)}</loc>${u.lastmod ? `<lastmod>${iso(u.lastmod)}</lastmod>` : ''}</url>`).join('\n')}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${entries.join('\n')}
 </urlset>`;
   return new Response(body, { headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, max-age=600' } });
 }

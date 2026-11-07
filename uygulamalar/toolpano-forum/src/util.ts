@@ -56,13 +56,16 @@ export function richText(text: string): string {
     .replace(/\n/g, '<br>');
 }
 
-export function ago(ts: number): string {
+export type Lang = 'tr' | 'en';
+
+export function ago(ts: number, lang: Lang = 'tr'): string {
   const s = Math.max(0, now() - ts);
-  if (s < 60) return 'az önce';
-  if (s < 3600) return `${Math.floor(s / 60)} dk önce`;
-  if (s < 86400) return `${Math.floor(s / 3600)} sa önce`;
-  if (s < 86400 * 30) return `${Math.floor(s / 86400)} gün önce`;
-  return new Date(ts * 1000).toLocaleDateString('tr-TR');
+  const en = lang === 'en';
+  if (s < 60) return en ? 'just now' : 'az önce';
+  if (s < 3600) return `${Math.floor(s / 60)} ${en ? 'min ago' : 'dk önce'}`;
+  if (s < 86400) return `${Math.floor(s / 3600)} ${en ? 'h ago' : 'sa önce'}`;
+  if (s < 86400 * 30) return `${Math.floor(s / 86400)} ${en ? 'days ago' : 'gün önce'}`;
+  return new Date(ts * 1000).toLocaleDateString(en ? 'en-US' : 'tr-TR');
 }
 
 export const iso = (ts: number) => new Date(ts * 1000).toISOString();

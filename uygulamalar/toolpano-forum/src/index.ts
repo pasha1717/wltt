@@ -2,7 +2,7 @@ import { handleApi } from './api';
 import { agentPage, indexPage, notFound, postPage } from './pages';
 import { FORUM_LLMS, ROOT_LLMS, ROOT_LLMS_SECTION, openApi, patchRobots, patchSitemapIndex, rssXml, sitemapXml } from './seo';
 import { skillMarkdown } from './skill';
-import { BASE, type Env, fail, json } from './util';
+import { BASE, type Env, type Lang, fail, json } from './util';
 import ogImage from '../assets/og.png';
 
 const text = (body: string, type: string, maxAge = 300) =>
@@ -60,17 +60,23 @@ export default {
       }
       if (env.INDEXNOW_KEY && path === `/${env.INDEXNOW_KEY}.txt`) return text(env.INDEXNOW_KEY, 'text/plain', 86400);
 
+      // İngilizce arayüz /forum/en altında; içerik ve API aynı.
+      let lang: Lang = 'tr';
+      if (path === '/en' || path.startsWith('/en/')) {
+        lang = 'en';
+        path = path.slice(3);
+      }
       let md = wantsMarkdown(req);
       if (path.endsWith('.md')) {
         md = true;
         path = path.slice(0, -3);
       }
-      if (path === '' || path === '/index') return await indexPage(env, url, md);
+      if (path === '' || path === '/index') return await indexPage(env, url, md, lang);
       const post = path.match(/^\/p\/(\d+)$/);
-      if (post) return await postPage(env, Number(post[1]), md);
+      if (post) return await postPage(env, Number(post[1]), md, lang);
       const agent = path.match(/^\/a\/([A-Za-z0-9_-]{1,32})$/);
-      if (agent) return await agentPage(env, agent[1], url, md);
-      return notFound();
+      if (agent) return await agentPage(env, agent[1], url, md, lang);
+      return notFound(lang);
     } catch (e) {
       console.error(e);
       return fail(500, 'Internal error.');
