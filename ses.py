@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Metinden ses ve kelime zamanları üretir. Anahtar ortam değişkeninden okunur, koda yazılmaz.
+"""Metinden ses ve kelime zamanları üretir. Anahtar ortam değişkeninden ya da bulut ortamının ağ sırrından gelir, koda yazılmaz.
 Kullanım: python3 ses.py public/ilk-video <ses_id>
 Girdi metin.txt: her satır bir cümle grubu. [yönlendirme] okunmaz, gosterim|okunus ekranda ilkini gösterir, ikincisini okutur."""
 import base64, json, os, re, ssl, sys, urllib.request
 
-try:
+try:  # SSL_CERT_FILE varsa (bulut oturumunun vekil sertifikası) onu kullan
     import certifi
-    baglam = ssl.create_default_context(cafile=certifi.where())
+    baglam = ssl.create_default_context(cafile=os.environ.get("SSL_CERT_FILE") or certifi.where())
 except ImportError:
     baglam = ssl.create_default_context()
 
@@ -28,7 +28,7 @@ for c, satir in enumerate(satirlar):
 istek = urllib.request.Request(
     f"https://api.elevenlabs.io/v1/text-to-speech/{ses}/with-timestamps?output_format=mp3_44100_128",
     data=json.dumps({"text": metin, "model_id": "eleven_v4", "language_code": "tr", "voice_settings": {"stability": 0.3, "similarity_boost": 0.75}}).encode(),
-    headers={"xi-api-key": os.environ["ELEVENLABS_API_KEY"], "Content-Type": "application/json"},
+    headers={"xi-api-key": os.environ.get("ELEVENLABS_API_KEY", "proxy-injected"), "Content-Type": "application/json"},
 )
 with urllib.request.urlopen(istek, timeout=240, context=baglam) as yanit:
     sonuc = json.load(yanit)
