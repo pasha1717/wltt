@@ -1985,3 +1985,611 @@ Her gün yeni bir "ne olurdu?" için takip et.
 
 #yüzkörlüğü #beyin #psikoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
 ```
+
+## Beton olmasaydı (`beton.mp4`)
+
+```text
+Sudan sonra en çok tükettiğimiz malzeme beton.
+
+Beton hiç icat edilmeseydi, ne olurdu?
+
+Romalılar betonu iki bin yıl önce kullanıyordu. Panteon'un 43 metrelik kubbesi yaklaşık 1900 yıldır ayakta ve içinde demir yok. MIT'nin bir çalışmasına göre Roma betonundaki kireç parçaları suyla karşılaşınca küçük çatlakları dolduruyordu. Bugün çimento, dünyadaki karbondioksit salımının yaklaşık yüzde 8'inden sorumlu.
+
+Sence bugünkü binalar iki bin yıl dayanır mı? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#beton #mimarlık #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Bisiklet icat edilmeseydi (`bisiklet.mp4`)
+
+```text
+Bisikletin icadında bir yanardağın payı olabilir.
+
+Bisiklet hiç icat edilmeseydi, ne olurdu?
+
+1815'te Tambora patladı, ertesi yıl Avrupa'da yaz neredeyse hiç gelmedi ve yulaf kıtlığında pek çok at öldü. Karl Drais 1817'de pedalsız koşu makinesini yaptı. Yüzyılın sonunda ABD'de düzgün yollar için ilk kampanyayı bisikletçiler başlattı. Wright kardeşler de uçaktan önce bisiklet dükkânı işletiyordu.
+
+Sence bisikletin hayatımıza en büyük katkısı ne oldu? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#bisiklet #ulaşım #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Deniz canlıları ışık saçamasaydı (`biyoluminesans.mp4`)
+
+```text
+Okyanusun en karanlık yerinde bile ışık var.
+
+Deniz canlıları ışık saçamasaydı, ne olurdu?
+
+Yaklaşık bin metrenin altına güneş ışığı ulaşmıyor. Orada ışığı canlıların kendisi üretiyor. Kaliforniya açıklarında yapılan bir araştırmada görülen hayvanların yaklaşık dörtte üçü ışık üretebiliyordu. Fener balığı yemini parlatan bakterilerle avlanıyor, parlayan bir denizanasından elde edilen bir protein de 2008'de Nobel Kimya Ödülü getirdi.
+
+Sence okyanusun dibinde daha neler saklı? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#okyanus #derindeniz #biyolüminesans #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Tek böbreğimiz olsaydı (`bobrek.mp4`)
+
+```text
+Vücudunda yedek bir organ taşıyorsun.
+
+Tek böbreğimiz olsaydı, ne olurdu?
+
+Böbrekler günde yaklaşık 180 litre sıvı süzüyor. Tek böbrekle doğanların çoğu bunu tesadüfen öğreniyor ve sağlıklı yaşıyor. İlk yapay böbrek 1943'te sosis kılıfıyla yapıldı. 1954'te ilk başarılı nakil ikizler arasında oldu, böbreğini veren kardeş elli yılı aşkın yaşadı.
+
+Sence organ bağışında en büyük yanılgı ne? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#böbrek #organbağışı #tıp #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Çamaşır makinesi icat edilmeseydi (`camasir.mp4`)
+
+```text
+1940'larda ABD'de bir yükü elle yıkamak yaklaşık 4 saat sürüyordu.
+
+Çamaşır makinesi hiç icat edilmeseydi, ne olurdu?
+
+Aynı çalışmada makineyle bu süre 41 dakikaya indi. Hans Rosling çamaşır makinesini Sanayi Devrimi'nin en büyük icadı sayardı, annesi kazandığı vakitle kütüphaneye gidebilmişti. Tarihçi Ruth Schwartz Cowan'a göre artık çamaşırı çok daha sık yıkıyoruz, kazandığımız vaktin bir kısmı yine çamaşıra gidiyor.
+
+Sence hangi ev aleti sana en çok zaman kazandırıyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#çamaşırmakinesi #evaletleri #icat #tarih #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
+```
+
+## Cırt cırt icat edilmeseydi (`cirtcirt.mp4`)
+
+```text
+Cırt cırt, bir köpeğin tüylerine yapışan dikenlerle başladı.
+
+Cırt cırt hiç icat edilmeseydi, ne olurdu?
+
+1941'de George de Mestral dulavratotu dikenlerini mikroskopta inceledi ve uçlarında yüzlerce minik kanca gördü. Kumaşta taklit etmesi yaklaşık on yıl sürdü. Adı Fransızca velours (kadife) ve crochet (kanca) kelimelerinden geliyor. Apollo görevlerinde kullanılınca ünü arttı.
+
+Sence doğadan kopyalanmış başka hangi icat var? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#cırtcırt #velcro #icat #doğa #neolurdu #bilgi #bilim #keşfet #reels
+```
+
+## Dalağımız olmasaydı (`dalak.mp4`)
+
+```text
+Karnının sol üstünde yumruk kadar bir organ var: dalak.
+
+Dalağımız hiç olmasaydı, ne olurdu?
+
+Dalak kanı süzüyor, yıpranmış kan hücrelerini ayıklıyor ve bakterilerle savaşıyor. Alınırsa işinin çoğunu karaciğer ve kemik iliği üstleniyor, ama ağır enfeksiyon riski iki üç kat artıyor. Endonezya'daki Bajau dalgıçlarının dalağı ise komşularınınkinden yaklaşık yüzde 50 büyük.
+
+Sence vücudumuzda en az bilinen organ hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#dalak #vücut #sağlık #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Bir canlı hiç yaşlanmasaydı (`denizanasi.mp4`)
+
+```text
+Yarım santimlik bir denizanası, yaşlanınca yeniden yavru evresine dönebiliyor.
+
+Bir canlı hiç yaşlanmasaydı, ne olurdu?
+
+Turritopsis dohrnii strese girince ya da yaşlanınca dibe çöküp polipe dönüşüyor, oradan yeni denizanaları çıkıyor. Bu dönüşüm 1996'da laboratuvarda ayrıntılı olarak belgelendi. Yine de denizler bu denizanasıyla dolmadı: balıklara yem oluyor, hastalıktan da ölebiliyor.
+
+Sence hangi hayvan uzun bir ömrü en çok hak ediyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#denizanası #deniz #biyoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Fermuar hiç icat edilmeseydi (`fermuar.mp4`)
+
+```text
+İlk fermuar benzeri kapama 1893'te çıktı ama sık sık takılıyordu.
+
+Fermuar hiç icat edilmeseydi, ne olurdu?
+
+Bugünkü dişli tasarım yaklaşık yirmi yıl sonra Gideon Sundback'ten geldi. İlk alıcılar botlar ve tütün keseleriydi, "zipper" adını da lastik bot yapan B.F. Goodrich koydu. Pantolonlara yerleşmesi 1930'ların sonunu buldu.
+
+Sence hangi gündelik eşya olmadan yapamazdın? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#fermuar #icat #tarih #giyim #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
+```
+
+## Hiçbir şeyi unutmasaydık (`hafiza.mp4`)
+
+```text
+Bazı insanlar hayatlarının her gününü hatırlıyor.
+
+Hiçbir şeyi unutmasaydık, ne olurdu?
+
+Bu duruma çok üstün otobiyografik bellek deniyor ve bilinen vaka sayısı 60 civarında. İlk tanımlanan kişi Jill Price, hatıraların durmadan aktığını ve bunun yorucu olduğunu anlatıyor. Beyin bilimcilere göre unutmak, eski bilgiyi aradan çekip yeni durumlara uyum sağlamamıza yardım ediyor olabilir.
+
+Sence hangi anını hiç unutmak istemezdin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#hafıza #beyin #psikoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Hamamböcekleri nükleer savaştan sağ çıkar mı? (`hamambocegi.mp4`)
+
+```text
+Hamamböceklerinin nükleer savaştan sağ çıkacağı söylenir.
+
+Bir nükleer savaş olsaydı, hamamböceklerine ne olurdu?
+
+Hamamböcekleri radyasyona insandan çok daha dayanıklı. 2008'deki bir televizyon deneyinde insanı öldüren dozun on katında bazıları yaşadı ama yüz katında hiçbiri sağ kalmadı, un böcekleri daha dayanıklı çıktı. Patlamanın kendisi zaten yakındaki her canlıyı öldürür. Yaklaşık 4500 türden yalnızca 30 kadarı evlerde sorun çıkarıyor.
+
+Sence en dayanıklı canlı hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#hamamböceği #böcek #radyasyon #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## İnsülin bulunmasaydı (`insulin.mp4`)
+
+```text
+Yüz yıl önce çocuklarda şeker hastalığı ölüm demekti.
+
+İnsülin hiç bulunmasaydı, ne olurdu?
+
+Doktorların elinde neredeyse yalnız açlık diyeti vardı. 1922'de Toronto'da ölmek üzere olan Leonard Thompson ilk insülin iğnesini oldu ve 13 yıl daha yaşadı. Buluşu yapanlar patenti üniversiteye bir dolara sattı.
+
+Sence hangi ilaç dünyayı en çok değiştirdi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#insülin #diyabet #tıp #tarih #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
+```
+
+## Kan grupları keşfedilmeseydi (`kan-grubu.mp4`)
+
+```text
+Yüzyıllarca kan nakli bir kumar gibiydi.
+
+Kan grupları hiç keşfedilmeseydi, ne olurdu?
+
+Kimi hasta iyileşiyor, kimi ağır tepki veriyordu. 1901'de Karl Landsteiner kanları karıştırınca bazılarında alyuvarların topaklandığını gördü ve A, B, 0 gruplarını buldu. AB bir yıl sonra eklendi. Landsteiner 1930'da Nobel aldı.
+
+Senin kan grubun ne? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#kangrubu #kanbağışı #tıp #tarih #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
+```
+
+## Kumsallar ısınsaydı (`kaplumbaga.mp4`)
+
+```text
+Deniz kaplumbağasının cinsiyetini yumurtanın kumda gördüğü sıcaklık belirliyor.
+
+Kumsallar biraz daha ısınsaydı, kaplumbağalara ne olurdu?
+
+Yeşil kaplumbağada eşik yaklaşık 29 derece. Daha sıcak yuvalardan daha çok dişi çıkıyor. Büyük Set Resifi'nin kuzeyinde genç kaplumbağaların yüzde 99'u dişi çıktı, daha serin güney kumsallarında bu oran üçte iki civarında. Bazı kumsallarda yuvalar gölgelikle serinletilmeye çalışılıyor.
+
+Sence ısınan dünyada en çok hangi hayvan zorlanır? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#kaplumbağa #denizkaplumbağası #iklim #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Kasırgalar olmasaydı (`kasirga.mp4`)
+
+```text
+Bir kasırga dev bir ısı makinesi gibi çalışıyor.
+
+Dünya'da hiç kasırga olmasaydı, ne olurdu?
+
+Sıcak okyanus suyu buharlaşıyor, bulutta yoğuşunca ısı açığa çıkıyor. NOAA'nın bir hesabına göre bu ısı dünyanın elektrik üretim kapasitesinin yüzlerce katı. Kasırgalar bu ısıyı tropiklerden kutuplara taşıyor, bazı yerlerde kuraklığı da onların yağmuru bitiriyor.
+
+Sence doğada başka hangi felaketin bir faydası var? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#kasırga #fırtına #hava #iklim #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Beynimiz kör noktayı doldurmasaydı (`kor-nokta.mp4`)
+
+```text
+Şu an görüş alanında bir delik var.
+
+Beynimiz kör noktayı doldurmasaydı, ne olurdu?
+
+Göz sinirinin gözden çıktığı yerde ışığı algılayan hücre yok. Bu kör nokta gökyüzünde yan yana on dolunay sığacak kadar büyük, ama beyin onu çevredeki renk ve desenlerle dolduruyor. Kör noktayı ilk kez 1660'larda Edme Mariotte tarif etti. Ahtapotların gözünde ise böyle bir boşluk yok.
+
+Sence beynin seni başka nerede kandırıyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#körnokta #göz #beyin #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Herkes kendi ölçüsünü kullansaydı (`metre.mp4`)
+
+```text
+Bir metre, Dünya'nın boyundan hesaplandı.
+
+Herkes kendi ölçü birimini kullansaydı, ne olurdu?
+
+Bir tahmine göre devrimden önce Fransa'da 250 bin kadar farklı ölçü vardı. Sonra metre, Kuzey Kutbu ile ekvator arasındaki mesafenin on milyonda biri diye tanımlandı ve iki astronom yedi yıl Dunkerque ile Barselona arasını ölçtü. 1999'da NASA'nın Mars Climate Orbiter aracı, bir ekip pound öteki newton kullandığı için Mars'a fazla yaklaşıp kayboldu.
+
+Sence günlük hayatta en çok hangi ölçü karışıyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#metre #ölçü #bilimtarihi #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Mikrodalga fırın icat edilmeseydi (`mikrodalga.mp4`)
+
+```text
+Mikrodalga fırın, radar üzerinde çalışan bir mühendisin cebinde başladı.
+
+Mikrodalga fırın hiç icat edilmeseydi, ne olurdu?
+
+1945'te Percy Spencer çalışan bir magnetronun yanında dururken cebindeki çikolatalı bar eridi. Sonra mısır patlattı. İlk fırınlar yaklaşık 340 kiloydu ve lokantalar içindi. Tezgâha sığan ev modeli 1967'de geldi.
+
+Sence mutfakta en vazgeçilmez alet hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#mikrodalga #mutfak #icat #fizik #neolurdu #bilgi #bilim #keşfet #reels
+```
+
+## Mısırı kireçle işlemeyi kimse öğrenmeseydi (`misir.mp4`)
+
+```text
+Mısırı pişirme şekli bile hayat kurtarabiliyor.
+
+Mısırı kireçle işlemeyi kimse öğrenmeseydi, ne olurdu?
+
+Orta Amerika halkları mısırı binlerce yıldır kireçli suda kaynatıyor. Bu işlem mısırdaki B3 vitaminini (niasin) vücudun kullanabileceği hale getiriyor. Mısır Avrupa'ya geldi ama yöntem gelmedi. Mısıra bağımlı yoksul bölgelerde pellagra yayıldı, ilk kez 1735'te İspanya'da tanımlandı. ABD'nin güneyinde 1906-1940 arasında yaklaşık üç milyon vaka görüldü. Doktor Joseph Goldberger hastalığın beslenmeden kaynaklandığını gösterdi.
+
+Sence hangi tarifin ardında bir sır var? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#mısır #beslenme #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Balıkları istediğimiz kadar avlasaydık (`morina.mp4`)
+
+```text
+Bir zamanlar denizdeki balığın bitmeyeceği sanılıyordu.
+
+Denizdeki balıkları istediğimiz kadar avlasaydık, ne olurdu?
+
+1883'te biyolog Thomas Huxley büyük balıkçılıkların, morina da dahil, tükenmez olduğunu söyledi. Kanada'nın Newfoundland açıklarında trol gemileri avı hızla artırdı. 1992'de üreyen morinalar eski zirvenin yaklaşık yüzde birine inmişti. Kanada avı yasakladı, bölgede yaklaşık 30 bin kişi işini kaybetti. İki yıl sürmesi planlanan yasak ancak 2024'te kalktı.
+
+Sence bugün hangi balığı fazla avlıyoruz? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#morina #balıkçılık #okyanus #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Muson yağmurları gelmeseydi (`muson.mp4`)
+
+```text
+Hindistan'ın yağmurunun çoğu dört ayda yağıyor.
+
+Muson yağmurları bir yıl hiç gelmeseydi, ne olurdu?
+
+Haziranla eylül arası Hindistan yıllık yağmurunun yaklaşık dörtte üçünü alıyor. Yazın kara denizden hızlı ısınınca okyanustaki nemli hava karaya çekiliyor. Tarım arazilerinin yaklaşık yarısı sulanmadığı için ekin bu yağmurla büyüyor, yağmur geç kalınca gıda fiyatları bile yükselebiliyor.
+
+Sence bizim tarlalarımız en çok hangi mevsimin yağmuruna bağlı? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#muson #yağmur #hava #coğrafya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Naylon icat edilmeseydi (`naylon.mp4`)
+
+```text
+Naylon poşet dediğimiz şeylerin çoğu aslında polietilen.
+
+Naylon hiç icat edilmeseydi, ne olurdu?
+
+Naylonu 1935'te DuPont'ta Wallace Carothers'ın ekibi geliştirdi. 1940'ta satışa çıkan naylon çoraptan ilk yıl yaklaşık 64 milyon çift satıldı. Savaşta naylon paraşüte gitti, savaştan sonra mağaza önlerinde kuyruklar oluştu.
+
+Sence adı yanlış bilinen başka hangi eşya var? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#naylon #kimya #giyim #icat #neolurdu #bilgi #bilim #keşfet #reels
+```
+
+## Örümcekler yok olsaydı (`orumcek.mp4`)
+
+```text
+Örümcekler bir gecede yok olsaydı çoğumuz sevinirdik.
+
+Dünyadaki bütün örümcekler yok olsaydı, ne olurdu?
+
+Bir çalışmaya göre örümcekler her yıl 400 ile 800 milyon ton av yiyor, bunun çoğu böcek. Bütün insanlığın yılda tükettiği et ve balık yaklaşık 400 milyon ton. Örümcekler olmasa bitki yiyen böcekler artabilir, ormanlar da tarlalar da bundan etkilenebilirdi.
+
+Sence en gereksiz sandığımız hayvan hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#örümcek #böcek #doğa #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Pancardan şeker çıkarmayı öğrenmeseydik (`pancar.mp4`)
+
+```text
+Çayına attığın şeker bir pancardan gelmiş olabilir.
+
+Pancardan şeker çıkarmayı hiç öğrenmeseydik, ne olurdu?
+
+Avrupa şekerini yüzyıllarca tropik bölgelerdeki şeker kamışından aldı, tarlalarda köleler çalışıyordu. 1747'de Alman kimyager Marggraf pancarda kamıştakiyle aynı şekeri buldu. Öğrencisi Achard ilk pancar şekeri fabrikasını 1801'de kurdu. Napolyon'un ablukası kamış şekerinin yolunu kesince Fransa pancara yöneldi. Bugün dünyadaki şekerin yaklaşık beşte biri pancardan geliyor.
+
+Sence bugün ucuz olan neyin değeri bir gün artar? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#şeker #pancar #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Para hiç icat edilmeseydi (`para.mp4`)
+
+```text
+İlk madeni paralar Anadolu'da, Lidya'da basıldı.
+
+Para hiç icat edilmeseydi, ne olurdu?
+
+Herkes takas yapardı diye düşünürüz, ama antropologlar yalnızca takasla yaşayan bir toplum bulamamış. İnsanlar borç ve güvenle idare ediyordu. Mezopotamya'da gümüş, madeni paradan çok önce ölçü birimiydi ve borçlar kil tabletlere yazılıyordu. Yap adasında denize batmış dev bir taş bile el değiştirebiliyordu, çünkü kimin olduğunu herkes biliyordu.
+
+Sence para bir gün tamamen kalksa, ilk ne değişirdi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#para #ekonomi #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Patates Amerika'dan hiç çıkmasaydı (`patates.mp4`)
+
+```text
+Patates kızartmasının vatanı And Dağları.
+
+Patates Amerika'dan hiç çıkmasaydı, ne olurdu?
+
+Patates 1500'lerin ikinci yarısında Kanarya Adaları üzerinden Avrupa'ya geldi. Aynı tarladan tahıldan çok daha fazla kalori veriyordu. Bir çalışmaya göre 1700-1900 arasında Eski Dünya'daki nüfus artışının yaklaşık dörtte biri patatesle açıklanıyor. Bu bağımlılığın bedeli 1845'te İrlanda'da görüldü: patates hastalığı bir milyondan fazla insanın ölümüne yol açtı.
+
+Patates olmasa mutfakta en çok neyi özlerdin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#patates #tarih #yemek #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Periyodik tablo yapılmasaydı (`periyodik.mp4`)
+
+```text
+Mendeleyev tablosuna bilerek boşluk bıraktı.
+
+Periyodik tablo hiç yapılmasaydı, ne olurdu?
+
+1869'da Mendeleyev bilinen elementleri atom ağırlığına göre sıraladı, uymayan yerlere boşluk koydu ve oraya gelecek elementlerin özelliklerini önceden yazdı. 1875'te bulunan galyumun yoğunluğu tahminine çok yakın çıktı, 1886'da germanyum da tarif ettiği yere oturdu. Bugün tabloda 118 element var.
+
+Sence en ilginç element hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#periyodiktablo #kimya #mendeleyev #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Posta pulu icat edilmeseydi (`pul.mp4`)
+
+```text
+Eskiden mektubun parasını alan kişi öderdi.
+
+Posta pulu hiç icat edilmeseydi, ne olurdu?
+
+İngiltere'de ücret mesafeye ve kâğıt sayısına göre değişiyordu, uzak bir mektup bazen bir günlük yevmiyeye mal oluyordu. Birçok kişi mektubu geri çeviriyordu. 1840'ta ilk pul Penny Black çıktı: her yere tek fiyat, ödeme önceden. Bir yılda gönderilen mektup sayısı iki katından fazla arttı.
+
+Sen en son ne zaman kâğıda mektup yazdın? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#pul #posta #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Röntgen ışınları bulunmasaydı (`rontgen.mp4`)
+
+```text
+Bir kadın kendi iskeletini görünce korktu.
+
+Röntgen ışınları hiç bulunmasaydı, ne olurdu?
+
+1895'te Wilhelm Röntgen kartondan geçen görünmez bir ışın fark etti ve ona X dedi. Haftalar sonra eşinin elini görüntüledi, kemikler ve yüzük göründü. Patent almadı, 1901'de ilk Nobel Fizik Ödülü'nü aldı. Tehlikesi geç anlaşıldı: 1950'lere kadar bazı ayakkabıcılarda ayak röntgeni çeken makineler vardı.
+
+Sence en önemli tıbbi cihaz hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#röntgen #xışını #tıp #tarih #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
+```
+
+## Sis olmasaydı (`sis.mp4`)
+
+```text
+Dünyanın en uzun ağaçları suyunun bir kısmını sisten alıyor.
+
+Dünya'da hiç sis olmasaydı, ne olurdu?
+
+Sis yere inmiş bir bulut. Kaliforniya'daki kızıl ağaçlar onu yapraklarında topluyor, bir çalışmaya göre oradaki yıllık suyun yaklaşık üçte biri sis damlalarından geliyor. Namib Çölü'nde bir böcek sırtında sis suyu biriktiriyor, Atacama'da insanlar ağlarla sisten su topluyor.
+
+Sence sisin en güzel olduğu yer neresi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#sis #hava #çöl #doğa #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Stetoskop icat edilmeseydi (`stetoskop.mp4`)
+
+```text
+Doktorlar eskiden kulaklarını hastanın göğsüne dayardı.
+
+Stetoskop hiç icat edilmeseydi, ne olurdu?
+
+1816'da Paris'te René Laennec genç bir kadın hastayı muayene ederken kulağını dayamayı uygun bulmadı. Anlatılana göre kâğıtları rulo yaptı ve kalbi çok daha net duydu. Sonra ahşap bir tüp yaptı, adını Yunanca "göğüs" kelimesinden aldı. 1819'da kalp ve akciğer seslerini anlatan kitabını yazdı.
+
+Sence doktor çantasındaki en önemli alet hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#stetoskop #doktor #tıp #tarih #neolurdu #bilgi #keşfet #reels #ilginçbilgiler
+```
+
+## Teflon bulunmasaydı (`teflon.mp4`)
+
+```text
+Yapışmaz tavanın hikâyesi, 1938'de boş görünen bir gaz tüpüyle başladı.
+
+Teflon hiç bulunmasaydı, ne olurdu?
+
+Roy Plunkett soğutucu gaz ararken tüpün içinde beyaz, kaygan bir toz buldu. Savaşta atom bombası projesinde aşındırıcı gazlara dayanan conta olarak kullanıldı. Tavaya 1950'lerde Fransa'da geçti, Tefal adı da teflon ve alüminyumdan geliyor.
+
+Sence tesadüfen bulunan en iyi şey ne? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#teflon #kimya #mutfak #icat #neolurdu #bilgi #bilim #keşfet #reels
+```
+
+## Teleskop icat edilmeseydi (`teleskop.mp4`)
+
+```text
+Bir mercek, gökyüzünü baştan yazdı.
+
+Teleskop hiç icat edilmeseydi, ne olurdu?
+
+1610'da Galileo, Jüpiter'in çevresinde dönen dört uydu gördü. Demek ki her şey Dünya'nın etrafında dönmüyordu. Uranüs 1781'de teleskopla bulundu, Neptün çıplak gözle hiç görünmez. 1924'te Edwin Hubble, Andromeda'nın ayrı bir galaksi olduğunu gösterdi. Teleskop olmasa gökyüzü birkaç bin yıldız ve beş gezegenden ibaret kalırdı.
+
+Sence uzayda bulunan en şaşırtıcı şey ne? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#teleskop #galileo #astronomi #uzay #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Termitler olmasaydı (`termit.mp4`)
+
+```text
+Brezilya'da uydudan görülen termit tepeleri var.
+
+Termitler hiç olmasaydı, ne olurdu?
+
+Brezilya'da yaklaşık 200 milyon termit tepesi Britanya büyüklüğünde bir alana yayılıyor, bazıları yaklaşık 4000 yıllık. Kurak bölgelerde tepeler su ve besin tutuyor, tünelleri yağmur suyunu toprağa indiriyor. Bir çalışmaya göre bu tepeler kurak toprakların çölleşmeye karşı direncini artırabilir.
+
+Sence evde gördüğün hangi böcek aslında doğaya yarıyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#termit #böcek #çölleşme #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Elektrikli balıklar olmasaydı (`torpil.mp4`)
+
+```text
+Telefonundaki pilin hikâyesi bir balıkla başlıyor.
+
+Elektrik üreten balıklar olmasaydı, ne olurdu?
+
+Torpil balığı avını elektrikle uyuşturan bir vatoz. Antik Roma'da bir hekim onu baş ağrısına öneriyordu. Volta 1800'de duyurduğu ilk pili, torpil balığının elektrik organını taklit ederek kurdu ve ona "yapay elektrik organı" dedi. 2019'da tanımlanan bir elektrikli yılan balığı Volta'nın adını taşıyor, bu balıkta 860 volt ölçüldü.
+
+Sence doğadan esinlenen en iyi icat hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#pil #elektrik #balık #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Trafik lambası olmasaydı (`trafik-lambasi.mp4`)
+
+```text
+Dünyanın ilk trafik lambası bir ay dolmadan patladı.
+
+Şehirlerde hiç trafik lambası olmasaydı, ne olurdu?
+
+O lamba 1868'de Londra'da kuruldu, gazla yanıyordu ve patlamada onu işleten polis yaralandı. Hollanda'daki Drachten kasabası yıllar sonra lambalarının çoğunu söktü, haberlere göre kazalar azaldı. ABD'de lambalı kavşakları göbeğe çeviren yerlerde yaralanmalı kazalar bir çalışmaya göre yaklaşık dörtte üç düştü.
+
+Sence senin şehrinde hangi kavşak lambasız daha iyi işlerdi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#trafik #şehir #ulaşım #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Uzay çöpü zincirleme çarpışsaydı (`uzay-copu.mp4`)
+
+```text
+Dünya'nın çevresinde on binlerce hurda dönüyor.
+
+Bu hurdalar zincirleme çarpışmaya başlasaydı, ne olurdu?
+
+1978'de NASA'dan Donald Kessler, bir çarpışmanın yeni parçalar üretip başka uyduları vurabileceğini anlattı. Bu parçalar saatte yaklaşık 28 bin kilometre hızla dönüyor. Uzay İstasyonu 1999'dan beri onlarca kez çöpten kaçmak için rota değiştirdi. Zincir büyürse hava tahmini, uydu interneti ve iletişim aksayabilirdi.
+
+Sence uzay çöpünü kim temizlemeli? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#uzayçöpü #uydu #uzay #kessler #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Zehirli yılanlar olmasaydı (`yilan.mp4`)
+
+```text
+Bir yılanın zehri tansiyon ilacına dönüştü.
+
+Zehirli yılanlar hiç olmasaydı, ne olurdu?
+
+Dünya Sağlık Örgütü'ne göre yılan sokması her yıl yaklaşık 81 ile 138 bin kişinin ölümüne yol açıyor. Öte yandan 1948'de Brezilya'da jararaka yılanının zehri üzerinde çalışan bilim insanları bradikinini buldu. Bu zehirden çıkan ipucuyla geliştirilen kaptopril 1981'de onaylandı ve sonraki birçok tansiyon ilacına yol açtı.
+
+Sence doğadaki başka hangi tehlike ilaç olabilir? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#yılan #zehir #tıp #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
