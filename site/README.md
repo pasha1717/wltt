@@ -8,7 +8,7 @@ Ciddi evlilik düşünenler için uyum testi, üyelik, profil ve eşleşme. Tek 
 
 ## Canlıya alma
 1. supabase.com'da ücretsiz proje açın.
-2. SQL Editor'de `supabase.sql` dosyasını çalıştırın.
+2. SQL Editor'de `supabase.sql` dosyasının tamamını çalıştırın (tablolar, kurallar, fotoğraf kovası, realtime). Daha önce eski bir sürümü çalıştırdıysanız boş bir projede baştan kurmanız en kolayı.
 3. Project Settings → API'den **Project URL** ve **anon public** anahtarını alın, `index.html` içindeki `SUPABASE_URL` ve `SUPABASE_ANON_KEY` satırlarına yazın. (anon anahtarı herkese açık olacak şekilde tasarlanmıştır; güvenliği RLS kuralları sağlar.)
 4. Authentication → URL Configuration'da Site URL'yi Vercel adresiniz yapın. E-posta doğrulamayı açık ya da kapalı bırakabilirsiniz.
 5. Realtime → Settings'te **"Allow public access"** seçeneğini kapatın (görüşme kanalları yalnızca yetkili iki kişiye açık olsun).
@@ -33,4 +33,24 @@ Kodda ek ayar gerekmez. Google ile gelen kullanıcının adı profil formuna oto
 ## Mesajlaşma
 - Yalnızca karşılıklı ilgi olan iki üye yazışabilir; kural veritabanında (RLS) uygulanır. İlgi geri alınırsa yeni mesaj gönderilemez.
 - Mesajlar Realtime ile anında gelir; okunmamış sayısı üst menüde görünür. Alıcı mesajın yalnızca "okundu" bilgisini değiştirebilir.
-- Supabase'i daha önce kurduysanız `supabase.sql` dosyasının "Mesajlaşma" bölümünü çalıştırmanız yeterli.
+
+## Güvenlik: engelleme, şikayet, askıya alma
+- Engellenen kişi engelleyeni listede göremez, ona ilgi gönderemez, yazamaz, arayamaz; aradaki ilgi silinir. Kimin engellediği görünmez.
+- Şikayetleri yalnızca yöneticiler görür. Yönetici bir profili askıya alınca o profil listelerden kalkar; mesaj, görüntülü görüşme ve iletişim bilgisi kapanır. Kullanıcı kendi askı durumunu değiştiremez (veritabanı tetikleyicisi engeller).
+- **Kendinizi yönetici yapmak için** siteye bir kez giriş yapın, sonra SQL Editor'de:
+  `insert into public.yoneticiler (id) select id from auth.users where email = 'sizin@gmail.com';`
+  Sayfayı yenileyince menüde "Yönetim" belirir.
+
+## Fotoğraflar
+- Fotoğraf tarayıcıda küçültülür (en fazla 900 px) ve iki kopya yüklenir: 24 piksellik bulanık kopya herkese, net kopya yalnızca sahibine, karşılıklı ilgi olan kişiye ve yöneticiye açıktır. Bu kural Storage politikalarıyla sunucuda uygulanır.
+
+## Hesap silme
+- "Hesabımı sil" fotoğrafları siler, sonra `hesabimi_sil()` fonksiyonuyla giriş hesabını siler; profil, mesaj, ilgi, engel ve arama kayıtları zincirleme silinir.
+
+## Yasal metinler (KVKK)
+- Sitede Aydınlatma Metni, Açık Rıza Metni ve Kullanım Koşulları sayfaları var. Kayıtta koşullar, profil oluştururken açık rıza onayı alınır (din ve yaşam tarzı bilgisi özel nitelikli kişisel veridir).
+- `index.html` içindeki `VERI_SORUMLUSU`, `ADRES` ve `DESTEK_EPOSTA` satırlarını kendi bilgilerinizle doldurun.
+- **Metinler taslaktır.** Yayına almadan önce bir hukukçuya kontrol ettirin; veri sorumluları siciline (VERBİS) kayıt yükümlülüğünüz olup olmadığını da sorun.
+
+## SQL'in sınanması
+`supabase.sql`, Supabase'in auth, storage ve realtime şemalarını taklit eden yerel bir PostgreSQL 16 üzerinde kuruldu ve 24 senaryoyla sınandı. Sınanan senaryolar: karşılıklı ilgi olmadan mesaj, başkası adına mesaj, mesaj metnini değiştirme, başkasının adına fotoğraf, net fotoğraf erişimi, görüşme kanalı, engel sonrası görünürlük, şikayet okuma, askıya alma, hesap silme. Gerçek Supabase üzerinde henüz çalıştırılmadı.

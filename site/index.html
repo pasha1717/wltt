@@ -169,6 +169,21 @@ nav.nav .rozet{margin-left:4px;vertical-align:1px}
 .balon.o{align-self:flex-start;background:var(--bg);border-bottom-left-radius:4px}
 .yaz{display:flex;gap:10px;align-items:flex-end}
 .yaz textarea{min-height:52px;max-height:140px;resize:none;flex:1;min-width:0;padding:13px 14px}
+.avatar{--b:56px;width:var(--b);height:var(--b);border-radius:50%;overflow:hidden;flex:none;display:inline-flex;align-items:center;justify-content:center;background:var(--nar-soft);color:var(--nar);font:700 calc(var(--b)*.42)/1 var(--display)}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar.bulanik img{filter:blur(calc(var(--b)*.09));transform:scale(1.25)}
+.card.kisi{grid-template-columns:auto minmax(0,1fr) auto;gap:14px}
+.card.kisi .ic{display:flex;flex-direction:column;gap:4px;min-width:0}
+.card.kisi .pct{grid-row:auto}
+.aday-bas{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.filtre{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.filtre summary{cursor:pointer;font-weight:600;display:flex;align-items:center;gap:8px}
+.satir{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 10px 10px 16px}
+.sikayet{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.sikayet .meta,.meta{color:var(--muted);font-size:14px}
+.yasal h3{margin-top:10px}
+.yasal ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.yasal a,.chk a,footer a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .gizli{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -181,7 +196,7 @@ nav.nav .rozet{margin-left:4px;vertical-align:1px}
   </header>
   <p class="demo" id="demo" hidden>Demo modu: hesaplar ve profiller yalnızca bu cihazda tutulur. “Örnek” etiketli profiller gerçek kişiler değildir.</p>
   <main id="app"></main>
-  <footer>Denk · <a href="#nasil" style="color:inherit">Puan nasıl hesaplanır?</a> · İletişim bilgileri yalnızca iki taraf da istediğinde açılır.</footer>
+  <footer>Denk · <a href="#nasil">Nasıl çalışır?</a> · <a href="#kosullar">Kullanım Koşulları</a> · <a href="#aydinlatma">Aydınlatma Metni</a> · <a href="#riza">Açık Rıza Metni</a></footer>
 </div>
 <div class="toast" id="toast" hidden></div>
 <div class="cagri" id="cagri" role="alertdialog" aria-live="assertive" hidden></div>
@@ -296,7 +311,7 @@ function supabaseApi(){
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {auth:{flowType:"pkce"}});
   let uid = null;
   const ok = ({data,error}) => { if(error) throw error; return data; };
-  const PROFIL_ALAN = "id,ad,dogum_yili,cinsiyet,sehir,hakkinda,cevap,gorunur";
+  const PROFIL_ALAN = "id,ad,dogum_yili,cinsiyet,sehir,hakkinda,cevap,gorunur,foto,askida,riza_tarihi";
   return {
     demo:false,
     async oturum(){ const u=(await sb.auth.getSession()).data.session?.user||null; uid=u?.id||null; return u; },
@@ -310,7 +325,36 @@ function supabaseApi(){
       ok(await sb.from("profiles").upsert({...p,id:uid,guncelleme:new Date().toISOString()}));
       if(iletisim!==undefined) ok(await sb.from("iletisim").upsert({id:uid,bilgi:iletisim}));
     },
-    async profilSil(){ ok(await sb.from("profiles").delete().eq("id",uid)); },
+    async hesapSil(){
+      await sb.storage.from("foto").remove(["net/"+uid+".jpg","bulanik/"+uid+".jpg"]).catch(()=>{});
+      ok(await sb.rpc("hesabimi_sil")); await sb.auth.signOut(); uid=null;
+    },
+    async engelle(id,ad){ ok(await sb.from("engel").upsert({from_id:uid,to_id:id,ad})); await sb.from("ilgi").delete().eq("from_id",uid).eq("to_id",id); },
+    async engelKaldir(id){ ok(await sb.from("engel").delete().eq("from_id",uid).eq("to_id",id)); },
+    async engellerim(){ return ok(await sb.from("engel").select("to_id,ad").eq("from_id",uid).order("olusturma",{ascending:false})); },
+    async sikayetEt(id,sebep,aciklama){ ok(await sb.from("sikayet").insert({from_id:uid,hakkinda_id:id,sebep,aciklama:aciklama||null})); },
+    async yoneticiMi(){ return !!ok(await sb.from("yoneticiler").select("id").eq("id",uid).maybeSingle()); },
+    async sikayetler(){
+      const l=ok(await sb.from("sikayet").select("id,from_id,hakkinda_id,sebep,aciklama,durum,olusturma").order("olusturma",{ascending:false}).limit(300));
+      const ids=[...new Set(l.flatMap(r=>[r.from_id,r.hakkinda_id]).filter(Boolean))];
+      const pr=ids.length?ok(await sb.from("profiles").select(PROFIL_ALAN).in("id",ids)):[];
+      const m=Object.fromEntries(pr.map(x=>[x.id,x]));
+      return l.map(r=>({...r,hakkinda:m[r.hakkinda_id],sikayetci:m[r.from_id]}));
+    },
+    async sikayetDurum(id,durum){ ok(await sb.from("sikayet").update({durum}).eq("id",id)); },
+    async askiya(id,v){ ok(await sb.from("profiles").update({askida:v}).eq("id",id)); },
+    async fotoYukle(net,bulanik){
+      const yukle=async(klasor,d)=>ok(await sb.storage.from("foto").upload(klasor+"/"+uid+".jpg",await dataBlob(d),{upsert:true,contentType:"image/jpeg",cacheControl:"60"}));
+      await yukle("net",net); await yukle("bulanik",bulanik);
+      const surum=(S.profil?.foto||0)+1; ok(await sb.from("profiles").update({foto:surum}).eq("id",uid)); return surum;
+    },
+    async fotoSil(){ await sb.storage.from("foto").remove(["net/"+uid+".jpg","bulanik/"+uid+".jpg"]); ok(await sb.from("profiles").update({foto:0}).eq("id",uid)); },
+    async fotolar(liste){
+      if(!liste.length) return {};
+      const yol=x=>(x.net?"net/":"bulanik/")+x.id+".jpg";
+      const d=ok(await sb.storage.from("foto").createSignedUrls(liste.map(yol),3600));
+      const m={}; d.forEach((r,i)=>{ if(r.signedUrl) m[liste[i].id]=r.signedUrl+"&v="+liste[i].surum; }); return m;
+    },
     async iletisimim(){ return ok(await sb.from("iletisim").select("bilgi").eq("id",uid).maybeSingle())?.bilgi||""; },
     async adaylar(){ return ok(await sb.from("profiles").select(PROFIL_ALAN).neq("id",uid).eq("gorunur",true).limit(500)); },
     async kisi(id){ return ok(await sb.from("profiles").select(PROFIL_ALAN).eq("id",id).maybeSingle()); },
@@ -355,12 +399,19 @@ function supabaseApi(){
 
 function demoApi(){
   const db = store.get("demo") || {};
-  db.hesap ??= {}; db.profil ??= {}; db.iletisim ??= {}; db.ilgi ??= [];
+  db.hesap ??= {}; db.profil ??= {}; db.iletisim ??= {}; db.ilgi ??= []; db.engel ??= []; db.foto ??= {};
+  if(!db.sikayet){ const t=new Date(Date.now()-36e5).toISOString(); db.sikayet=[
+    {id:1,from_id:"ornek1",hakkinda_id:"ornek5",sebep:"Para isteme, dolandırıcılık",aciklama:"Örnek şikayet: tanıştıktan iki gün sonra acil para lazım olduğunu söyledi.",durum:"acik",olusturma:t},
+    {id:2,from_id:"ornek3",hakkinda_id:"ornek5",sebep:"Sahte profil",aciklama:"Örnek şikayet: fotoğraf internetten alınmış gibi.",durum:"acik",olusturma:t},
+    {id:3,from_id:"ornek0",hakkinda_id:"ornek7",sebep:"Taciz ya da hakaret",aciklama:"",durum:"asilsiz",olusturma:t}]; }
   if(!db.tohum){ tohumla(db); db.tohum=1; store.set("demo", db); }
-  const kaydet = () => store.set("demo", db);
+  const kaydet = () => localStorage.setItem("denk_demo", JSON.stringify(db));
   const uid = () => store.get("demo_oturum");
   const hata = m => { const e=new Error(m); e.tr=true; throw e; };
-  const karsilikliMi = (a,b) => db.ilgi.some(r=>r[0]===a&&r[1]===b) && db.ilgi.some(r=>r[0]===b&&r[1]===a);
+  const engelli = (a,b) => db.engel.some(e=>(e.from_id===a&&e.to_id===b)||(e.from_id===b&&e.to_id===a));
+  const askida = id => !!db.profil[id]?.askida;
+  const karsilikliMi = (a,b) => db.ilgi.some(r=>r[0]===a&&r[1]===b) && db.ilgi.some(r=>r[0]===b&&r[1]===a) && !engelli(a,b) && !askida(a) && !askida(b);
+  const gorunurMu = p => p.id===uid() || (p.gorunur && !p.askida && !engelli(p.id,uid()));
   const demoDinleyiciler = [];
   return {
     demo:true,
@@ -377,13 +428,34 @@ function demoApi(){
     async cikis(){ store.set("demo_oturum",null); },
     async profilim(){ return db.profil[uid()]||null; },
     async profilKaydet(p,iletisim){ db.profil[uid()]={...db.profil[uid()],...p,id:uid()}; if(iletisim!==undefined) db.iletisim[uid()]=iletisim; kaydet(); },
-    async profilSil(){ delete db.profil[uid()]; delete db.iletisim[uid()]; db.ilgi=db.ilgi.filter(([a,b])=>a!==uid()&&b!==uid()); kaydet(); },
+    async hesapSil(){
+      const u=uid(); delete db.profil[u]; delete db.iletisim[u]; delete db.foto[u];
+      db.ilgi=db.ilgi.filter(([a,b])=>a!==u&&b!==u); db.engel=db.engel.filter(e=>e.from_id!==u&&e.to_id!==u);
+      db.mesaj=(db.mesaj||[]).filter(m=>m.from_id!==u&&m.to_id!==u); db.sikayet=db.sikayet.filter(x=>x.hakkinda_id!==u);
+      for(const k in db.hesap) if(db.hesap[k].id===u) delete db.hesap[k];
+      kaydet(); store.set("demo_oturum",null);
+    },
+    async engelle(id,ad){ const u=uid(); if(!db.engel.some(e=>e.from_id===u&&e.to_id===id)) db.engel.push({from_id:u,to_id:id,ad}); db.ilgi=db.ilgi.filter(r=>!(r[0]===u&&r[1]===id)); kaydet(); },
+    async engelKaldir(id){ const u=uid(); db.engel=db.engel.filter(e=>!(e.from_id===u&&e.to_id===id)); kaydet(); },
+    async engellerim(){ return db.engel.filter(e=>e.from_id===uid()); },
+    async sikayetEt(id,sebep,aciklama){ db.sikayet.push({id:Date.now(),from_id:uid(),hakkinda_id:id,sebep,aciklama,durum:"acik",olusturma:new Date().toISOString()}); kaydet(); },
+    async yoneticiMi(){ return true; }, // demo: panel herkese açık
+    async sikayetler(){ return db.sikayet.map(r=>({...r,hakkinda:db.profil[r.hakkinda_id],sikayetci:db.profil[r.from_id]})); },
+    async sikayetDurum(id,durum){ const r=db.sikayet.find(x=>x.id===id); if(r) r.durum=durum; kaydet(); },
+    async askiya(id,v){ if(db.profil[id]) db.profil[id].askida=v; kaydet(); },
+    async fotoYukle(net,bulanik){
+      const u=uid(), eski=db.foto[u]; db.foto[u]={net,bulanik};
+      try{ kaydet(); localStorage.getItem("denk_demo"); }catch(e){ db.foto[u]=eski; hata("Fotoğraf bu cihazda saklanamadı. Daha küçük bir fotoğraf deneyin."); }
+      const surum=(db.profil[u].foto||0)+1; db.profil[u].foto=surum; kaydet(); return surum;
+    },
+    async fotoSil(){ const u=uid(); delete db.foto[u]; db.profil[u].foto=0; kaydet(); },
+    async fotolar(liste){ const m={}; liste.forEach(x=>{ const f=db.foto[x.id]; if(f) m[x.id]=x.net?f.net:f.bulanik; }); return m; },
     async iletisimim(){ return db.iletisim[uid()]||""; },
-    async adaylar(){ return Object.values(db.profil).filter(p=>p.id!==uid()&&p.gorunur); },
-    async kisi(id){ return db.profil[id]||null; },
+    async adaylar(){ return Object.values(db.profil).filter(p=>p.id!==uid()&&gorunurMu(p)); },
+    async kisi(id){ const p=db.profil[id]; return p&&gorunurMu(p)?p:null; },
     async ilgiler(){ const u=uid(); return { giden:new Set(db.ilgi.filter(r=>r[0]===u).map(r=>r[1])), gelen:new Set(db.ilgi.filter(r=>r[1]===u).map(r=>r[0])) }; },
     async ilgiGonder(id){
-      const u=uid(); if(!db.ilgi.some(r=>r[0]===u&&r[1]===id)) db.ilgi.push([u,id]);
+      const u=uid(); if(engelli(u,id)) hata("Bu kişiye ilgi gönderemezsiniz."); if(!db.ilgi.some(r=>r[0]===u&&r[1]===id)) db.ilgi.push([u,id]);
       // Örnek profillerin bir kısmı demoyu göstermek için karşılık verir
       if(db.profil[id]?.karsilik && !db.ilgi.some(r=>r[0]===id&&r[1]===u)) db.ilgi.push([id,u]);
       kaydet();
@@ -434,6 +506,7 @@ function hataMetni(e){
   if(/already registered/i.test(m)) return "Bu e-posta ile zaten bir hesap var. Giriş yapın.";
   if(/Password should be/i.test(m)) return "Şifre en az 6 karakter olmalı.";
   if(/provider is not enabled/i.test(m)) return "Google ile giriş henüz açılmadı. Site yöneticisinin Supabase panelinde Google sağlayıcısını etkinleştirmesi gerekiyor.";
+  if(/row-level security|violates/i.test(m)) return "Bu işlem için izniniz yok. Sayfayı yenileyip tekrar deneyin.";
   if(/Email not confirmed/i.test(m)) return "E-postanızı doğrulamadınız. Gelen kutunuzdaki bağlantıya tıklayın.";
   if(/fetch|network/i.test(m)) return "Sunucuya ulaşılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.";
   return "Bir sorun oluştu: "+m;
@@ -497,7 +570,7 @@ function selectEl(el){ const r=document.createRange(); r.selectNodeContents(el);
 function navCiz(h){
   const l=(href,t,cls="")=>`<a href="#${href}" class="${cls} ${h===href?"on":""}">${t}</a>`;
   $("#nav").innerHTML = S.user
-    ? l("eslesmeler","Eşleşmeler")+l("mesajlar","Mesajlar"+(toplamOkunmamis()?`<span class="rozet" aria-label="okunmamış">${toplamOkunmamis()}</span>`:""))+l("profil","Profilim")
+    ? l("eslesmeler","Eşleşmeler")+l("mesajlar","Mesajlar"+(toplamOkunmamis()?`<span class="rozet" aria-label="okunmamış">${toplamOkunmamis()}</span>`:""))+l("profil","Profilim")+(S.yonetici?l("yonetim","Yönetim"):"")
     : l("nasil","Nasıl çalışır?")+l("giris","Giriş yap","cta");
 }
 
@@ -660,14 +733,14 @@ function giris(){
       <div class="stack" style="gap:8px"><p class="eyebrow">Hesabınız</p><h2>${mod==="kayit"?"Ücretsiz üye olun":"Tekrar hoş geldiniz"}</h2></div>
       <div class="stack" style="gap:10px">
         <button class="btn google" id="g-google" type="button"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Google ile devam et</button>
-        <p style="color:var(--muted);font-size:13px">Google ile devam ederek 18 yaşından büyük olduğunuzu, profil bilgilerinizin üye adaylara gösterilmesini ve iletişim bilginizin yalnızca karşılıklı ilgi olduğunda paylaşılmasını kabul etmiş olursunuz.</p>
+        <p style="color:var(--muted);font-size:13px">Google ile devam ederek 18 yaşından büyük ve evli olmadığınızı, <a href="#kosullar">Kullanım Koşulları</a>'nı kabul ettiğinizi ve <a href="#aydinlatma">Aydınlatma Metni</a>'ni okuduğunuzu onaylarsınız.</p>
       </div>
       <p class="ayrac">ya da e-posta ile</p>
       <div class="seg" role="tablist"><button id="t-kayit" class="${mod==="kayit"?"on":""}" role="tab">Üye ol</button><button id="t-giris" class="${mod==="giris"?"on":""}" role="tab">Giriş yap</button></div>
       <form id="fg" class="stack" novalidate>
         <div class="fld"><label for="g-email">E-posta</label><input type="email" id="g-email" autocomplete="email" required></div>
         <div class="fld"><label for="g-sifre">Şifre</label><input type="password" id="g-sifre" autocomplete="${mod==="kayit"?"new-password":"current-password"}" minlength="6" required>${mod==="kayit"?`<small>En az 6 karakter.</small>`:""}</div>
-        ${mod==="kayit"?`<label class="chk"><input type="checkbox" id="g-onay"><span>18 yaşından büyüğüm. Profil bilgilerimin üye adaylara gösterilmesini ve iletişim bilgimin yalnızca karşılıklı ilgi olduğunda paylaşılmasını kabul ediyorum.</span></label>`:""}
+        ${mod==="kayit"?`<label class="chk"><input type="checkbox" id="g-onay"><span>18 yaşından büyüğüm ve evli değilim. <a href="#kosullar">Kullanım Koşulları</a>'nı kabul ediyorum, <a href="#aydinlatma">Aydınlatma Metni</a>'ni okudum.</span></label>`:""}
         <p class="err" id="gerr" role="alert"></p>
         <div class="row"><button class="btn" type="submit" id="g-btn">${mod==="kayit"?"Hesap oluştur":"Giriş yap"}</button></div>
       </form>
@@ -703,15 +776,25 @@ function giris(){
 async function profilSayfa(){
   if(!S.user){ location.hash="giris"; return; }
   const meta=S.user.user_metadata||{};
-  const p=S.profil||{ad:(meta.given_name||meta.full_name||meta.name||"").split(" ")[0]}, ilet = S.profil ? await api.iletisimim() : "";
+  const p=S.profil||{ad:(meta.given_name||meta.full_name||meta.name||"").split(" ")[0]};
+  let ilet="", engeller=[], furl=null;
+  if(S.profil){ try{ [ilet,engeller]=await Promise.all([api.iletisimim(),api.engellerim()]); if(p.foto) furl=(await api.fotolar([{id:S.user.id,net:true,surum:p.foto}]))[S.user.id]; }catch(e){} }
   const c=gecerli(p.cevap)||S.cevap, yil=new Date().getFullYear();
   app.innerHTML=`<div class="stack" style="gap:26px">
     <div class="stack" style="gap:8px"><p class="eyebrow">Profilim</p><h2>${S.profil?"Profil bilgileriniz":"Profilinizi oluşturun"}</h2></div>
+    ${p.askida?`<p class="demo">Hesabınız bir şikayet nedeniyle askıya alındı. İtiraz için ${esc(DESTEK_EPOSTA)} adresine yazın.</p>`:""}
     <section class="persona">
       ${c?`<p class="eyebrow">Test sonucunuz · ${sayi(c)} soru</p><h2>${personaSec(profil(c))[0]}</h2>
         <div class="row">${sayi(c)<Q.length?`<button class="btn ghost" id="b-tamamla">Kalan ${Q.length-sayi(c)} soruyu çöz</button>`:""}<a class="btn ghost" href="#sonuc">Ayrıntılı sonuç</a></div>`
       :`<p class="eyebrow">Test sonucunuz</p><p>Eşleşmelerin hesaplanması için önce testi çözmelisiniz.</p><div class="row"><button class="btn" id="b-test">Teste başla</button></div>`}
     </section>
+    ${S.profil?`<section class="stack"><h3>Fotoğrafınız</h3>
+      <div class="aday-bas">${avatar(p, furl, false, 104)}
+        <div class="stack" style="gap:10px;min-width:0">
+          <p style="color:var(--muted);font-size:14px">Diğer üyeler fotoğrafınızı bulanık görür. Yalnızca karşılıklı ilgi olduğunuz kişiler net görür. Yüzünüzün göründüğü, size ait bir fotoğraf seçin.</p>
+          <div class="row"><label class="btn ghost" for="p-foto" style="cursor:pointer">${p.foto?"Fotoğrafı değiştir":"Fotoğraf ekle"}</label>${p.foto?`<button class="btn ghost danger" id="b-foto-sil" type="button">Kaldır</button>`:""}</div>
+          <input type="file" id="p-foto" accept="image/*" class="gizli">
+        </div></div></section>`:""}
     <form id="fp" class="stack" novalidate>
       <div class="grid2">
         <div class="fld"><label for="p-ad">Adınız</label><input type="text" id="p-ad" maxlength="40" value="${esc(p.ad)}" autocomplete="given-name"><small>Soyadınızı yazmanız gerekmez.</small></div>
@@ -722,23 +805,35 @@ async function profilSayfa(){
       <div class="fld"><label for="p-hak">Kendinizi kısaca tanıtın</label><textarea id="p-hak" maxlength="400" placeholder="Mesleğiniz, nelerden hoşlandığınız, nasıl bir evlilik hayal ettiğiniz...">${esc(p.hakkinda)}</textarea></div>
       <div class="fld"><label for="p-ilet">İletişim bilgisi</label><input type="text" id="p-ilet" maxlength="120" value="${esc(ilet)}" placeholder="Telefon, e-posta ya da Instagram"><small>Yalnızca ikiniz de birbirinizle ilgilendiğinizde karşı tarafa gösterilir.</small></div>
       <label class="chk"><input type="checkbox" id="p-gor" ${p.gorunur!==false?"checked":""}><span>Profilim aday listelerinde görünsün</span></label>
+      ${p.riza_tarihi?"":`<label class="chk"><input type="checkbox" id="p-riza"><span><a href="#riza" target="_self">Açık Rıza Metni</a>'ni okudum. Test cevaplarımdan anlaşılabilecek dini inanç ve yaşam tarzı bilgilerimin eşleşme amacıyla işlenmesine ve üyelere gösterilmesine açık rıza veriyorum.</span></label>`}
+      ${S.profil?"":`<p style="color:var(--muted);font-size:14px">Fotoğrafınızı profili oluşturduktan sonra ekleyebilirsiniz.</p>`}
       <p class="err" id="perr" role="alert"></p>
       <div class="row"><button class="btn" type="submit" id="p-btn">${S.profil?"Kaydet":"Profili oluştur"}</button></div>
     </form>
+    ${S.profil?`<section class="stack"><h3>Engellediklerim</h3>
+      ${engeller.length?`<div class="cards">${engeller.map(e=>`<div class="satir"><span>${esc(e.ad||"Üye")}</span><button class="btn ghost" data-engel="${esc(e.to_id)}" style="padding:10px 16px;font-size:15px">Engeli kaldır</button></div>`).join("")}</div>`
+      :`<p style="color:var(--muted)">Kimseyi engellemediniz.</p>`}</section>`:""}
     <section class="note">
       <p>${S.user.email?`${esc(S.user.email)} ile giriş yaptınız.`:"Giriş yaptınız."}</p>
-      <div class="row"><button class="btn ghost" id="b-cikis">Çıkış yap</button>${S.profil?`<button class="btn ghost danger" id="b-sil">Profilimi sil</button>`:""}</div>
-      <div id="sil-onay" hidden class="stack" style="gap:10px"><p class="danger">Profiliniz, cevaplarınız ve ilgileriniz silinecek. Bu geri alınamaz.</p><div class="row"><button class="btn" id="b-sil-evet">Evet, sil</button><button class="btn ghost" id="b-sil-hayir">Vazgeç</button></div></div>
+      <div class="row"><button class="btn ghost" id="b-cikis">Çıkış yap</button><button class="btn ghost danger" id="b-sil">Hesabımı sil</button></div>
+      <div id="sil-onay" hidden class="stack" style="gap:10px"><p class="danger">Hesabınız, profiliniz, fotoğrafınız, mesajlarınız ve ilgileriniz kalıcı olarak silinecek. Bu geri alınamaz.</p><div class="row"><button class="btn" id="b-sil-evet">Evet, hesabımı sil</button><button class="btn ghost" id="b-sil-hayir">Vazgeç</button></div></div>
     </section>
   </div>`;
   const bt=$("#b-test"); if(bt) bt.onclick=()=>baslat("tek","hizli");
   const tm=$("#b-tamamla"); if(tm) tm.onclick=()=>baslat("tek","tam",c);
-  $("#b-cikis").onclick=async()=>{ cagriDinlemeyiDurdur(); mesajDinlemeyiDurdur(); await api.cikis(); S.user=null; S.profil=null; location.hash=""; toast("Çıkış yapıldı"); };
-  const sil=$("#b-sil"); if(sil){
-    sil.onclick=()=>{ $("#sil-onay").hidden=false; };
-    $("#b-sil-hayir").onclick=()=>{ $("#sil-onay").hidden=true; };
-    $("#b-sil-evet").onclick=async()=>{ try{ await api.profilSil(); S.profil=null; toast("Profiliniz silindi"); render(); }catch(e){ toast(hataMetni(e)); } };
-  }
+  const cikisTemizle=()=>{ cagriDinlemeyiDurdur(); mesajDinlemeyiDurdur(); S.user=null; S.profil=null; S.yonetici=false; location.hash=""; };
+  $("#b-cikis").onclick=async()=>{ await api.cikis(); cikisTemizle(); toast("Çıkış yapıldı"); };
+  $("#b-sil").onclick=()=>{ $("#sil-onay").hidden=false; };
+  $("#b-sil-hayir").onclick=()=>{ $("#sil-onay").hidden=true; };
+  $("#b-sil-evet").onclick=async()=>{ const b=$("#b-sil-evet"); b.disabled=true; try{ await api.hesapSil(); store.set("cevap2",null); S.cevap=null; cikisTemizle(); toast("Hesabınız silindi"); }catch(e){ toast(hataMetni(e)); b.disabled=false; } };
+  app.querySelectorAll("[data-engel]").forEach(b=>b.onclick=async()=>{ b.disabled=true; try{ await api.engelKaldir(b.dataset.engel); toast("Engel kaldırıldı"); profilSayfa(); }catch(e){ toast(hataMetni(e)); b.disabled=false; } });
+  const fi=$("#p-foto"); if(fi) fi.onchange=async()=>{
+    const f=fi.files[0]; if(!f) return;
+    toast("Fotoğraf yükleniyor…");
+    try{ const h=await fotoHazirla(f); S.profil.foto=await api.fotoYukle(h.net,h.bulanik); toast("Fotoğrafınız kaydedildi"); profilSayfa(); }
+    catch(e){ toast(hataMetni(e)); }
+  };
+  const fs=$("#b-foto-sil"); if(fs) fs.onclick=async()=>{ try{ await api.fotoSil(); S.profil.foto=0; toast("Fotoğraf kaldırıldı"); profilSayfa(); }catch(e){ toast(hataMetni(e)); } };
   $("#fp").onsubmit=async e=>{
     e.preventDefault();
     const err=$("#perr"), v={
@@ -750,21 +845,42 @@ async function profilSayfa(){
     if(!v.cinsiyet) return err.textContent="Cinsiyetinizi seçin.";
     if(!v.sehir) return err.textContent="Şehrinizi yazın.";
     if(!c) return err.textContent="Profili kaydetmeden önce testi çözün.";
+    if(!p.riza_tarihi){ if(!$("#p-riza").checked) return err.textContent="Devam etmek için açık rıza kutusunu işaretleyin."; v.riza_tarihi=new Date().toISOString(); }
     v.cevap=c;
     const b=$("#p-btn"); b.disabled=true; err.textContent="";
     try{
       await api.profilKaydet(v, $("#p-ilet").value.trim());
       const ilk=!S.profil; S.profil={...S.profil,...v};
       toast("Profiliniz kaydedildi");
-      if(ilk) location.hash="eslesmeler"; else b.disabled=false;
+      if(ilk){ okunmamisYukle(); location.hash="eslesmeler"; } else b.disabled=false;
     }catch(ex){ err.textContent=hataMetni(ex); b.disabled=false; }
   };
 }
 
+/* ---------- fotoğraf yardımcıları ---------- */
+async function fotoHazirla(file){
+  if(!/^image\//.test(file.type)) throw Object.assign(new Error("Lütfen bir fotoğraf dosyası seçin."),{tr:true});
+  if(file.size>15*1024*1024) throw Object.assign(new Error("Fotoğraf 15 MB'tan küçük olmalı."),{tr:true});
+  const img=await createImageBitmap(file);
+  const ciz=(maks,kalite)=>{
+    const o=Math.min(1,maks/Math.max(img.width,img.height)), c=document.createElement("canvas");
+    c.width=Math.round(img.width*o); c.height=Math.round(img.height*o);
+    c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+    return c.toDataURL("image/jpeg",kalite);
+  };
+  return { net: ciz(api.demo?520:900, .82), bulanik: ciz(24, .7) };
+}
+const dataBlob = d => fetch(d).then(r=>r.blob());
+function avatar(a, url, bulanik, boyut=56){
+  return `<span class="avatar ${bulanik&&url?"bulanik":""}" style="--b:${boyut}px">${url?`<img src="${esc(url)}" alt="" loading="lazy">`:`<span>${esc((a.ad||"?")[0].toLocaleUpperCase("tr"))}</span>`}</span>`;
+}
+
 /* ---------- eşleşmeler ---------- */
+const FILTRE0 = {yasMin:"", yasMax:"", sehir:"", tam:false, foto:false};
 async function eslesmeler(){
   if(!S.user){ location.hash="giris"; return; }
   if(!S.profil){ location.hash="profil"; return; }
+  if(S.profil.askida){ app.innerHTML=askidaUyari(); return; }
   app.innerHTML=`<p style="color:var(--muted)">Adaylarınız hesaplanıyor…</p>`;
   const ben=gecerli(S.profil.cevap);
   let adaylar, ilgi;
@@ -774,34 +890,70 @@ async function eslesmeler(){
   const liste = adaylar.filter(a=>a.cinsiyet===karsi && gecerli(a.cevap))
     .map(a=>({...a, u:uyum(ben,gecerli(a.cevap))})).filter(a=>a.u.ortak)
     .sort((x,y)=>y.u.genel-x.u.genel);
+  const F = S.filtre ??= {...FILTRE0, ...(store.get("filtre")||{})};
+  const sehirler=[...new Set(liste.map(a=>a.sehir).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"tr"));
+  const uygun = a => (!F.yasMin||yas(a.dogum_yili)>=+F.yasMin) && (!F.yasMax||yas(a.dogum_yili)<=+F.yasMax)
+    && (!F.sehir||a.sehir===F.sehir) && (!F.tam||sayi(gecerli(a.cevap))===Q.length) && (!F.foto||a.foto>0);
+  const filtreli = liste.filter(uygun);
+  const aktifFiltre = Object.keys(FILTRE0).filter(k=>F[k]).length;
   const sekme = S.sekme || "tum";
-  const filtre = { tum:liste, gelen:liste.filter(a=>ilgi.gelen.has(a.id)), karsilikli:liste.filter(a=>ilgi.gelen.has(a.id)&&ilgi.giden.has(a.id)) }[sekme];
-  const durum = a => ilgi.giden.has(a.id)&&ilgi.gelen.has(a.id) ? `<span class="pill ok">Karşılıklı ilgi</span>`
+  const kars = a => ilgi.gelen.has(a.id)&&ilgi.giden.has(a.id);
+  const goster = { tum:filtreli, gelen:liste.filter(a=>ilgi.gelen.has(a.id)), karsilikli:liste.filter(kars) }[sekme];
+  const durum = a => kars(a) ? `<span class="pill ok">Karşılıklı ilgi</span>`
     : ilgi.gelen.has(a.id) ? `<span class="pill nar">Sizinle ilgileniyor</span>`
     : ilgi.giden.has(a.id) ? `<span class="pill">İlgi gönderildi</span>` : "";
-  const kG=liste.filter(a=>ilgi.gelen.has(a.id)).length, kK=liste.filter(a=>ilgi.gelen.has(a.id)&&ilgi.giden.has(a.id)).length;
-  app.innerHTML=`<div class="stack" style="gap:22px">
+  let foto={}; try{ foto=await api.fotolar(goster.filter(a=>a.foto).map(a=>({id:a.id,net:kars(a),surum:a.foto}))); }catch(e){}
+  const kG=liste.filter(a=>ilgi.gelen.has(a.id)).length, kK=liste.filter(kars).length;
+  app.innerHTML=`<div class="stack" style="gap:20px">
     <div class="stack" style="gap:8px"><p class="eyebrow">Eşleşmeler</p><h2>Size en uyumlu adaylar</h2>
-      <p style="color:var(--muted)">Uyum puanına göre sıralandı. Bir adaya ilgi gönderin; o da size ilgi gönderirse iletişim bilgileriniz karşılıklı açılır.</p></div>
+      <p style="color:var(--muted)">Uyum puanına göre sıralandı. Fotoğraflar karşılıklı ilgiden sonra netleşir.</p></div>
     <div class="seg" role="tablist">
-      <button data-s="tum" class="${sekme==="tum"?"on":""}">Tümü (${liste.length})</button>
+      <button data-s="tum" class="${sekme==="tum"?"on":""}">Tümü (${filtreli.length})</button>
       <button data-s="gelen" class="${sekme==="gelen"?"on":""}">Gelen (${kG})</button>
       <button data-s="karsilikli" class="${sekme==="karsilikli"?"on":""}">Karşılıklı (${kK})</button>
     </div>
-    ${filtre.length?`<div class="cards">${filtre.map(a=>`
-      <button class="card" data-id="${esc(a.id)}">
-        <b>${esc(a.ad)}, ${yas(a.dogum_yili)}</b><span class="pct">%${a.u.genel}</span>
+    ${sekme==="tum"?`<details class="filtre" ${S.filtreAcik?"open":""}><summary>Filtrele${aktifFiltre?` <span class="rozet">${aktifFiltre}</span>`:""}</summary>
+      <div class="stack" style="gap:14px;padding-top:14px">
+        <div class="grid2">
+          <div class="fld"><label for="f-min">En küçük yaş</label><input type="number" id="f-min" min="18" max="99" inputmode="numeric" value="${esc(F.yasMin)}"></div>
+          <div class="fld"><label for="f-max">En büyük yaş</label><input type="number" id="f-max" min="18" max="99" inputmode="numeric" value="${esc(F.yasMax)}"></div>
+        </div>
+        <div class="fld"><label for="f-sehir">Şehir</label><select id="f-sehir"><option value="">Tüm şehirler</option>${sehirler.map(s=>`<option ${F.sehir===s?"selected":""}>${esc(s)}</option>`).join("")}</select></div>
+        <label class="chk"><input type="checkbox" id="f-tam" ${F.tam?"checked":""}><span>Yalnızca kapsamlı testi çözenler</span></label>
+        <label class="chk"><input type="checkbox" id="f-foto" ${F.foto?"checked":""}><span>Yalnızca fotoğrafı olanlar</span></label>
+        ${aktifFiltre?`<div class="row"><button class="btn ghost" id="f-temizle" type="button">Filtreleri temizle</button></div>`:""}
+      </div></details>`:""}
+    ${goster.length?`<div class="cards">${goster.map(a=>`
+      <button class="card kisi" data-id="${esc(a.id)}">
+        ${avatar(a, foto[a.id], !kars(a))}
+        <span class="ic"><b>${esc(a.ad)}, ${yas(a.dogum_yili)}</b>
         <span class="meta">${esc(a.sehir)} · ${personaSec(profil(gecerli(a.cevap)))[0]}</span>
-        <span class="pills">${a.ornek?`<span class="pill">Örnek</span>`:""}${durum(a)}</span>
+        <span class="pills">${a.ornek?`<span class="pill">Örnek</span>`:""}${durum(a)}</span></span>
+        <span class="pct">%${a.u.genel}</span>
       </button>`).join("")}</div>`
-    :`<p style="color:var(--muted)">${sekme==="tum"?"Şu an size uygun aday yok. Yeni üyeler katıldıkça burada görünecek.":sekme==="gelen"?"Henüz size ilgi gönderen olmadı.":"Henüz karşılıklı ilgi yok."}</p>`}
+    :`<p style="color:var(--muted)">${sekme==="tum"?(liste.length?"Filtrelerinize uyan aday yok. Filtreleri genişletmeyi deneyin.":"Şu an size uygun aday yok. Yeni üyeler katıldıkça burada görünecek."):sekme==="gelen"?"Henüz size ilgi gönderen olmadı.":"Henüz karşılıklı ilgi yok."}</p>`}
   </div>`;
   app.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{ S.sekme=b.dataset.s; eslesmeler(); });
   app.querySelectorAll(".card").forEach(b=>b.onclick=()=>{ S.kisiId=b.dataset.id; location.hash="aday"; });
+  const d=app.querySelector("details.filtre");
+  if(d){
+    d.ontoggle=()=>{ S.filtreAcik=d.open; };
+    let bekliyor=false;
+    const guncelle=()=>{ if(bekliyor) return; bekliyor=true;
+      Object.assign(F,{yasMin:$("#f-min").value,yasMax:$("#f-max").value,sehir:$("#f-sehir").value,tam:$("#f-tam").checked,foto:$("#f-foto").checked});
+      store.set("filtre",F); setTimeout(eslesmeler,0); };
+    ["#f-sehir","#f-tam","#f-foto"].forEach(s=>$(s).onchange=guncelle);
+    ["#f-min","#f-max"].forEach(s=>$(s).onchange=guncelle);
+    const t=$("#f-temizle"); if(t) t.onclick=()=>{ S.filtre={...FILTRE0}; store.set("filtre",S.filtre); eslesmeler(); };
+  }
 }
+const askidaUyari = () => `<div class="stack" style="gap:14px"><p class="eyebrow">Hesap durumu</p><h2>Hesabınız askıya alındı</h2>
+  <p class="lead">Hakkınızdaki bir şikayet incelendi ve profiliniz geçici olarak gizlendi. Bu sürede eşleşmeleri göremez, mesaj gönderemezsiniz.</p>
+  <p>İtiraz etmek için <b>${esc(DESTEK_EPOSTA)}</b> adresine yazın.</p></div>`;
 
 async function adaySayfa(){
   if(!S.user||!S.profil||!S.kisiId){ location.hash=S.user?"eslesmeler":"giris"; return; }
+  if(S.profil.askida){ app.innerHTML=askidaUyari(); return; }
   let a, ilgi, ilet;
   try{ [a,ilgi]=await Promise.all([api.kisi(S.kisiId),api.ilgiler()]); }
   catch(e){ app.innerHTML=`<p class="err">${esc(hataMetni(e))}</p>`; return; }
@@ -809,16 +961,21 @@ async function adaySayfa(){
   const ben=gecerli(S.profil.cevap), o=gecerli(a.cevap), u=uyum(ben,o);
   const giden=ilgi.giden.has(a.id), gelen=ilgi.gelen.has(a.id), karsilikli=giden&&gelen;
   if(karsilikli){ try{ ilet=await api.iletisimGetir(a.id); }catch(e){} }
+  let furl=null; if(a.foto){ try{ furl=(await api.fotolar([{id:a.id,net:karsilikli,surum:a.foto}]))[a.id]; }catch(e){} }
   const A="Siz", B=esc(a.ad);
   const [pad,pacik]=personaSec(profil(o));
   app.innerHTML=`<div class="stack" style="gap:26px">
     <a href="#eslesmeler" style="color:var(--muted);font-size:15px">← Eşleşmeler</a>
-    <section class="stack" style="gap:10px">
-      <div class="pills">${a.ornek?`<span class="pill">Örnek profil</span>`:""}${karsilikli?`<span class="pill ok">Karşılıklı ilgi</span>`:gelen?`<span class="pill nar">Sizinle ilgileniyor</span>`:""}</div>
-      <h2>${esc(a.ad)}, ${yas(a.dogum_yili)}</h2>
-      <p style="color:var(--muted)">${esc(a.sehir)}</p>
-      ${a.hakkinda?`<p>${esc(a.hakkinda)}</p>`:""}
+    <section class="aday-bas">
+      ${avatar(a, furl, !karsilikli, 132)}
+      <div class="stack" style="gap:8px;min-width:0">
+        <div class="pills">${a.ornek?`<span class="pill">Örnek profil</span>`:""}${karsilikli?`<span class="pill ok">Karşılıklı ilgi</span>`:gelen?`<span class="pill nar">Sizinle ilgileniyor</span>`:""}</div>
+        <h2>${esc(a.ad)}, ${yas(a.dogum_yili)}</h2>
+        <p style="color:var(--muted)">${esc(a.sehir)}</p>
+        ${a.foto&&!karsilikli?`<p style="color:var(--muted);font-size:13px">Fotoğraf karşılıklı ilgiden sonra netleşir.</p>`:""}
+      </div>
     </section>
+    ${a.hakkinda?`<p>${esc(a.hakkinda)}</p>`:""}
     <section class="stack" style="gap:8px">
       <div class="score"><b>%${u.genel}</b><span>uyum</span></div>
       <p class="lead">${yorumMetni(u.genel)}</p>
@@ -831,11 +988,130 @@ async function adaySayfa(){
         <p style="color:var(--muted);font-size:14px">${giden?`${esc(a.ad)} de ilgi gönderirse iletişim bilgileriniz karşılıklı açılır.`:`${esc(a.ad)} ilgi gönderdiğinizi ${gelen?"görecek ve iletişim bilgileriniz hemen açılacak":"görür; o da ilgilenirse iletişim bilgileriniz açılır"}.`}</p></section>`}
     <section class="stack"><h3>Konu konu uyum</h3>${barlar(u.d,"n")}</section>
     <section class="stack"><h3>Konuşmanız gereken sorular</h3>${farkListesi(u,ben,o,A,B)}</section>
+    <section class="note" id="guvenlik">
+      <p><b style="color:var(--ink)">Güvenlik</b> · Rahatsız edici bir davranışla karşılaşırsanız engelleyin ya da şikayet edin. Şikayetler gizlidir; ${esc(a.ad)} kimin şikayet ettiğini görmez.</p>
+      <div class="row"><button class="btn ghost" id="b-engel">Engelle</button><button class="btn ghost danger" id="b-sikayet">Şikayet et</button></div>
+      <div id="engel-onay" hidden class="stack" style="gap:10px"><p>${esc(a.ad)} engellenirse sizi listelerde göremez, size mesaj gönderemez ve sizi arayamaz. Aranızdaki ilgi de kaldırılır. Engeli Profilim sayfasından kaldırabilirsiniz.</p>
+        <div class="row"><button class="btn" id="b-engel-evet">Engelle</button><button class="btn ghost" id="b-engel-hayir">Vazgeç</button></div></div>
+      <form id="sikayet-form" hidden class="stack" novalidate>
+        <div class="fld"><label for="s-sebep">Şikayet sebebi</label><select id="s-sebep"><option value="">Seçin</option>${SIKAYET_SEBEP.map(s=>`<option>${s}</option>`).join("")}</select></div>
+        <div class="fld"><label for="s-aciklama">Açıklama (isteğe bağlı)</label><textarea id="s-aciklama" maxlength="1000" placeholder="Ne olduğunu kısaca anlatın. Mesaj içeriği varsa yazabilirsiniz."></textarea></div>
+        <label class="chk"><input type="checkbox" id="s-engelle" checked><span>Bu kişiyi ayrıca engelle</span></label>
+        <p class="err" id="s-err" role="alert"></p>
+        <div class="row"><button class="btn" type="submit" id="s-btn">Şikayeti gönder</button><button class="btn ghost" type="button" id="s-vazgec">Vazgeç</button></div>
+      </form>
+    </section>
   </div>`;
   const bi=$("#b-ilgi"); if(bi) bi.onclick=async()=>{ bi.disabled=true; try{ await api.ilgiGonder(a.id); toast("İlgi gönderildi"); adaySayfa(); }catch(e){ toast(hataMetni(e)); bi.disabled=false; } };
   const bm=$("#b-mesaj"); if(bm) bm.onclick=()=>{ S.sohbet={id:a.id,ad:a.ad}; location.hash="sohbet"; };
   const bv=$("#b-video"); if(bv) bv.onclick=()=>gorusmeBaslat(a.id, a.ad, "arayan", null);
   const bg=$("#b-geri-al"); if(bg) bg.onclick=async()=>{ bg.disabled=true; try{ await api.ilgiGeriAl(a.id); toast("İlgi geri alındı"); adaySayfa(); }catch(e){ toast(hataMetni(e)); bg.disabled=false; } };
+  const engelle=async()=>{ await api.engelle(a.id,a.ad); delete S.okunmamis[a.id]; navCiz("eslesmeler"); };
+  $("#b-engel").onclick=()=>{ $("#engel-onay").hidden=false; $("#sikayet-form").hidden=true; };
+  $("#b-engel-hayir").onclick=()=>{ $("#engel-onay").hidden=true; };
+  $("#b-engel-evet").onclick=async()=>{ try{ await engelle(); toast(`${a.ad} engellendi`); location.hash="eslesmeler"; }catch(e){ toast(hataMetni(e)); } };
+  $("#b-sikayet").onclick=()=>{ $("#sikayet-form").hidden=false; $("#engel-onay").hidden=true; $("#s-sebep").focus(); };
+  $("#s-vazgec").onclick=()=>{ $("#sikayet-form").hidden=true; };
+  $("#sikayet-form").onsubmit=async e=>{
+    e.preventDefault();
+    const sebep=$("#s-sebep").value; if(!sebep) return $("#s-err").textContent="Bir şikayet sebebi seçin.";
+    const b=$("#s-btn"); b.disabled=true;
+    try{
+      await api.sikayetEt(a.id, sebep, $("#s-aciklama").value.trim());
+      if($("#s-engelle").checked){ await engelle(); location.hash="eslesmeler"; }
+      else{ $("#sikayet-form").hidden=true; }
+      toast("Şikayetiniz alındı. Teşekkürler.");
+    }catch(ex){ $("#s-err").textContent=hataMetni(ex); b.disabled=false; }
+  };
+}
+const SIKAYET_SEBEP=["Sahte profil","Taciz ya da hakaret","Para isteme, dolandırıcılık","Uygunsuz fotoğraf ya da içerik","Evli olduğu halde kayıtlı","18 yaşından küçük","Diğer"];
+
+/* ---------- yönetim ---------- */
+async function yonetimSayfa(){
+  if(!S.yonetici){ location.hash=""; return; }
+  let liste; try{ liste=await api.sikayetler(); }catch(e){ app.innerHTML=`<p class="err">${esc(hataMetni(e))}</p>`; return; }
+  const sekme=S.ySekme||"acik";
+  const goster=liste.filter(s=>sekme==="acik"?s.durum==="acik":s.durum!=="acik").sort((x,y)=>y.olusturma.localeCompare(x.olusturma));
+  const sayac={}; liste.forEach(s=>sayac[s.hakkinda_id]=(sayac[s.hakkinda_id]||0)+1);
+  let foto={}; try{ foto=await api.fotolar(goster.filter(s=>s.hakkinda?.foto).map(s=>({id:s.hakkinda_id,net:true,surum:s.hakkinda.foto}))); }catch(e){}
+  const DURUM={acik:"Açık",islem:"İşlem yapıldı",asilsiz:"Asılsız"};
+  app.innerHTML=`<div class="stack" style="gap:20px">
+    <div class="stack" style="gap:8px"><p class="eyebrow">Yönetim</p><h2>Şikayetler</h2>
+      ${api.demo?`<p style="color:var(--muted);font-size:14px">Demo modunda bu panel herkese açık ve içindeki şikayetler örnektir. Canlı modda yalnızca yönetici olarak eklenen hesaplar görür.</p>`:""}</div>
+    <div class="seg" role="tablist">
+      <button data-s="acik" class="${sekme==="acik"?"on":""}">Açık (${liste.filter(s=>s.durum==="acik").length})</button>
+      <button data-s="kapali" class="${sekme!=="acik"?"on":""}">Kapatılanlar (${liste.filter(s=>s.durum!=="acik").length})</button>
+    </div>
+    ${goster.length?`<div class="cards">${goster.map(s=>{ const h=s.hakkinda||{ad:"Silinmiş hesap"}; return `
+      <article class="sikayet">
+        <div class="aday-bas" style="gap:14px">${avatar(h, foto[s.hakkinda_id], false, 64)}
+          <div class="stack" style="gap:4px;min-width:0"><b style="font:700 19px var(--display)">${esc(h.ad)}${h.dogum_yili?`, ${yas(h.dogum_yili)}`:""}</b>
+          <span class="meta">${esc(h.sehir||"")}${sayac[s.hakkinda_id]>1?` · <b class="danger">${sayac[s.hakkinda_id]} şikayet</b>`:""}</span>
+          <span class="pills"><span class="pill nar">${esc(s.sebep)}</span>${h.askida?`<span class="pill">Askıda</span>`:""}${s.durum!=="acik"?`<span class="pill ok">${DURUM[s.durum]}</span>`:""}</span></div></div>
+        ${s.aciklama?`<p>${esc(s.aciklama)}</p>`:""}
+        ${h.hakkinda?`<p class="meta">Profil yazısı: ${esc(h.hakkinda)}</p>`:""}
+        <p class="meta">Şikayet eden: ${esc(s.sikayetci?.ad||"Silinmiş hesap")} · ${saat(s.olusturma)}</p>
+        <div class="row">
+          ${s.hakkinda?`<button class="btn ${h.askida?"ghost":""}" data-ask="${esc(s.hakkinda_id)}" data-v="${h.askida?0:1}">${h.askida?"Askıdan çıkar":"Askıya al"}</button>`:""}
+          ${s.durum==="acik"?`<button class="btn ghost" data-kapat="${s.id}" data-d="islem">Kapat: işlem yapıldı</button><button class="btn ghost" data-kapat="${s.id}" data-d="asilsiz">Kapat: asılsız</button>`:`<button class="btn ghost" data-kapat="${s.id}" data-d="acik">Yeniden aç</button>`}
+        </div>
+      </article>`;}).join("")}</div>`
+    :`<p style="color:var(--muted)">${sekme==="acik"?"Bekleyen şikayet yok.":"Kapatılmış şikayet yok."}</p>`}
+  </div>`;
+  app.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{ S.ySekme=b.dataset.s; yonetimSayfa(); });
+  app.querySelectorAll("[data-ask]").forEach(b=>b.onclick=async()=>{ b.disabled=true; try{ await api.askiya(b.dataset.ask, b.dataset.v==="1"); toast(b.dataset.v==="1"?"Profil askıya alındı":"Profil askıdan çıkarıldı"); yonetimSayfa(); }catch(e){ toast(hataMetni(e)); b.disabled=false; } });
+  app.querySelectorAll("[data-kapat]").forEach(b=>b.onclick=async()=>{ b.disabled=true; try{ await api.sikayetDurum(+b.dataset.kapat, b.dataset.d); yonetimSayfa(); }catch(e){ toast(hataMetni(e)); b.disabled=false; } });
+}
+
+/* ---------- yasal metinler ---------- */
+// Köşeli parantezli yerleri kendi bilgilerinizle doldurun ve metinleri bir hukukçuya kontrol ettirin.
+const VERI_SORUMLUSU = "[Ad Soyad / Şirket unvanı]";
+const ADRES = "[Açık adres]";
+const DESTEK_EPOSTA = "[destek@alanadiniz.com]";
+const YASAL = {
+  aydinlatma: ["Aydınlatma Metni", `
+    <p>Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu'nun (KVKK) 10. maddesi uyarınca, Denk'i kullanırken kişisel verilerinizin nasıl işlendiğini anlatır.</p>
+    <h3>Veri sorumlusu</h3><p>${VERI_SORUMLUSU}, ${ADRES}. İletişim: ${DESTEK_EPOSTA}</p>
+    <h3>İşlenen kişisel veriler</h3><ul>
+      <li><b>Kimlik:</b> adınız, doğum yılınız, cinsiyetiniz.</li>
+      <li><b>İletişim:</b> e-posta adresiniz ve isteğe bağlı olarak eklediğiniz iletişim bilgisi.</li>
+      <li><b>Görsel veri:</b> yüklediğiniz profil fotoğrafı.</li>
+      <li><b>Özel nitelikli veri:</b> test cevaplarınızdan anlaşılabilecek dini inanç ve yaşam tarzı bilgileri.</li>
+      <li><b>Kullanım verileri:</b> şehir, tanıtım yazısı, ilgi gönderdiğiniz ve engellediğiniz kişiler, mesajlarınız, şikayet kayıtları.</li>
+      <li><b>İşlem güvenliği:</b> giriş kayıtları, IP adresi ve oturum bilgileri.</li></ul>
+    <h3>İşleme amaçları</h3><p>Uyum puanını hesaplamak, size uygun adayları göstermek, üyeler arasında ilgi, mesaj ve görüntülü görüşmeyi sağlamak, sahte hesap ve kötüye kullanımı önlemek, şikayetleri incelemek ve yasal yükümlülükleri yerine getirmek.</p>
+    <h3>Hukuki sebepler</h3><p>Kişisel verileriniz KVKK md. 5/2-c (üyelik sözleşmesinin kurulması ve ifası), md. 5/2-ç (hukuki yükümlülük) ve md. 5/2-f (meşru menfaat, örneğin güvenlik) kapsamında işlenir. Dini inanç gibi özel nitelikli verileriniz ise md. 6 uyarınca yalnızca <a href="#riza">açık rızanız</a> ile işlenir.</p>
+    <h3>Kimler görebilir, kimlere aktarılır?</h3><p>Adınız, yaşınız, şehriniz, tanıtım yazınız, test cevaplarınızdan hesaplanan profil ve bulanık fotoğrafınız diğer üyelere gösterilir. Net fotoğrafınız ve iletişim bilginiz yalnızca karşılıklı ilgi olan kişiye açılır. Görüntülü görüşmeler kaydedilmez; görüntü iki cihaz arasında doğrudan iletilir.</p>
+    <p>Hizmeti sunmak için veritabanı ve barındırma hizmeti aldığımız sağlayıcılar (Supabase, Vercel) ve Google ile giriş yaparsanız Google'dan kimlik doğrulama hizmeti alınır. Bu sağlayıcıların sunucuları yurt dışında olabileceğinden verileriniz KVKK md. 9'da öngörülen şartlara uygun olarak yurt dışına aktarılabilir. Kanunen yetkili kurumlar talep ederse bilgiler bu kurumlarla paylaşılabilir.</p>
+    <h3>Saklama süresi</h3><p>Verileriniz hesabınız açık kaldığı sürece saklanır. Hesabınızı sildiğinizde profiliniz, fotoğrafınız, mesajlarınız ve ilgileriniz silinir. Kanunen saklanması gereken kayıtlar ilgili süre boyunca saklanıp sonra silinir.</p>
+    <h3>Haklarınız</h3><p>KVKK md. 11 uyarınca verilerinizin işlenip işlenmediğini öğrenme, bilgi isteme, düzeltilmesini ya da silinmesini isteme, aktarıldığı kişileri öğrenme, itiraz etme ve zararın giderilmesini talep etme haklarına sahipsiniz. Başvurularınızı ${DESTEK_EPOSTA} adresine iletebilirsiniz. Başvurular en geç 30 gün içinde cevaplanır.</p>`],
+  riza: ["Açık Rıza Metni", `
+    <p><a href="#aydinlatma">Aydınlatma Metni</a>'ni okudum. Aşağıdaki konularda özgür irademle açık rıza veriyorum:</p>
+    <ul>
+      <li>Uyum testine verdiğim cevaplardan anlaşılabilecek <b>dini inanç ve yaşam tarzı</b> bilgilerimin, uyum puanı hesaplamak ve bana uygun adayları göstermek amacıyla işlenmesine,</li>
+      <li>Bu cevaplardan hesaplanan profilimin ve uyum puanlarımın Denk üyelerine gösterilmesine,</li>
+      <li>Hizmetin sunulması için verilerimin yurt dışında bulunan hizmet sağlayıcıların sunucularında saklanmasına ve bu amaçla yurt dışına aktarılmasına.</li>
+    </ul>
+    <p>Rızamı dilediğim zaman hesabımı silerek ya da ${DESTEK_EPOSTA} adresine yazarak geri alabileceğimi biliyorum. Rıza vermemem halinde, test cevapları eşleşmenin temeli olduğu için üyelik hizmetinden yararlanamayacağımı, ancak testi üye olmadan çözebileceğimi biliyorum.</p>`],
+  kosullar: ["Kullanım Koşulları", `
+    <p>Denk'e üye olarak aşağıdaki koşulları kabul etmiş olursunuz.</p>
+    <h3>Kimler üye olabilir?</h3><p>18 yaşını doldurmuş, evli olmayan ve ciddi bir evlilik amacıyla tanışmak isteyen kişiler. Başkası adına profil açılamaz.</p>
+    <h3>Doğru bilgi</h3><p>Profilinizdeki bilgilerin ve fotoğrafın size ait ve doğru olması gerekir. Sahte ya da yanıltıcı profiller uyarı yapılmadan kapatılabilir.</p>
+    <h3>Yasak davranışlar</h3><ul>
+      <li>Taciz, hakaret, tehdit, ayrımcılık ya da müstehcen içerik paylaşmak,</li>
+      <li>Para, hediye, banka ya da kimlik bilgisi istemek, dolandırıcılık girişiminde bulunmak,</li>
+      <li>Siteyi reklam, ticari ya da siyasi amaçla kullanmak,</li>
+      <li>Diğer üyelerin bilgilerini, fotoğraflarını ya da mesajlarını izinsiz paylaşmak,</li>
+      <li>Görüntülü görüşmeleri karşı tarafın izni olmadan kaydetmek.</li></ul>
+    <h3>Şikayet ve yaptırımlar</h3><p>Şikayet edilen hesaplar incelenir. Koşulları ihlal eden hesaplar askıya alınabilir ya da kalıcı olarak kapatılabilir.</p>
+    <h3>Sorumluluk</h3><p>Denk, üyeler arasında tanışmayı kolaylaştıran bir araçtır. Uyum puanı bir sohbet başlatıcıdır, evlilik başarısı için garanti vermez. Üyelerin birbirleriyle yaptıkları görüşmelerden ve buluşmalardan üyeler kendileri sorumludur. İlk buluşmayı kalabalık ve güvenli bir yerde yapmanızı öneririz.</p>
+    <h3>Değişiklikler</h3><p>Bu koşullar güncellenebilir. Önemli değişiklikler sitede duyurulur.</p>
+    <h3>Uygulanacak hukuk</h3><p>Bu koşullar Türkiye Cumhuriyeti hukukuna tabidir. İletişim: ${DESTEK_EPOSTA}</p>`]
+};
+function yasalSayfa(anahtar){
+  const [baslik, govde]=YASAL[anahtar];
+  app.innerHTML=`<article class="stack yasal" style="gap:14px"><p class="eyebrow">Yasal</p><h2>${baslik}</h2>${govde}
+    <p style="color:var(--muted);font-size:14px">Diğer metinler: ${Object.keys(YASAL).filter(k=>k!==anahtar).map(k=>`<a href="#${k}">${YASAL[k][0]}</a>`).join(" · ")}</p></article>`;
 }
 
 /* ---------- görüntülü görüşme ---------- */
@@ -1054,6 +1330,7 @@ async function sohbetSayfa(){
     <div class="sohbet-bas">
       <a href="#mesajlar" style="color:var(--muted);font-size:15px">← Mesajlar</a>
       <h2 style="flex:1;min-width:0">${esc(k.ad)}</h2>
+      <a href="#aday" id="s-profil" style="flex-basis:auto;color:var(--muted);font-size:15px">Profil</a>
       <button class="btn ghost" id="s-video" style="padding:10px 16px;font-size:15px">Görüntülü ara</button>
     </div>
     <div class="akis" id="akis" aria-live="polite"><p class="bos">Yükleniyor…</p></div>
@@ -1065,6 +1342,7 @@ async function sohbetSayfa(){
     <p style="color:var(--muted);font-size:13px">Para, banka bilgisi ya da kimlik fotoğrafı isteyen kişilere karşı dikkatli olun.</p>
   </div>`;
   $("#s-video").onclick=()=>gorusmeBaslat(k.id,k.ad,"arayan",null);
+  $("#s-profil").onclick=()=>{ S.kisiId=k.id; };
   const ta=$("#s-metin");
   ta.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); $("#fs").requestSubmit(); } });
   ta.addEventListener("input",()=>{ ta.style.height="auto"; ta.style.height=Math.min(ta.scrollHeight,140)+"px"; });
@@ -1102,7 +1380,8 @@ async function oturumYukle(){
   try{ S.user=await api.oturum(); S.profil = S.user ? await api.profilim() : null; }
   catch(e){ S.user=null; S.profil=null; toast(hataMetni(e)); }
   if(S.profil && !S.cevap && gecerli(S.profil.cevap)) S.cevap=gecerli(S.profil.cevap);
-  if(S.user){ cagriDinlemeyiBaslat(); mesajDinlemeyiBaslat(); okunmamisYukle(); }
+  S.yonetici=false;
+  if(S.user){ try{ S.yonetici=await api.yoneticiMi(); }catch(e){} cagriDinlemeyiBaslat(); mesajDinlemeyiBaslat(); okunmamisYukle(); }
   // Google dönüşünden sonra kullanıcıyı doğru sayfaya götür
   if(store.get("oauth")){ store.set("oauth",null); if(S.user) location.hash = S.profil ? "eslesmeler" : "profil"; }
 }
@@ -1113,7 +1392,8 @@ async function render(){
   if(h!=="gorusme") gorusmeKapat();
   window.scrollTo(0,0);
   if(h==="anket") return S.liste.length?anket():(location.hash="");
-  const v={sonuc, uyum:uyumSayfa, nasil, giris, profil:profilSayfa, eslesmeler, aday:adaySayfa, gorusme:gorusmeSayfa, mesajlar:mesajlarSayfa, sohbet:sohbetSayfa}[h];
+  const v={sonuc, uyum:uyumSayfa, nasil, giris, profil:profilSayfa, eslesmeler, aday:adaySayfa, gorusme:gorusmeSayfa, mesajlar:mesajlarSayfa, sohbet:sohbetSayfa, yonetim:yonetimSayfa,
+    aydinlatma:()=>yasalSayfa("aydinlatma"), riza:()=>yasalSayfa("riza"), kosullar:()=>yasalSayfa("kosullar")}[h];
   return (v||anaSayfa)();
 }
 $("#demo").hidden = !api.demo;
