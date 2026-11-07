@@ -101,3 +101,27 @@ create policy "gorusme kanali yazma" on realtime.messages for insert to authenti
     and public.karsilikli(split_part(split_part(realtime.topic(), ':', 2), '_', 1)::uuid,
                           split_part(split_part(realtime.topic(), ':', 2), '_', 2)::uuid)
   );
+
+-- ================= Mesajlaşma =================
+create table if not exists public.mesaj (
+  id bigint generated always as identity primary key,
+  from_id uuid not null references public.profiles(id) on delete cascade,
+  to_id   uuid not null references public.profiles(id) on delete cascade,
+  metin text not null check (char_length(metin) between 1 and 1000),
+  okundu boolean not null default false,
+  olusturma timestamptz not null default now()
+);
+create index if not exists mesaj_cift on public.mesaj (least(from_id,to_id), greatest(from_id,to_id), olusturma desc);
+create index if not exists mesaj_alici on public.mesaj (to_id, okundu);
+alter table public.mesaj enable row level security;
+
+-- Yalnızca gönderen ve alıcı okur; yalnızca karşılıklı ilgi varsa gönderilir; alıcı yalnızca "okundu" bilgisini değiştirir.
+create policy "mesaj okuma" on public.mesaj for select to authenticated
+  using (from_id = auth.uid() or to_id = auth.uid());
+create policy "mesaj gonderme" on public.mesaj for insert to authenticated
+  with check (from_id = auth.uid() and public.karsilikli(from_id, to_id) and okundu = false);
+create policy "mesaj okundu" on public.mesaj for update to authenticated
+  using (to_id = auth.uid()) with check (to_id = auth.uid());
+revoke update on public.mesaj from authenticated;
+grant update (okundu) on public.mesaj to authenticated;
+alter publication supabase_realtime add table public.mesaj;

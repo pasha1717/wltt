@@ -154,6 +154,22 @@ textarea:focus-visible,select:focus-visible{outline:3px solid var(--nar);outline
 .yuvar:focus-visible{outline:3px solid var(--nar);outline-offset:3px}
 .cagri{position:fixed;z-index:20;top:calc(12px + env(safe-area-inset-top, 0px));left:max(16px, env(safe-area-inset-left, 0px));right:max(16px, env(safe-area-inset-right, 0px));max-width:520px;margin:0 auto;background:var(--surface);border:1.5px solid var(--nar);border-radius:var(--r);padding:16px 18px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:12px}
 .cagri p{margin:0}
+.rozet{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--nar);color:var(--surface);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+nav.nav .rozet{margin-left:4px;vertical-align:1px}
+.card .onizleme{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.card .rozet{justify-self:end}
+.sohbet-bas{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.sohbet-bas a{flex-basis:100%}
+.akis{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;height:min(58vh,520px);overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.akis .bos{margin:auto;color:var(--muted);text-align:center}
+.balon{max-width:80%;padding:10px 14px;border-radius:16px;display:flex;flex-direction:column;gap:2px}
+.balon p{white-space:pre-wrap;word-break:break-word;line-height:1.45}
+.balon time{font-size:11px;color:var(--muted);align-self:flex-end;font-variant-numeric:tabular-nums}
+.balon.ben{align-self:flex-end;background:var(--nar-soft);border-bottom-right-radius:4px}
+.balon.o{align-self:flex-start;background:var(--bg);border-bottom-left-radius:4px}
+.yaz{display:flex;gap:10px;align-items:flex-end}
+.yaz textarea{min-height:52px;max-height:140px;resize:none;flex:1;min-width:0;padding:13px 14px}
+.gizli{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -320,6 +336,19 @@ function supabaseApi(){
       ch.on("broadcast",{event:"m"},({payload})=>onMsg(payload));
       await new Promise((res,rej)=>ch.subscribe(st=>{ if(st==="SUBSCRIBED") res(); else if(st==="CHANNEL_ERROR"||st==="TIMED_OUT") rej(new Error("Görüşme kanalına bağlanılamadı.")); }));
       return { gonder:m=>ch.send({type:"broadcast",event:"m",payload:m}), kapat:()=>sb.removeChannel(ch) };
+    },
+    // Mesajlaşma
+    async sohbetler(){ return ok(await sb.from("mesaj").select("id,from_id,to_id,metin,okundu,olusturma").order("olusturma",{ascending:false}).limit(1000)); },
+    async mesajlar(id){
+      const d=ok(await sb.from("mesaj").select("id,from_id,to_id,metin,okundu,olusturma")
+        .or(`and(from_id.eq.${uid},to_id.eq.${id}),and(from_id.eq.${id},to_id.eq.${uid})`).order("olusturma",{ascending:false}).limit(200));
+      return d.reverse();
+    },
+    async mesajGonder(to,metin){ return ok(await sb.from("mesaj").insert({from_id:uid,to_id:to,metin}).select("id,from_id,to_id,metin,okundu,olusturma").single()); },
+    async okundu(id){ ok(await sb.from("mesaj").update({okundu:true}).eq("from_id",id).eq("to_id",uid).eq("okundu",false)); },
+    mesajDinle(cb){
+      const ch=sb.channel("mesaj-"+uid).on("postgres_changes",{event:"INSERT",schema:"public",table:"mesaj",filter:"to_id=eq."+uid},e=>cb(e.new)).subscribe();
+      return ()=>sb.removeChannel(ch);
     }
   };
 }
@@ -331,6 +360,8 @@ function demoApi(){
   const kaydet = () => store.set("demo", db);
   const uid = () => store.get("demo_oturum");
   const hata = m => { const e=new Error(m); e.tr=true; throw e; };
+  const karsilikliMi = (a,b) => db.ilgi.some(r=>r[0]===a&&r[1]===b) && db.ilgi.some(r=>r[0]===b&&r[1]===a);
+  const demoDinleyiciler = [];
   return {
     demo:true,
     async oturum(){ const u=uid(); return u&&Object.values(db.hesap).some(h=>h.id===u) ? {id:u} : null; },
@@ -358,7 +389,22 @@ function demoApi(){
       kaydet();
     },
     async ilgiGeriAl(id){ const u=uid(); db.ilgi=db.ilgi.filter(r=>!(r[0]===u&&r[1]===id)); kaydet(); },
-    async iletisimGetir(id){ const u=uid(); const k=db.ilgi.some(r=>r[0]===u&&r[1]===id)&&db.ilgi.some(r=>r[0]===id&&r[1]===u); return k?(db.iletisim[id]||null):null; }
+    async iletisimGetir(id){ const u=uid(); return karsilikliMi(u,id)?(db.iletisim[id]||null):null; },
+    async sohbetler(){ const u=uid(); return (db.mesaj||[]).filter(r=>r.from_id===u||r.to_id===u); },
+    async mesajlar(id){ const u=uid(); return (db.mesaj||[]).filter(r=>(r.from_id===u&&r.to_id===id)||(r.from_id===id&&r.to_id===u)); },
+    async mesajGonder(to,metin){
+      const u=uid(); if(!karsilikliMi(u,to)) hata("Yalnızca karşılıklı ilgi gösterdiğiniz kişilere mesaj gönderebilirsiniz.");
+      db.mesaj ??= []; const r={id:Date.now(),from_id:u,to_id:to,metin,okundu:false,olusturma:new Date().toISOString()};
+      db.mesaj.push(r); kaydet();
+      // Örnek profiller ilk mesaja bir kez otomatik cevap verir
+      if(db.profil[to]?.ornek && !db.mesaj.some(m=>m.from_id===to&&m.to_id===u)) setTimeout(()=>{
+        const c={id:Date.now(),from_id:to,to_id:u,metin:"Merhaba, mesajınız için teşekkürler! (Bu bir örnek profil; cevap demo amaçlı otomatik gönderildi.)",okundu:false,olusturma:new Date().toISOString()};
+        db.mesaj.push(c); kaydet(); demoDinleyiciler.forEach(f=>f(c));
+      },1500);
+      return r;
+    },
+    async okundu(id){ const u=uid(); (db.mesaj||[]).forEach(r=>{ if(r.from_id===id&&r.to_id===u) r.okundu=true; }); kaydet(); },
+    mesajDinle(cb){ demoDinleyiciler.push(cb); return ()=>{ const i=demoDinleyiciler.indexOf(cb); if(i>=0) demoDinleyiciler.splice(i,1); }; }
   };
 }
 function tohumla(db){
@@ -451,7 +497,7 @@ function selectEl(el){ const r=document.createRange(); r.selectNodeContents(el);
 function navCiz(h){
   const l=(href,t,cls="")=>`<a href="#${href}" class="${cls} ${h===href?"on":""}">${t}</a>`;
   $("#nav").innerHTML = S.user
-    ? l("eslesmeler","Eşleşmeler")+l("profil","Profilim")
+    ? l("eslesmeler","Eşleşmeler")+l("mesajlar","Mesajlar"+(toplamOkunmamis()?`<span class="rozet" aria-label="okunmamış">${toplamOkunmamis()}</span>`:""))+l("profil","Profilim")
     : l("nasil","Nasıl çalışır?")+l("giris","Giriş yap","cta");
 }
 
@@ -687,7 +733,7 @@ async function profilSayfa(){
   </div>`;
   const bt=$("#b-test"); if(bt) bt.onclick=()=>baslat("tek","hizli");
   const tm=$("#b-tamamla"); if(tm) tm.onclick=()=>baslat("tek","tam",c);
-  $("#b-cikis").onclick=async()=>{ cagriDinlemeyiDurdur(); await api.cikis(); S.user=null; S.profil=null; location.hash=""; toast("Çıkış yapıldı"); };
+  $("#b-cikis").onclick=async()=>{ cagriDinlemeyiDurdur(); mesajDinlemeyiDurdur(); await api.cikis(); S.user=null; S.profil=null; location.hash=""; toast("Çıkış yapıldı"); };
   const sil=$("#b-sil"); if(sil){
     sil.onclick=()=>{ $("#sil-onay").hidden=false; };
     $("#b-sil-hayir").onclick=()=>{ $("#sil-onay").hidden=true; };
@@ -779,14 +825,15 @@ async function adaySayfa(){
       <p style="color:var(--muted);font-size:14px">${esc(a.ad)} profili: <b style="color:var(--ink)">${pad}</b>. ${pacik}</p>
     </section>
     ${karsilikli?`<section class="contact"><span class="tag" style="font-size:13px;font-weight:600;color:var(--sage);letter-spacing:.08em;text-transform:uppercase">İletişim bilgisi</span><b>${esc(ilet||"Henüz iletişim bilgisi eklememiş.")}</b><small style="color:var(--muted)">İlk görüşmeyi kalabalık ve güvenli bir yerde yapın. Para isteyenlere karşı dikkatli olun.</small></section>
-      <section class="band"><span class="tag">Görüntülü görüşme</span><p>Telefon numaranızı paylaşmadan önce site üzerinden görüntülü konuşun. ${esc(a.ad)} sitede açıkken aramanızı görür.</p>
-        <div class="row"><button class="btn" id="b-video">Görüntülü ara</button></div></section>`
+      <section class="band"><span class="tag">Tanışın</span><p>Telefon numaranızı paylaşmadan önce site üzerinden yazışın ya da görüntülü konuşun. ${esc(a.ad)} sitede açıkken aramanızı görür.</p>
+        <div class="row"><button class="btn" id="b-mesaj">Mesaj gönder</button><button class="btn ghost" id="b-video">Görüntülü ara</button></div></section>`
       :`<section class="stack"><div class="row">${giden?`<button class="btn ghost" id="b-geri-al">İlgiyi geri al</button>`:`<button class="btn" id="b-ilgi">${gelen?"Ben de ilgileniyorum":"İlgileniyorum"}</button>`}</div>
         <p style="color:var(--muted);font-size:14px">${giden?`${esc(a.ad)} de ilgi gönderirse iletişim bilgileriniz karşılıklı açılır.`:`${esc(a.ad)} ilgi gönderdiğinizi ${gelen?"görecek ve iletişim bilgileriniz hemen açılacak":"görür; o da ilgilenirse iletişim bilgileriniz açılır"}.`}</p></section>`}
     <section class="stack"><h3>Konu konu uyum</h3>${barlar(u.d,"n")}</section>
     <section class="stack"><h3>Konuşmanız gereken sorular</h3>${farkListesi(u,ben,o,A,B)}</section>
   </div>`;
   const bi=$("#b-ilgi"); if(bi) bi.onclick=async()=>{ bi.disabled=true; try{ await api.ilgiGonder(a.id); toast("İlgi gönderildi"); adaySayfa(); }catch(e){ toast(hataMetni(e)); bi.disabled=false; } };
+  const bm=$("#b-mesaj"); if(bm) bm.onclick=()=>{ S.sohbet={id:a.id,ad:a.ad}; location.hash="sohbet"; };
   const bv=$("#b-video"); if(bv) bv.onclick=()=>gorusmeBaslat(a.id, a.ad, "arayan", null);
   const bg=$("#b-geri-al"); if(bg) bg.onclick=async()=>{ bg.disabled=true; try{ await api.ilgiGeriAl(a.id); toast("İlgi geri alındı"); adaySayfa(); }catch(e){ toast(hataMetni(e)); bg.disabled=false; } };
 }
@@ -939,6 +986,106 @@ function gorusmeBitir(mesajMetni){
 }
 addEventListener("pagehide", gorusmeKapat);
 
+/* ---------- mesajlaşma ---------- */
+let mesajDur = null;
+S.okunmamis = {}; // karsiId -> sayı
+const toplamOkunmamis = () => Object.values(S.okunmamis).reduce((a,b)=>a+b,0);
+function saat(t){
+  const d=new Date(t), bugun=new Date();
+  return d.toDateString()===bugun.toDateString() ? d.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"}) : d.toLocaleDateString("tr-TR",{day:"numeric",month:"short"});
+}
+async function okunmamisYukle(){
+  try{
+    const m=await api.sohbetler(); S.okunmamis={};
+    m.filter(r=>r.to_id===S.user.id&&!r.okundu).forEach(r=>S.okunmamis[r.from_id]=(S.okunmamis[r.from_id]||0)+1);
+    navCiz(location.hash.slice(1));
+  }catch(e){}
+}
+function mesajDinlemeyiBaslat(){
+  if(mesajDur || !S.user) return;
+  mesajDur = api.mesajDinle(async r => {
+    if(r.to_id!==S.user.id) return;
+    if(location.hash==="#sohbet" && S.sohbet?.id===r.from_id){ balonEkle(r); api.okundu(r.from_id).catch(()=>{}); return; }
+    S.okunmamis[r.from_id]=(S.okunmamis[r.from_id]||0)+1;
+    navCiz(location.hash.slice(1));
+    if(location.hash==="#mesajlar") return mesajlarSayfa();
+    let ad="Yeni mesaj"; try{ ad=(await api.kisi(r.from_id))?.ad||ad; }catch(e){}
+    toast(`${ad}: ${r.metin.length>40?r.metin.slice(0,40)+"…":r.metin}`);
+  });
+}
+function mesajDinlemeyiDurdur(){ if(mesajDur){ mesajDur(); mesajDur=null; } S.okunmamis={}; }
+
+async function mesajlarSayfa(){
+  if(!S.user){ location.hash="giris"; return; }
+  if(!S.profil){ location.hash="profil"; return; }
+  let adaylar, ilgi, msj;
+  try{ [adaylar,ilgi,msj]=await Promise.all([api.adaylar(),api.ilgiler(),api.sohbetler()]); }
+  catch(e){ app.innerHTML=`<p class="err">${esc(hataMetni(e))}</p>`; return; }
+  const me=S.user.id, son={};
+  msj.forEach(r=>{ const k=r.from_id===me?r.to_id:r.from_id; if(!son[k]||son[k].olusturma<r.olusturma) son[k]=r; });
+  const kisiler=adaylar.filter(a=>ilgi.giden.has(a.id)&&ilgi.gelen.has(a.id))
+    .sort((x,y)=>(son[y.id]?.olusturma||"").localeCompare(son[x.id]?.olusturma||""));
+  app.innerHTML=`<div class="stack" style="gap:22px">
+    <div class="stack" style="gap:8px"><p class="eyebrow">Mesajlar</p><h2>Sohbetleriniz</h2>
+      <p style="color:var(--muted)">Yalnızca karşılıklı ilgi gösterdiğiniz kişilerle mesajlaşabilirsiniz.</p></div>
+    ${kisiler.length?`<div class="cards">${kisiler.map(a=>{ const r=son[a.id], n=S.okunmamis[a.id]||0; return `
+      <button class="card sohbet-k" data-id="${esc(a.id)}">
+        <b>${esc(a.ad)}</b><span class="meta" style="text-align:right">${r?saat(r.olusturma):""}</span>
+        <span class="meta onizleme">${r?(r.from_id===me?"Siz: ":"")+esc(r.metin):"Henüz mesaj yok. İlk mesajı siz yazın."}</span>${n?`<span class="rozet">${n}</span>`:"<span></span>"}
+      </button>`;}).join("")}</div>`
+    :`<p style="color:var(--muted)">Henüz karşılıklı ilginiz olan biri yok. <a href="#eslesmeler" style="color:var(--nar)">Eşleşmelerinize</a> göz atın.</p>`}
+  </div>`;
+  app.querySelectorAll(".sohbet-k").forEach(b=>b.onclick=()=>{ const a=kisiler.find(k=>k.id===b.dataset.id); S.sohbet={id:a.id,ad:a.ad}; location.hash="sohbet"; });
+}
+
+function balonEkle(r){
+  const kutu=$("#akis"); if(!kutu) return;
+  kutu.querySelector(".bos")?.remove();
+  const el=document.createElement("div");
+  el.className="balon "+(r.from_id===S.user.id?"ben":"o");
+  el.innerHTML=`<p>${esc(r.metin)}</p><time>${saat(r.olusturma)}</time>`;
+  kutu.appendChild(el); kutu.scrollTop=kutu.scrollHeight;
+}
+
+async function sohbetSayfa(){
+  const k=S.sohbet;
+  if(!S.user||!S.profil||!k){ location.hash=S.user?"mesajlar":"giris"; return; }
+  app.innerHTML=`<div class="stack" style="gap:14px">
+    <div class="sohbet-bas">
+      <a href="#mesajlar" style="color:var(--muted);font-size:15px">← Mesajlar</a>
+      <h2 style="flex:1;min-width:0">${esc(k.ad)}</h2>
+      <button class="btn ghost" id="s-video" style="padding:10px 16px;font-size:15px">Görüntülü ara</button>
+    </div>
+    <div class="akis" id="akis" aria-live="polite"><p class="bos">Yükleniyor…</p></div>
+    <form id="fs" class="yaz" novalidate>
+      <label for="s-metin" class="gizli">Mesajınız</label>
+      <textarea id="s-metin" rows="1" maxlength="1000" placeholder="Mesaj yazın" autocomplete="off"></textarea>
+      <button class="btn" type="submit" id="s-gonder">Gönder</button>
+    </form>
+    <p style="color:var(--muted);font-size:13px">Para, banka bilgisi ya da kimlik fotoğrafı isteyen kişilere karşı dikkatli olun.</p>
+  </div>`;
+  $("#s-video").onclick=()=>gorusmeBaslat(k.id,k.ad,"arayan",null);
+  const ta=$("#s-metin");
+  ta.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); $("#fs").requestSubmit(); } });
+  ta.addEventListener("input",()=>{ ta.style.height="auto"; ta.style.height=Math.min(ta.scrollHeight,140)+"px"; });
+  $("#fs").onsubmit=async e=>{
+    e.preventDefault();
+    const metin=ta.value.trim(); if(!metin) return;
+    const b=$("#s-gonder"); b.disabled=true;
+    try{ const r=await api.mesajGonder(k.id,metin); ta.value=""; ta.style.height="auto"; balonEkle(r); }
+    catch(ex){ toast(hataMetni(ex)); }
+    b.disabled=false; ta.focus();
+  };
+  try{
+    const liste=await api.mesajlar(k.id);
+    if(S.sohbet!==k) return;
+    $("#akis").innerHTML = liste.length ? "" : `<p class="bos">İlk mesajı siz yazın. Kısa bir selam yeterli.</p>`;
+    liste.forEach(balonEkle);
+    if(S.okunmamis[k.id]){ delete S.okunmamis[k.id]; navCiz("sohbet"); }
+    api.okundu(k.id).catch(()=>{});
+  }catch(e){ $("#akis").innerHTML=`<p class="err">${esc(hataMetni(e))}</p>`; }
+}
+
 function nasil(){
   app.innerHTML=`<div class="stack" style="gap:18px">
     <p class="eyebrow">Nasıl çalışır?</p>
@@ -955,7 +1102,7 @@ async function oturumYukle(){
   try{ S.user=await api.oturum(); S.profil = S.user ? await api.profilim() : null; }
   catch(e){ S.user=null; S.profil=null; toast(hataMetni(e)); }
   if(S.profil && !S.cevap && gecerli(S.profil.cevap)) S.cevap=gecerli(S.profil.cevap);
-  if(S.user) cagriDinlemeyiBaslat();
+  if(S.user){ cagriDinlemeyiBaslat(); mesajDinlemeyiBaslat(); okunmamisYukle(); }
   // Google dönüşünden sonra kullanıcıyı doğru sayfaya götür
   if(store.get("oauth")){ store.set("oauth",null); if(S.user) location.hash = S.profil ? "eslesmeler" : "profil"; }
 }
@@ -966,7 +1113,7 @@ async function render(){
   if(h!=="gorusme") gorusmeKapat();
   window.scrollTo(0,0);
   if(h==="anket") return S.liste.length?anket():(location.hash="");
-  const v={sonuc, uyum:uyumSayfa, nasil, giris, profil:profilSayfa, eslesmeler, aday:adaySayfa, gorusme:gorusmeSayfa}[h];
+  const v={sonuc, uyum:uyumSayfa, nasil, giris, profil:profilSayfa, eslesmeler, aday:adaySayfa, gorusme:gorusmeSayfa, mesajlar:mesajlarSayfa, sohbet:sohbetSayfa}[h];
   return (v||anaSayfa)();
 }
 $("#demo").hidden = !api.demo;

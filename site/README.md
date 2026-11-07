@@ -29,3 +29,8 @@ Ciddi evlilik düşünenler için uyum testi, üyelik, profil ve eşleşme. Tek 
 4. Supabase → Authentication → URL Configuration → **Redirect URLs** listesine Vercel adresinizi ekleyin.
 
 Kodda ek ayar gerekmez. Google ile gelen kullanıcının adı profil formuna otomatik yazılır.
+
+## Mesajlaşma
+- Yalnızca karşılıklı ilgi olan iki üye yazışabilir; kural veritabanında (RLS) uygulanır. İlgi geri alınırsa yeni mesaj gönderilemez.
+- Mesajlar Realtime ile anında gelir; okunmamış sayısı üst menüde görünür. Alıcı mesajın yalnızca "okundu" bilgisini değiştirebilir.
+- Supabase'i daha önce kurduysanız `supabase.sql` dosyasının "Mesajlaşma" bölümünü çalıştırmanız yeterli.
