@@ -1153,3 +1153,483 @@ Her gün yeni bir "ne olurdu?" için takip et.
 
 #oksijen #ateş #dünya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
 ```
+
+## Akbabalar hiç olmasaydı (`akbaba.mp4`)
+
+```text
+Hindistan'da akbabalar azalınca insanlar da hastalandı.
+
+Akbabalar hiç olmasaydı, ne olurdu?
+
+Doksanlarda sığırlara verilen bir ağrı kesici akbabaları zehirledi. Leşler ortada kaldı, sokak köpekleri çoğaldı, kuduz yayıldı. Bir çalışmaya göre beş yılda yaklaşık yarım milyon fazladan ölüm oldu.
+
+Sence en çok hafife alınan hayvan hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#akbaba #kuşlar #doğa #ekosistem #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Serçeler olmasaydı (`serce.mp4`)
+
+```text
+Bir ülke serçelere savaş açtı.
+
+Serçeler olmasaydı, ne olurdu?
+
+Çin 1958'de serçeleri zararlı ilan etti, yüz milyonlarca serçe öldü. Ama serçeler böcek de yiyordu. Böcekler çoğaldı, ekinler zarar gördü. 1960'ta serçe listeden çıkarıldı.
+
+Sence doğaya en çok zarar veren karar hangisiydi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#serçe #kuşlar #tarih #doğa #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Somonlar olmasaydı (`somon.mp4`)
+
+```text
+Bazı ormanlar balıkla besleniyor.
+
+Somonlar olmasaydı, ne olurdu?
+
+Ayılar somonları ormana taşıyor, artıklar toprağa okyanustan gelen azotu bırakıyor. Alaska'da bir çalışmaya göre kıyı ağaçlarının azotunun yaklaşık dörtte biri somondan geliyor olabilir.
+
+Sence doğada en şaşırtıcı bağ hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#somon #orman #ayı #ekosistem #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Deniz samurları olmasaydı (`samur.mp4`)
+
+```text
+Koca bir su altı ormanı, küçük bir hayvana bağlı.
+
+Deniz samurları olmasaydı, ne olurdu?
+
+Samurlar deniz kestanesi yiyor, deniz kestaneleri de dev yosunları kemiriyor. Samurların azaldığı yerlerde yosun ormanları çıplak kayalığa döndü.
+
+Sence denizin en önemli hayvanı hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#denizsamuru #okyanus #deniz #ekosistem #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Bok böcekleri olmasaydı (`bokbocegi.mp4`)
+
+```text
+Avustralya bir dönem inek tezeğine boğuldu.
+
+Bok böcekleri olmasaydı, ne olurdu?
+
+Yerli böcekler keselilerin kuru dışkısına alışkındı, inek tezeğini gömemedi. Tezekler aylarca otlakta kaldı, sinekler ürüdü. Başka kıtalardan getirilen böceklerden yirmiden fazla tür tutundu.
+
+Sence en faydalı böcek hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#bokböceği #böcek #avustralya #doğa #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Orman filleri olmasaydı (`fil.mp4`)
+
+```text
+Filler ağaç kırıyor, orman kazanıyor.
+
+Orman filleri olmasaydı, ne olurdu?
+
+Filler küçük ağaçları seyreltiyor, büyük ve sert odunlu ağaçlar daha çok büyüyor. Bir çalışmaya göre filler olmasa Orta Afrika ormanları yaklaşık yüzde 7 daha az biyokütle tutardı.
+
+Sence doğayı en çok hangi hayvan şekillendiriyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#fil #orman #afrika #iklim #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Konteyner icat edilmeseydi (`konteyner.mp4`)
+
+```text
+Giydiğin tişört okyanusu büyük ihtimalle bir kutunun içinde geçti.
+
+Konteyner hiç icat edilmeseydi, ne olurdu?
+
+Eskiden yükler elle taşınır, gemiler limanda günlerce beklerdi. 1956'da Malcom McLean 58 kutuyu bir tankere yükledi. Onun hesabına göre ton başına yükleme maliyeti yaklaşık 6 dolardan 16 sente indi.
+
+Sence en çok hangi sade icada borçluyuz? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#konteyner #icat #ticaret #neolurdu #bilgi #tarih #keşfet #reels #ilginçbilgiler
+```
+
+## Deniz altındaki kablolar kopsaydı (`kablo.mp4`)
+
+```text
+Bu videoyu belki okyanusun dibinden izliyorsun.
+
+Deniz altındaki kablolar kopsaydı, ne olurdu?
+
+Kıtalar arası internet trafiğinin yaklaşık %99'u deniz altı kablolarından geçiyor. Uyduların payı çok küçük. Her yıl 200 civarında arıza oluyor, çoğu balıkçı ağları ve gemi çapaları yüzünden. Bir kablo kopunca trafik ötekilere kayıyor.
+
+Sence internetsiz kaç gün dayanırdın? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#internet #teknoloji #okyanus #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Asansör icat edilmeseydi (`asansor.mp4`)
+
+```text
+Eskiden binanın en ucuz katı en üsttekiydi.
+
+Asansör hiç icat edilmeseydi, ne olurdu?
+
+Merdivenle çıkılan binalar fazla yükselemiyordu. 1854'te Elisha Otis, New York'ta platformun halatını herkesin önünde kestirdi ve güvenlik freni platformu tuttu. Sonra üst katlar binanın en değerli yeri oldu.
+
+Sen hangi katta oturmak isterdin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#asansör #icat #şehir #neolurdu #bilgi #tarih #keşfet #reels #ilginçbilgiler
+```
+
+## Klima icat edilmeseydi (`klima.mp4`)
+
+```text
+İlk klima insanlar için yapılmadı.
+
+Klima hiç icat edilmeseydi, ne olurdu?
+
+1902'de Willis Carrier, New York'taki bir matbaada kâğıdı şişiren nemi almak için bir sistem kurdu. Serinlik bunun yan etkisiydi. Bugün bir tahmine göre klimalar ve vantilatörler dünyadaki elektriğin yaklaşık onda birini harcıyor.
+
+Sen klimasız bir yaza dayanabilir miydin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#klima #icat #yaz #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Silgi icat edilmeseydi (`silgi.mp4`)
+
+```text
+Silgiden önce yanlışlar ekmekle silinirdi.
+
+Silgi hiç icat edilmeseydi, ne olurdu?
+
+Kurşun kalem izini kabuğu alınmış beyaz ekmekle silerlerdi. 1770'te Joseph Priestley kauçuğun kalem izini sildiğini yazdı. Aynı yıl Edward Nairne kauçuk silgiyi satmaya başladı, hem de pahalıya.
+
+Sen en çok neyi silmek isterdin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#silgi #icat #kalem #neolurdu #bilgi #tarih #keşfet #reels #ilginçbilgiler
+```
+
+## Telgraf icat edilmeseydi (`telgraf.mp4`)
+
+```text
+Bir savaş, barıştan iki hafta sonra yapıldı.
+
+Telgraf hiç icat edilmeseydi, ne olurdu?
+
+ABD ile İngiltere 24 Aralık 1814'te barış imzaladı. Haber gemiyle gidiyordu. 8 Ocak 1815'te iki ordu New Orleans'ta çarpıştı, İngilizler iki bine yakın kayıp verdi. Antlaşma Washington'a ancak şubat ortasında ulaştı. 1844'te Morse'un telgrafıyla haber dakikalar içinde gitmeye başladı.
+
+Sence en hızlı yayılması gereken haber hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#telgraf #icat #tarih #neolurdu #bilgi #iletişim #keşfet #reels #ilginçbilgiler
+```
+
+## Apandisimiz olmasaydı (`apandis.mp4`)
+
+```text
+Apandisin işe yaramaz bir organ diye bilinir.
+
+Hiç olmasaydı, ne olurdu?
+
+2013'te 361 memeli türüne bakan bir çalışma, apandisin bu türlerde birbirinden bağımsız en az 32 kez ortaya çıktığını buldu. Bir fikre göre yararlı bağırsak bakterileri için bir sığınak. Henüz kanıtlanmış değil.
+
+Sence vücutta başka hangi organ hafife alınıyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#apandis #vücut #sağlık #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Göz kırpamasaydık (`kirpma.mp4`)
+
+```text
+Dakikada yaklaşık 15 kez göz kırpıyorsun ve çoğunu fark etmiyorsun bile.
+
+Hiç kırpamasaydık, ne olurdu?
+
+Korneada kan damarı yok. Oksijenini havadan, üstündeki gözyaşı katmanıyla alıyor. Her kırpma bu katmanı yeniliyor. Kırpmayan göz kurur, yara ve enfeksiyon riski artar.
+
+Sence vücudun en hafife alınan refleksi hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#göz #gözkırpma #vücut #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Koku alamasaydık (`koku.mp4`)
+
+```text
+Yemeğin lezzetini büyük ölçüde burnunla alıyorsun.
+
+Hiç koku alamasaydık, ne olurdu?
+
+Dil yalnızca beş temel tadı ayırıyor, gerisini koku tamamlıyor. 2004'teki bir çalışmada koku sorunu olan hastaların yaklaşık üçte biri en az bir tehlikeli olay yaşamıştı: yanan yemek, bozuk yiyecek, fark edilmeyen gaz kaçağı. Doğalgaza koku bu yüzden ekleniyor.
+
+Sence en çok hangi kokuyu özlerdin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#koku #burun #duyular #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Karaciğer kendini yenileyemeseydi (`karaciger.mp4`)
+
+```text
+Karaciğerin, kendini yeniden büyütebilen bir organ.
+
+Bu yeteneği olmasaydı, ne olurdu?
+
+Canlı vericiden karaciğer nakli bu sayede mümkün. Verici karaciğerinin bir parçasını veriyor, sonra iki taraftaki parça da büyüyor. Kaybedilen hacmin büyük kısmı ilk birkaç ayda geri geliyor.
+
+Sence vücudun hangi yeteneği en şaşırtıcı? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#karaciğer #organnakli #sağlık #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Aşı bulunmasaydı (`asi.mp4`)
+
+```text
+Aşının İngilizce adı "vaccine", Latincede inek demek olan "vacca"dan geliyor.
+
+Aşı hiç bulunmasaydı, ne olurdu?
+
+Çiçek hastalığı yalnız 20. yüzyılda en az 300 milyon kişiyi öldürdü. 1796'da Edward Jenner bir çocuğa inek çiçeği aşıladı. 1980'de çiçek, tamamen yok edilen ilk insan hastalığı ilan edildi. Bugüne kadar tek örnek o.
+
+Sence tıbbın en büyük buluşu hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#aşı #çiçekhastalığı #tıp #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## C vitamini üretebilseydik (`iskorbut.mp4`)
+
+```text
+Köpekler ve kediler C vitaminini kendi vücudunda üretiyor. Biz üretemiyoruz.
+
+Üretebilseydik, ne olurdu?
+
+İnsanda bu işi yapan gen bozuk. Taze meyve sebzenin olmadığı uzun deniz yolculuklarında iskorbut yüzünden en az iki milyon denizcinin öldüğü tahmin ediliyor. 1747'de James Lind limon ve portakal yiyen hastaların en hızlı iyileştiğini gördü.
+
+Sence hangi yiyecek olmasa hayat zorlaşırdı? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#cvitamini #iskorbut #beslenme #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Dünya'nın halkası olsaydı (`halka.mp4`)
+
+```text
+Dünya'nın bir zamanlar halkası olmuş olabilir.
+
+Satürn gibi bir halkamız olsaydı, ne olurdu?
+
+2024'te yayımlanan bir çalışmaya göre yaklaşık 466 milyon yıl önceki 21 krater, o dönemde hep ekvatora yakın yerlerdeydi. Ekip, parçalanan bir asteroidin geçici bir halka oluşturduğunu ve gölgesinin soğumaya katkı yapmış olabileceğini öne sürüyor. Bu hâlâ bir hipotez.
+
+Sence halkalı bir Dünya'da gece nasıl görünürdü? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#halka #satürn #uzay #dünya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Göktaşı başka yere düşseydi (`asteroit.mp4`)
+
+```text
+Dinozorların şansı çok kötüymüş.
+
+Onları yok eden göktaşı başka yere düşseydi, ne olurdu?
+
+Yaklaşık 66 milyon yıl önce göktaşı, kükürt ve organik maddece zengin kayalara çarptı. Gökyüzüne yayılan is ve kükürt güneş ışığını yıllarca zayıflattı. 2017'deki bir çalışmaya göre böyle bir felakete yüzeyin yalnızca %13'ü yol açabilirdi. Rakam tartışmalı ama yerin önemli olduğu kabul görüyor.
+
+Sence dinozorlar yaşasaydı dünya nasıl olurdu? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#dinozor #göktaşı #asteroit #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Yıldırım düşmeseydi (`yildirim.mp4`)
+
+```text
+Bir yıldırım, Güneş'in yüzeyinden sıcak.
+
+Dünya'ya hiç yıldırım düşmeseydi, ne olurdu?
+
+Yıldırım havayı yaklaşık 27 bin dereceye kadar ısıtıyor. Bu sıcaklıkta azot ve oksijen birleşiyor, oluşan bileşikler yağmurla toprağa inip bitkilere besin oluyor. Bir çalışmaya göre ilk Dünya'da yıldırımlar, canlıların ihtiyaç duyduğu fosforu da açığa çıkarmış olabilir.
+
+Sence doğada en çok yanlış anlaşılan şey ne? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#yıldırım #şimşek #doğa #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Plüton hâlâ gezegen olsaydı (`pluton.mp4`)
+
+```text
+Plüton, 1930'da bulunduğundan beri Güneş'in çevresinde tek tur atmadı. Bir turu yaklaşık 248 yıl sürüyor.
+
+Hâlâ gezegen sayılsaydı, ne olurdu?
+
+2005'te ondan biraz daha ağır Eris bulundu. 2006'da masaya 12 gezegenli bir öneri geldi. Sonunda gezegen için yörüngesini temizlemiş olma şartı kondu ve Plüton cüce gezegen oldu.
+
+Sence Plüton gezegen sayılmalı mı? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#plüton #gezegen #uzay #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Dünya baştan ayağa donsaydı (`kartopu.mp4`)
+
+```text
+Dünya bir zamanlar ekvatora kadar buz tuttu.
+
+Bütün Dünya buzla kaplansaydı, ne olurdu?
+
+Yaklaşık 717 milyon yıl önce başlayan bu dönemde yağmur neredeyse durdu, kayalar karbondioksiti havadan çekemez oldu. Volkanların saldığı gaz milyonlarca yıl birikti, sera etkisi güçlendi ve buzlar eridi. Yaşam bu buz devrini atlattı.
+
+Sence buzla kaplı bir Dünya'da nerede yaşardık? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#kartopudünya #buzdevri #volkan #iklim #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Dünya Mars kadar küçük olsaydı (`mars.mp4`)
+
+```text
+Mars'ta bir zamanlar göller vardı.
+
+Dünya, Mars kadar küçük olsaydı, ne olurdu?
+
+Küçük gezegenin içi hızlı soğur. Mars'ın manyetik kalkanı milyarlarca yıl önce söndü, güneş rüzgârı havasını uzaya süpürdü. Bugün Mars'ın havası Dünya'nınkinin %1'inden bile ince. Jezero kraterinde ise eski bir gölün izleri duruyor.
+
+Sence Mars'ta yaşamak mümkün olur mu? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#mars #gezegen #uzay #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Alüminyum hâlâ altın kadar pahalı olsaydı (`aluminyum.mp4`)
+
+```text
+Alüminyum bir zamanlar altından değerliydi.
+
+Hâlâ o kadar pahalı olsaydı, ne olurdu?
+
+Yer kabuğunda en bol bulunan metal ama saf hâlde çıkmıyor. 1800'lerde kayadan ayırmak çok zordu. 1886'da iki genç mucit elektrikle ucuz üretimin yolunu buldu ve fiyat çöktü. Bugün uçak gövdeleri büyük ölçüde alüminyum alaşımından.
+
+Sence bugün ucuz olan ne eskiden lükstü? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#alüminyum #tarih #kimya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Havadan gübre yapmayı öğrenmeseydik (`gubre.mp4`)
+
+```text
+Yediğin ekmeğin bir kısmı havadan geliyor.
+
+Havadan gübre yapmayı hiç öğrenmeseydik, ne olurdu?
+
+Havanın %78'i azot ama bitkiler onu doğrudan alamıyor. 1909'da Fritz Haber havadaki azotu amonyağa çevirdi, Carl Bosch da yöntemi fabrikalara taşıdı. Bir çalışmaya göre bugün insanların yaklaşık yarısı bu gübreyle yetişen besinlerle doyuyor.
+
+Sence en büyük buluş hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#gübre #kimya #tarım #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Kibrit icat edilmeseydi (`kibrit.mp4`)
+
+```text
+Çakmak, kibritten önce icat edildi.
+
+Kibrit hiç icat edilmeseydi, ne olurdu?
+
+1823'te Döbereiner hidrojenle çalışan bir masa çakmağı yaptı ama cebe sığmıyordu. 1826'da John Walker sürtünce tutuşan çubuğu buldu. Beyaz fosforlu kibritler her yüzeyde yanıyordu, fabrika işçilerinde ise çene kemiğini çürüten bir hastalığa yol açtı. 1855'te İsveç'te güvenli kibrit yaygınlaştı.
+
+Sence en sık hangi küçük icadı kullanıyorsun? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#kibrit #tarih #kimya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Demir hiç paslanmasaydı (`pas.mp4`)
+
+```text
+Pas, demirin çok yavaş yanması gibi.
+
+Demir hiç paslanmasaydı, ne olurdu?
+
+Demir oksijen ve suyla birleşince paslanıyor, tuz da bunu hızlandırıyor. Bir çalışmaya göre korozyonun dünyaya yıllık maliyeti yaklaşık 2,5 trilyon dolar. Pasın işe yaradığı yer de var: cep ısıtıcıları demir tozunun hızla paslanmasıyla ısınıyor.
+
+Sence evde en çok hangi eşya paslanıyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#pas #demir #kimya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Su her yerde 70 derecede kaynasaydı (`kaynama.mp4`)
+
+```text
+Everest'in tepesinde su yaklaşık 70 derecede kaynıyor.
+
+Su her yerde 70 derecede kaynasaydı, ne olurdu?
+
+Kaynama sıcaklığı hava basıncına bağlı. Yükseldikçe su daha az ısınınca kaynıyor, patates de makarna da çok daha geç pişiyor. Düdüklü tencere basıncı artırıyor, içindeki su yaklaşık 120 dereceye çıkıyor.
+
+Sence düdüklü tencere olmasa mutfakta ne değişirdi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#su #fizik #mutfak #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Anestezi bulunmasaydı (`anestezi.mp4`)
+
+```text
+Eskiden ameliyatlarda hasta uyanıktı.
+
+Anestezi hiç bulunmasaydı, ne olurdu?
+
+Cerrahlar hıza güvenirdi, bazıları bir bacağı birkaç dakikada keserdi. Karın ya da göğüs ameliyatı neredeyse imkânsızdı. 16 Ekim 1846'da Boston'da diş hekimi William Morton bir hastayı eterle uyuttu ve haber aylar içinde Avrupa'ya ulaştı.
+
+Sence tıptaki en büyük buluş hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#anestezi #tıp #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
