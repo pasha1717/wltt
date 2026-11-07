@@ -25,6 +25,7 @@
   --bg:#161013; --surface:#211A1E; --ink:#F3ECEF; --muted:#AFA0A8; --line:#3A2F35;
   --nar:#F0688F; --nar-soft:#43202C; --sage:#7CC4AC; --sage-soft:#1D3A31; color-scheme:dark}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body);
   padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
@@ -137,6 +138,19 @@ textarea:focus-visible,select:focus-visible{outline:3px solid var(--nar);outline
 .contact b{font:600 18px var(--body);user-select:all;word-break:break-word}
 .danger{color:var(--nar)}
 @media (max-width:480px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.sahne{--sahne:#0E0A0C;position:relative;background:var(--sahne);border-radius:var(--r);overflow:hidden;aspect-ratio:3/4;max-height:68vh;max-width:100%;width:100%;margin:0 auto}
+.sahne video{display:block}
+#v-karsi{width:100%;height:100%;object-fit:cover}
+#v-ben{position:absolute;right:12px;bottom:12px;width:30%;aspect-ratio:3/4;object-fit:cover;border-radius:10px;border:2px solid rgba(255,255,255,.7);transform:scaleX(-1);background:var(--sahne)}
+.v-durum{position:absolute;left:16px;right:16px;top:16px;margin:0;color:#fff;font-size:16px;line-height:1.45;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.v-durum:empty{display:none}
+.kontrol{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.yuvar{appearance:none;border:0;cursor:pointer;font:600 15px var(--body);padding:14px 18px;border-radius:999px;background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.yuvar[aria-pressed="false"]{background:var(--ink);color:var(--bg)}
+.yuvar.kapat{background:var(--nar);color:var(--surface);box-shadow:none}
+.yuvar:focus-visible{outline:3px solid var(--nar);outline-offset:3px}
+.cagri{position:fixed;z-index:20;top:calc(12px + env(safe-area-inset-top, 0px));left:max(16px, env(safe-area-inset-left, 0px));right:max(16px, env(safe-area-inset-right, 0px));max-width:520px;margin:0 auto;background:var(--surface);border:1.5px solid var(--nar);border-radius:var(--r);padding:16px 18px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:12px}
+.cagri p{margin:0}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
@@ -151,11 +165,14 @@ textarea:focus-visible,select:focus-visible{outline:3px solid var(--nar);outline
   <footer>Denk · <a href="#nasil" style="color:inherit">Puan nasıl hesaplanır?</a> · İletişim bilgileri yalnızca iki taraf da istediğinde açılır.</footer>
 </div>
 <div class="toast" id="toast" hidden></div>
+<div class="cagri" id="cagri" role="alertdialog" aria-live="assertive" hidden></div>
 
 <script>
 /* Supabase ayarı: boş bırakılırsa site demo modunda çalışır. Kurulum için site/README.md */
 const SUPABASE_URL = "";
 const SUPABASE_ANON_KEY = "";
+// İsteğe bağlı TURN sunucusu (kısıtlı ağlarda görüntülü görüşme için): {urls:"turn:...", username:"...", credential:"..."}
+const TURN_SUNUCU = null;
 const DIMS = {
   din:    {ad:"İnanç ve gelenek",      alt:"İbadet, bayramlar, helal-haram hassasiyeti"},
   aile:   {ad:"Aile bağları",          alt:"Görüşme sıklığı, kararlar, nerede oturulacağı"},
@@ -282,7 +299,23 @@ function supabaseApi(){
     },
     async ilgiGonder(id){ ok(await sb.from("ilgi").insert({from_id:uid,to_id:id})); },
     async ilgiGeriAl(id){ ok(await sb.from("ilgi").delete().eq("from_id",uid).eq("to_id",id)); },
-    async iletisimGetir(id){ return ok(await sb.from("iletisim").select("bilgi").eq("id",id).maybeSingle())?.bilgi||null; }
+    async iletisimGetir(id){ return ok(await sb.from("iletisim").select("bilgi").eq("id",id).maybeSingle())?.bilgi||null; },
+    // Görüntülü görüşme: arama kayıtları (cagri tablosu) ve iki kişilik özel sinyal kanalı
+    cagriDinle(cb){
+      const ch=sb.channel("cagri-"+uid)
+        .on("postgres_changes",{event:"*",schema:"public",table:"cagri",filter:"to_id=eq."+uid},e=>cb(e.eventType,e.new))
+        .on("postgres_changes",{event:"UPDATE",schema:"public",table:"cagri",filter:"from_id=eq."+uid},e=>cb(e.eventType,e.new))
+        .subscribe();
+      return ()=>sb.removeChannel(ch);
+    },
+    async cagriBaslat(to){ return ok(await sb.from("cagri").insert({from_id:uid,to_id:to}).select("id").single()); },
+    async cagriDurum(id,durum){ ok(await sb.from("cagri").update({durum}).eq("id",id)); },
+    async oda(topic,onMsg){
+      const ch=sb.channel(topic,{config:{private:true,broadcast:{self:false}}});
+      ch.on("broadcast",{event:"m"},({payload})=>onMsg(payload));
+      await new Promise((res,rej)=>ch.subscribe(st=>{ if(st==="SUBSCRIBED") res(); else if(st==="CHANNEL_ERROR"||st==="TIMED_OUT") rej(new Error("Görüşme kanalına bağlanılamadı.")); }));
+      return { gonder:m=>ch.send({type:"broadcast",event:"m",payload:m}), kapat:()=>sb.removeChannel(ch) };
+    }
   };
 }
 
@@ -419,7 +452,7 @@ function anaSayfa(){
     <section class="stack">
       <p class="eyebrow">Ciddi evlilik düşünenler için</p>
       <h1>Size denk kişiyi değerlerinizle tanıyın.</h1>
-      <p class="lead">Sekiz konuda evlilik profilinizi çıkarın. Üye olursanız size en uyumlu adaylar listelenir; iletişim bilgileri yalnızca iki taraf da istediğinde açılır.</p>
+      <p class="lead">Sekiz konuda evlilik profilinizi çıkarın. Üye olursanız size en uyumlu adaylar listelenir. Karşılıklı ilgi olunca numara vermeden site içinden görüntülü konuşabilirsiniz.</p>
       <div class="row">${S.cevap?`<a class="btn ghost" href="#sonuc">Sonucumu gör</a>`:""}${S.user?`<a class="btn ghost" href="#eslesmeler">Eşleşmelerim</a>`:`<a class="btn ghost" href="#giris">Zaten üyeyim, giriş yap</a>`}</div>
     </section>
     <section class="tests" aria-label="Test seçin">
@@ -634,7 +667,7 @@ async function profilSayfa(){
   </div>`;
   const bt=$("#b-test"); if(bt) bt.onclick=()=>baslat("tek","hizli");
   const tm=$("#b-tamamla"); if(tm) tm.onclick=()=>baslat("tek","tam",c);
-  $("#b-cikis").onclick=async()=>{ await api.cikis(); S.user=null; S.profil=null; location.hash=""; toast("Çıkış yapıldı"); };
+  $("#b-cikis").onclick=async()=>{ cagriDinlemeyiDurdur(); await api.cikis(); S.user=null; S.profil=null; location.hash=""; toast("Çıkış yapıldı"); };
   const sil=$("#b-sil"); if(sil){
     sil.onclick=()=>{ $("#sil-onay").hidden=false; };
     $("#b-sil-hayir").onclick=()=>{ $("#sil-onay").hidden=true; };
@@ -725,15 +758,166 @@ async function adaySayfa(){
       <p class="lead">${yorumMetni(u.genel)}</p>
       <p style="color:var(--muted);font-size:14px">${esc(a.ad)} profili: <b style="color:var(--ink)">${pad}</b>. ${pacik}</p>
     </section>
-    ${karsilikli?`<section class="contact"><span class="tag" style="font-size:13px;font-weight:600;color:var(--sage);letter-spacing:.08em;text-transform:uppercase">İletişim bilgisi</span><b>${esc(ilet||"Henüz iletişim bilgisi eklememiş.")}</b><small style="color:var(--muted)">İlk görüşmeyi kalabalık ve güvenli bir yerde yapın. Para isteyenlere karşı dikkatli olun.</small></section>`
+    ${karsilikli?`<section class="contact"><span class="tag" style="font-size:13px;font-weight:600;color:var(--sage);letter-spacing:.08em;text-transform:uppercase">İletişim bilgisi</span><b>${esc(ilet||"Henüz iletişim bilgisi eklememiş.")}</b><small style="color:var(--muted)">İlk görüşmeyi kalabalık ve güvenli bir yerde yapın. Para isteyenlere karşı dikkatli olun.</small></section>
+      <section class="band"><span class="tag">Görüntülü görüşme</span><p>Telefon numaranızı paylaşmadan önce site üzerinden görüntülü konuşun. ${esc(a.ad)} sitede açıkken aramanızı görür.</p>
+        <div class="row"><button class="btn" id="b-video">Görüntülü ara</button></div></section>`
       :`<section class="stack"><div class="row">${giden?`<button class="btn ghost" id="b-geri-al">İlgiyi geri al</button>`:`<button class="btn" id="b-ilgi">${gelen?"Ben de ilgileniyorum":"İlgileniyorum"}</button>`}</div>
         <p style="color:var(--muted);font-size:14px">${giden?`${esc(a.ad)} de ilgi gönderirse iletişim bilgileriniz karşılıklı açılır.`:`${esc(a.ad)} ilgi gönderdiğinizi ${gelen?"görecek ve iletişim bilgileriniz hemen açılacak":"görür; o da ilgilenirse iletişim bilgileriniz açılır"}.`}</p></section>`}
     <section class="stack"><h3>Konu konu uyum</h3>${barlar(u.d,"n")}</section>
     <section class="stack"><h3>Konuşmanız gereken sorular</h3>${farkListesi(u,ben,o,A,B)}</section>
   </div>`;
   const bi=$("#b-ilgi"); if(bi) bi.onclick=async()=>{ bi.disabled=true; try{ await api.ilgiGonder(a.id); toast("İlgi gönderildi"); adaySayfa(); }catch(e){ toast(hataMetni(e)); bi.disabled=false; } };
+  const bv=$("#b-video"); if(bv) bv.onclick=()=>gorusmeBaslat(a.id, a.ad, "arayan", null);
   const bg=$("#b-geri-al"); if(bg) bg.onclick=async()=>{ bg.disabled=true; try{ await api.ilgiGeriAl(a.id); toast("İlgi geri alındı"); adaySayfa(); }catch(e){ toast(hataMetni(e)); bg.disabled=false; } };
 }
+
+/* ---------- görüntülü görüşme ---------- */
+// Görüntü ve ses WebRTC ile iki cihaz arasında doğrudan akar; Supabase yalnızca arama bildirimini ve bağlantı bilgisini taşır.
+const ICE = [{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}, ...(TURN_SUNUCU?[TURN_SUNUCU]:[])];
+let G = null;        // aktif görüşme
+let cagriDur = null; // arama dinleyicisini kapatan fonksiyon
+let gelen = null;    // ekrandaki gelen arama
+
+function gorusmeBaslat(karsiId, ad, rol, cagriId){
+  S.gorusme = {karsiId, ad, rol, cagriId};
+  if(location.hash==="#gorusme") render(); else location.hash = "gorusme";
+}
+
+function cagriDinlemeyiBaslat(){
+  if(api.demo || cagriDur || !S.user) return;
+  cagriDur = api.cagriDinle(async (olay, r) => {
+    const yeni = Date.now() - new Date(r.olusturma).getTime() < 60000;
+    if(olay==="INSERT" && r.to_id===S.user.id && r.durum==="caliyor" && yeni){
+      if(G){ api.cagriDurum(r.id,"mesgul").catch(()=>{}); return; }
+      let ad="Bir eşleşmeniz";
+      try{ ad=(await api.kisi(r.from_id))?.ad || ad; }catch(e){}
+      gelenGoster(r, ad);
+    }
+    if(olay==="UPDATE"){
+      if(r.to_id===S.user.id && gelen?.id===r.id && r.durum!=="caliyor") gelenGizle();
+      if(r.from_id===S.user.id && G?.cagriId===r.id){
+        if(r.durum==="red") gorusmeBitir("Arama reddedildi.");
+        else if(r.durum==="mesgul") gorusmeBitir("Karşı taraf şu an başka bir görüşmede.");
+        else if(r.durum==="kabul") durumYaz("Bağlanıyor…");
+      }
+    }
+  });
+}
+function cagriDinlemeyiDurdur(){ if(cagriDur){ cagriDur(); cagriDur=null; } }
+
+function gelenGoster(r, ad){
+  gelen = r;
+  const el=$("#cagri");
+  el.innerHTML=`<p><b>${esc(ad)}</b> sizi görüntülü arıyor.</p>
+    <div class="row"><button class="btn" id="c-kabul">Kabul et</button><button class="btn ghost" id="c-red">Reddet</button></div>`;
+  el.hidden=false;
+  $("#c-kabul").onclick=()=>{ gelenGizle(); gorusmeBaslat(r.from_id, ad, "cevaplayan", r.id); };
+  $("#c-red").onclick=()=>{ api.cagriDurum(r.id,"red").catch(()=>{}); gelenGizle(); };
+  clearTimeout(gelenGoster.t); gelenGoster.t=setTimeout(gelenGizle, 45000);
+}
+function gelenGizle(){ gelen=null; $("#cagri").hidden=true; }
+
+const durumYaz = t => { const el=$("#v-durum"); if(el) el.textContent=t; };
+
+async function gorusmeSayfa(){
+  const g=S.gorusme;
+  if(!S.user||!g){ location.hash=S.user?"eslesmeler":"giris"; return; }
+  gorusmeKapat();
+  app.innerHTML=`<div class="stack" style="gap:16px">
+    <div class="stack" style="gap:6px"><p class="eyebrow">Görüntülü görüşme</p><h2>${esc(g.ad)}</h2></div>
+    <div class="sahne">
+      <video id="v-karsi" autoplay playsinline></video>
+      <video id="v-ben" autoplay playsinline muted></video>
+      <p class="v-durum" id="v-durum">Kamera açılıyor…</p>
+    </div>
+    <div class="kontrol">
+      <button class="yuvar" id="v-mik" aria-pressed="true">Mikrofon açık</button>
+      <button class="yuvar" id="v-kam" aria-pressed="true">Kamera açık</button>
+      <button class="yuvar kapat" id="v-kapat">Görüşmeyi bitir</button>
+    </div>
+    <p style="color:var(--muted);font-size:14px">Görüşme kaydedilmez. Görüntü ve ses doğrudan iki cihaz arasında akar. Rahatsız edici bir davranışla karşılaşırsanız görüşmeyi bitirip ilgiyi geri alabilirsiniz.</p>
+  </div>`;
+  $("#v-kapat").onclick=()=>{ gorusmeBitir("Görüşmeyi bitirdiniz."); };
+  G = {cagriId:g.cagriId, rol:g.rol, kuyruk:[]};
+  const benimG = G;
+  try{
+    G.yerel = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:720}},audio:{echoCancellation:true,noiseSuppression:true}});
+  }catch(e){
+    G=null; durumYaz("Kameraya ya da mikrofona erişilemedi. Tarayıcı ayarlarından bu siteye kamera ve mikrofon izni verip tekrar deneyin."); return;
+  }
+  if(G!==benimG){ benimG.yerel.getTracks().forEach(t=>t.stop()); return; } // bu arada sayfadan çıkıldı
+  $("#v-ben").srcObject=G.yerel;
+  const izle=(id,tur,acik,kapali)=>{ const b=$(id); b.onclick=()=>{ const tr=G?.yerel?.getTracks().filter(t=>t.kind===tur)||[]; const on=!tr[0]?.enabled; tr.forEach(t=>t.enabled=on); b.setAttribute("aria-pressed",on); b.textContent=on?acik:kapali; }; };
+  izle("#v-mik","audio","Mikrofon açık","Mikrofon kapalı");
+  izle("#v-kam","video","Kamera açık","Kamera kapalı");
+
+  if(api.demo){ durumYaz("Demo modunda örnek profiller aramayı yanıtlamaz. Kameranızı ve mikrofonunuzu burada deneyebilirsiniz. Gerçek görüşmeler canlı modda çalışır."); return; }
+
+  const pc = G.pc = new RTCPeerConnection({iceServers:ICE});
+  G.yerel.getTracks().forEach(t=>pc.addTrack(t,G.yerel));
+  pc.ontrack = e => { $("#v-karsi").srcObject=e.streams[0]; };
+  pc.onicecandidate = e => { if(e.candidate) G?.oda?.gonder({t:"ice",c:e.candidate.toJSON()}); };
+  pc.onconnectionstatechange = () => {
+    const s=pc.connectionState;
+    if(s==="connected"){ clearTimeout(G?.zaman); durumYaz(""); }
+    if(s==="disconnected") durumYaz("Bağlantı zayıf, yeniden bağlanılıyor…");
+    if(s==="failed") gorusmeBitir("Bağlantı kurulamadı. İki taraftan biri kısıtlı bir ağda olabilir; başka bir ağdan tekrar deneyin.");
+  };
+  const uzakEkle = async () => { for(const c of G.kuyruk.splice(0)) await pc.addIceCandidate(c).catch(()=>{}); };
+  const mesaj = async m => {
+    if(!G||G.pc!==pc) return;
+    try{
+      if(m.t==="hazir" && G.rol==="arayan"){
+        durumYaz("Bağlanıyor…");
+        await pc.setLocalDescription(await pc.createOffer());
+        G.oda.gonder({t:"offer",sdp:pc.localDescription.toJSON()});
+      } else if(m.t==="offer"){
+        await pc.setRemoteDescription(m.sdp); await uzakEkle();
+        await pc.setLocalDescription(await pc.createAnswer());
+        G.oda.gonder({t:"answer",sdp:pc.localDescription.toJSON()});
+      } else if(m.t==="answer"){
+        await pc.setRemoteDescription(m.sdp); await uzakEkle();
+      } else if(m.t==="ice"){
+        if(pc.remoteDescription) await pc.addIceCandidate(m.c).catch(()=>{}); else G.kuyruk.push(m.c);
+      } else if(m.t==="bye"){
+        gorusmeBitir(`${g.ad} görüşmeyi bitirdi.`);
+      }
+    }catch(e){ gorusmeBitir("Bağlantı kurulurken bir sorun oluştu. Tekrar deneyin."); }
+  };
+  try{
+    G.oda = await api.oda("gorusme:"+[S.user.id,g.karsiId].sort().join("_"), mesaj);
+    if(G?.pc!==pc){ return; }
+    if(G.rol==="arayan"){
+      G.cagriId = (await api.cagriBaslat(g.karsiId)).id;
+      durumYaz(`${g.ad} aranıyor…`);
+      G.zaman = setTimeout(()=>{ if(G?.pc===pc && pc.connectionState!=="connected"){ api.cagriDurum(G.cagriId,"iptal").catch(()=>{}); gorusmeBitir(`${g.ad} cevap vermedi. Daha sonra tekrar deneyin.`); } }, 45000);
+    } else {
+      await api.cagriDurum(G.cagriId,"kabul");
+      durumYaz("Bağlanıyor…");
+      G.oda.gonder({t:"hazir"});
+    }
+  }catch(e){ gorusmeBitir(hataMetni(e)); }
+}
+
+function gorusmeKapat(){
+  if(!G) return;
+  const g=G; G=null;
+  clearTimeout(g.zaman);
+  try{ g.oda?.gonder({t:"bye"}); }catch(e){}
+  if(g.rol==="arayan" && g.cagriId && g.pc?.connectionState!=="connected") api.cagriDurum(g.cagriId,"iptal").catch(()=>{});
+  setTimeout(()=>g.oda?.kapat(), 300);
+  g.pc?.close();
+  g.yerel?.getTracks().forEach(t=>t.stop());
+}
+function gorusmeBitir(mesajMetni){
+  gorusmeKapat();
+  if(location.hash!=="#gorusme") return toast(mesajMetni);
+  const id=S.gorusme?.karsiId;
+  app.innerHTML=`<div class="stack" style="gap:18px"><p class="eyebrow">Görüntülü görüşme</p><h2>Görüşme sona erdi</h2><p class="lead">${esc(mesajMetni)}</p>
+    <div class="row">${id?`<button class="btn" id="v-tekrar">Tekrar ara</button>`:""}<a class="btn ghost" href="#eslesmeler">Eşleşmelere dön</a></div></div>`;
+  const t=$("#v-tekrar"); if(t) t.onclick=()=>{ S.gorusme={...S.gorusme, rol:"arayan", cagriId:null}; gorusmeSayfa(); };
+}
+addEventListener("pagehide", gorusmeKapat);
 
 function nasil(){
   app.innerHTML=`<div class="stack" style="gap:18px">
@@ -751,14 +935,16 @@ async function oturumYukle(){
   try{ S.user=await api.oturum(); S.profil = S.user ? await api.profilim() : null; }
   catch(e){ S.user=null; S.profil=null; toast(hataMetni(e)); }
   if(S.profil && !S.cevap && gecerli(S.profil.cevap)) S.cevap=gecerli(S.profil.cevap);
+  if(S.user) cagriDinlemeyiBaslat();
 }
 
 async function render(){
   const h=location.hash.slice(1);
   navCiz(h);
+  if(h!=="gorusme") gorusmeKapat();
   window.scrollTo(0,0);
   if(h==="anket") return S.liste.length?anket():(location.hash="");
-  const v={sonuc, uyum:uyumSayfa, nasil, giris, profil:profilSayfa, eslesmeler, aday:adaySayfa}[h];
+  const v={sonuc, uyum:uyumSayfa, nasil, giris, profil:profilSayfa, eslesmeler, aday:adaySayfa, gorusme:gorusmeSayfa}[h];
   return (v||anaSayfa)();
 }
 $("#demo").hidden = !api.demo;

@@ -59,3 +59,45 @@ create policy "iletisim ekleme" on public.iletisim for insert to authenticated
   with check (id = auth.uid());
 create policy "iletisim guncelleme" on public.iletisim for update to authenticated
   using (id = auth.uid()) with check (id = auth.uid());
+
+-- ================= Görüntülü görüşme =================
+-- İki kişi arasında karşılıklı ilgi var mı?
+create or replace function public.karsilikli(a uuid, b uuid) returns boolean
+language sql stable security definer set search_path = public as $$
+  select exists (select 1 from ilgi where from_id = a and to_id = b)
+     and exists (select 1 from ilgi where from_id = b and to_id = a)
+$$;
+
+-- Arama kayıtları: arayan satır ekler, aranan Realtime ile anında görür.
+create table if not exists public.cagri (
+  id bigint generated always as identity primary key,
+  from_id uuid not null references public.profiles(id) on delete cascade,
+  to_id   uuid not null references public.profiles(id) on delete cascade,
+  durum text not null default 'caliyor' check (durum in ('caliyor','kabul','red','iptal','mesgul')),
+  olusturma timestamptz not null default now()
+);
+alter table public.cagri enable row level security;
+create policy "cagri okuma" on public.cagri for select to authenticated
+  using (from_id = auth.uid() or to_id = auth.uid());
+create policy "cagri baslatma" on public.cagri for insert to authenticated
+  with check (from_id = auth.uid() and public.karsilikli(from_id, to_id));
+create policy "cagri durum" on public.cagri for update to authenticated
+  using (from_id = auth.uid() or to_id = auth.uid())
+  with check (from_id = auth.uid() or to_id = auth.uid());
+alter publication supabase_realtime add table public.cagri;
+
+-- Sinyal kanalı "gorusme:<id1>_<id2>": yalnızca bu iki kişi, karşılıklı ilgi varsa katılabilir.
+create policy "gorusme kanali okuma" on realtime.messages for select to authenticated
+  using (
+    realtime.topic() like 'gorusme:%'
+    and auth.uid()::text = any (string_to_array(split_part(realtime.topic(), ':', 2), '_'))
+    and public.karsilikli(split_part(split_part(realtime.topic(), ':', 2), '_', 1)::uuid,
+                          split_part(split_part(realtime.topic(), ':', 2), '_', 2)::uuid)
+  );
+create policy "gorusme kanali yazma" on realtime.messages for insert to authenticated
+  with check (
+    realtime.topic() like 'gorusme:%'
+    and auth.uid()::text = any (string_to_array(split_part(realtime.topic(), ':', 2), '_'))
+    and public.karsilikli(split_part(split_part(realtime.topic(), ':', 2), '_', 1)::uuid,
+                          split_part(split_part(realtime.topic(), ':', 2), '_', 2)::uuid)
+  );
