@@ -1633,3 +1633,355 @@ Her gün yeni bir "ne olurdu?" için takip et.
 
 #anestezi #tıp #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
 ```
+
+## Hiç alışkanlığımız olmasaydı (`aliskanlik.mp4`)
+
+```text
+Bugün yaptıklarının neredeyse yarısını düşünmeden yaptın.
+
+Hiç alışkanlığımız olmasaydı, ne olurdu?
+
+Günlük tutulan bir çalışmada davranışların yaklaşık yüzde 43'ü her gün aynı ortamda tekrarlanan işlerdi ve insanların aklı bu sırada çoğu zaman başka yerdeydi. Yeni bir alışkanlık kazanmak da sanıldığından uzun sürebiliyor: bir çalışmada ortalama 66 gün, kimi için 18 gün, kimi için aylar.
+
+Sence bırakması en zor alışkanlık hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#alışkanlık #beyin #psikoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Amazon hâlâ batıya aksaydı (`amazon.mp4`)
+
+```text
+Amazon Nehri bir zamanlar ters yöne akıyordu.
+
+Amazon bugün de batıya aksaydı, ne olurdu?
+
+And Dağları yükseldikçe nehrin batıya giden yolu kapandı, sular önce dev bir sulak alanda birikti. Yaklaşık 10 milyon yıl önce nehir Atlas Okyanusu'na dökülmeye başladı. Bugün nehirlerin okyanuslara taşıdığı suyun yaklaşık beşte biri Amazon'dan geliyor.
+
+Sence hangi nehir yön değiştirse dünya en çok değişirdi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#amazon #nehir #coğrafya #jeoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Andromeda Samanyolu'na çarpsaydı (`andromeda.mp4`)
+
+```text
+Komşu galaksi Andromeda bize doğru geliyor.
+
+Andromeda Samanyolu'na çarpsaydı, ne olurdu?
+
+2012'de NASA, Hubble verilerine dayanarak çarpışmanın yaklaşık 4,5 milyar yıl sonra olacağını açıkladı. Galaksilerin içi o kadar boş ki yıldızlar neredeyse hiç birbirine çarpmaz, sadece yeni yörüngelere savrulur. 2025'teki bir çalışma ise çarpışmanın kesin olmadığını, ihtimalin yarı yarıya olduğunu buldu.
+
+Sence o gün gökyüzü nasıl görünürdü? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#andromeda #galaksi #samanyolu #uzay #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Bir yıl uzayda yaşasaydın (`astronot.mp4`)
+
+```text
+Astronotlar uzaydan biraz daha uzun döner.
+
+Bir yıl uzayda yaşasaydın, ne olurdu?
+
+Ağırlıksız ortamda vücut yük taşımaz ve zayıflar. NASA'ya göre kemikler her ay yaklaşık yüzde 1-1,5 yoğunluk kaybediyor. Omurga gevşediği için boy yüzde 3'e kadar uzayabiliyor. Sıvılar başa doğru kayıyor, yüz şişiyor. Uzun görevlerdeki astronotların yaklaşık üçte birinde gözde değişiklikler görülmüş. Bu yüzden istasyonda her gün yaklaşık iki saat spor yapıyorlar.
+
+Sence bir yıl uzayda kalmaya dayanır mıydın? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#astronot #uzay #insanvücudu #nasa #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Atomların içi boş olmasaydı (`atom.mp4`)
+
+```text
+Dokunduğun her şey neredeyse boşluktan ibaret.
+
+Atomların içinde hiç boşluk olmasaydı, ne olurdu?
+
+Atom bir futbol sahası kadar olsa, çekirdeği aşağı yukarı bir kum tanesi kadar kalırdı ve kütlenin neredeyse tamamı oradadır. Rutherford'un ekibi ince bir altın yaprağa parçacık yolladığında çoğu geçip gitti, çok azı geri sekti. Bir hesaba göre bu boşluk olmasaydı bütün insanlık bir şeker küpüne sığardı.
+
+Sence evde en dolu görünen şey hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#atom #fizik #rutherford #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Hava basıncı bir anda kalksaydı (`basinc.mp4`)
+
+```text
+Şu an üstünde görünmez bir ağırlık var.
+
+Üstümüzdeki hava basıncı bir anda kalksaydı, ne olurdu?
+
+Deniz seviyesinde hava her metrekareye yaklaşık 10 tonluk ağırlıkla bastırıyor, vücudumuz da içeriden aynı güçle ittiği için hissetmiyoruz. Basınç düşünce patlamazdık ama yaklaşık 19 kilometrede su vücut ısısında kaynıyor, tükürük ve gözyaşı kaynamaya başlıyor. 1654'te Otto von Guericke havasını boşalttığı iki yarım küreyi birleştirdi, anlatılanlara göre otuz at bile ayıramadı.
+
+Sence uçakta kulaklar neden tıkanıyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#basınç #fizik #hava #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Betelgeuse bu gece patlasaydı (`betelgeuse.mp4`)
+
+```text
+Avcı takımyıldızındaki kırmızı yıldız ömrünün sonunda.
+
+Betelgeuse bu gece patlasaydı, ne olurdu?
+
+Korkacak bir şey yok. Bir çalışmaya göre yaklaşık 550 ışık yılı uzakta, zarar veremeyecek kadar uzak. Patlama dolunaya yakın parlar, geceleri gölge düşürür ve aylarca gündüz bile görünürdü. Sonra yavaşça söner, Avcı omzundaki yıldızı kaybederdi. Patlamanın yaklaşık 100 bin yıl içinde olması bekleniyor.
+
+Sence böyle bir şeyi görmek ister miydin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#betelgeuse #süpernova #yıldız #astronomi #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Domates Avrupa'ya hiç gelmeseydi (`domates.mp4`)
+
+```text
+Domatessiz bir İtalyan mutfağı düşünebilir misin?
+
+Domates Avrupa'ya hiç gelmeseydi, ne olurdu?
+
+Domates Amerika kıtasından 1500'lerde geldi. İtalya'da ilk kez 1544'te botanikçi Mattioli tarif etti. Zehirli itüzümünün akrabası olduğu için uzun süre şüpheyle karşılandı. Bilinen en eski domates sosu tarifi 1692'de Napoli'de yayımlandı ve et yemekleri için önerildi. Makarnayla domatesin yazılı ilk buluşması ancak 1800'lerde görülüyor.
+
+Domates olmasa en çok hangi yemeği özlerdin? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#domates #italyanmutfağı #yemektarihi #neolurdu #bilgi #tarih #keşfet #reels #ilginçbilgiler
+```
+
+## Kendimizi gıdıklayabilseydik (`gidiklanma.mp4`)
+
+```text
+Kendini gıdıklamayı hiç denedin mi?
+
+Kendimizi gıdıklayabilseydik, ne olurdu?
+
+Bir hareket yaptığında beynin, o hareketin nasıl hissettireceğini önceden tahmin ediyor ve tahmin edilen dokunuş daha zayıf geliyor. 1998 tarihli bir beyin taramasında bu tahminde beyinciğin rol oynadığı görüldü. Bir robot dokunuşu biraz geciktirince aynı dokunuş daha çok gıdıklattı.
+
+Sence en çok nerenden gıdıklanıyorsun? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#gıdıklanma #beyin #dokunma #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Harita gerçek boyutlarla çizilseydi (`harita.mp4`)
+
+```text
+Okuldaki dünya haritası seni biraz yanıltıyor.
+
+Dünya haritası gerçek boyutlarla çizilseydi, ne olurdu?
+
+Alıştığımız harita, Mercator'un 1569'da denizciler için kullandığı yönteme dayanıyor. Pusulayla aynı yönde giden rota haritada düz çizgi oluyor, ama kutuplara yaklaştıkça ülkeler şişiyor. Grönland neredeyse Afrika kadar görünüyor. Gerçekte Afrika yaklaşık 14 kat büyük.
+
+Sence haritada hangi ülke gerçeğinden en farklı görünüyor? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#harita #coğrafya #dünya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Helyum tükenseydi (`helyum.mp4`)
+
+```text
+Balonlardaki helyum bir gün bitebilir.
+
+Helyum tükenseydi, ne olurdu?
+
+MR cihazlarının mıknatısları sıvı helyumla eksi 269 dereceye kadar soğutuluyor ve bir cihazda 1.500 ile 2.000 litre helyum olabiliyor. Helyum yerin altında uranyum ve toryum bozundukça çok yavaş birikiyor, havaya kaçınca da uzaya gidebiliyor. İlk kez 1868'de bir güneş tutulmasında Güneş'te fark edildi, Dünya'da yaklaşık 27 yıl sonra bulundu.
+
+Sence hangi kaynağı daha dikkatli kullanmalıyız? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#helyum #kimya #element #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## İpek böceği evcilleşmeseydi (`ipekbocegi.mp4`)
+
+```text
+İpek böceğinin kelebeği uçamıyor.
+
+İnsanlar ipek böceğini hiç evcilleştirmeseydi, ne olurdu?
+
+İpek böceği yaklaşık 5000 yıl önce Çin'de evcilleştirildi. Tırtılı yalnızca dut yaprağı yiyor, kozasını yüzlerce metre, bazen neredeyse bir kilometre uzunluğunda tek bir iplikle örüyor. Asya'yı Akdeniz'e bağlayan yollar adını bu kumaştan aldı. Bugün bu kelebek ne uçabiliyor ne de doğada yaşayabiliyor.
+
+Sence tarihi en çok değiştiren hayvan hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#ipekböceği #ipek #ipekyolu #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## İstiridyeler olmasaydı (`istiridye.mp4`)
+
+```text
+Bir avuç istiridye koca bir körfezi temizleyebiliyor.
+
+İstiridyeler hiç olmasaydı, ne olurdu?
+
+İstiridye suyu süzerek beslenir. İyi koşullarda tek bir istiridye günde yüz litreden fazla su süzebiliyor. Bir tahmine göre 1800'lerin sonunda Chesapeake Körfezi'ndeki istiridyeler, körfezin bütün suyunu birkaç günde süzebiliyordu. Bugün o nüfusun yalnızca yüzde birkaçı kaldı.
+
+Sence denizde en çok hangi canlıyı küçümsüyoruz? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#istiridye #deniz #ekoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Güneş karadeliğe dönüşseydi (`karadelik.mp4`)
+
+```text
+Karadelikler her şeyi yutar, öyle biliriz.
+
+Güneş bir anda aynı kütlede bir karadeliğe dönüşseydi, ne olurdu?
+
+Dünya içine çekilmezdi, aynı yörüngede dönmeye devam ederdi. Çekim kütleye ve uzaklığa bağlı, ikisi de değişmiyor. Böyle bir karadeliğin olay ufku yalnızca 3 kilometre kadar olurdu. Sorun ışıkta: yaklaşık 8 dakika sonra gökyüzü kararır, Dünya soğumaya başlardı. Neyse ki Güneş bunun için fazla hafif.
+
+Sence Güneş'in en çok neyini özlerdik? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#karadelik #güneş #uzay #astronomi #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Yağmur kayaları eritmeseydi (`magara.mp4`)
+
+```text
+Mağaraları kazan şey yağmur damlaları.
+
+Yağmur suyu kayaları hiç eritmeseydi, ne olurdu?
+
+Yağmur suyu karbondioksit alıp zayıf bir aside dönüşüyor, kireçtaşını binlerce yılda eritiyor. Mağaralar, yeraltı nehirleri ve kaynaklar böyle oluşuyor. Bir çalışmaya göre dünyada yaklaşık on kişiden biri içme suyunu bu kayalardan alıyor. Chauvet Mağarası'ndaki resimler de 30 bin yıldan eski.
+
+Sence gördüğün en etkileyici mağara hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#mağara #jeoloji #su #coğrafya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Bütün muzlar aynı hastalığa yakalansaydı (`muz.mp4`)
+
+```text
+Markette aldığın muz büyük ihtimalle bir klon.
+
+Bütün muzlar aynı hastalığa yakalansaydı, ne olurdu?
+
+Bu bir kez yaşandı. 1950'lere kadar dünyaya satılan muz Gros Michel çeşidiydi. Toprakta yaşayan bir mantarın yol açtığı Panama hastalığı plantasyonları kurutunca şirketler dayanıklı Cavendish'e geçti. Bugün muz üretiminin yaklaşık yarısı Cavendish ve bu muzlar filizden çoğaltıldığı için genetik olarak neredeyse aynı. TR4 denen yeni bir mantar türü 2019'da Latin Amerika'ya da ulaştı.
+
+En sevdiğin meyve yok olsa yerine ne koyardın? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#muz #tarım #biyoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Nil hiç taşmasaydı (`nil.mp4`)
+
+```text
+Mısır'ın tarlalarını binlerce yıl bir sel gübreledi.
+
+Nil Nehri hiç taşmasaydı, ne olurdu?
+
+Nil her yaz Etiyopya'daki yağmurlarla kabarır, kıyılara kara bir çamur bırakırdı. 1970'te Asvan Yüksek Barajı tamamlanınca yıllık taşkın bitti. Çamurun neredeyse tamamı artık Nasır Gölü'nde kalıyor, çiftçiler kimyasal gübre kullanıyor, delta yer yer aşınıyor.
+
+Sence bir nehrin taşmasını durdurmak doğru mu? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#nil #mısır #nehir #coğrafya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Radyoaktivite keşfedilmeseydi (`radyoaktivite.mp4`)
+
+```text
+Bulutlu bir gün, fiziğin yönünü değiştirdi.
+
+Radyoaktivite hiç keşfedilmeseydi, ne olurdu?
+
+1896'da Becquerel uranyum tuzlarını fotoğraf plakasıyla bir çekmeceye koydu. Güneş yoktu ama plaka yine de karardı. O güne kadar Kelvin, Dünya'nın yaşını soğuma hesabıyla 20 ile 400 milyon yıl arası bulmuştu. Radyoaktif ısıyı bilmiyordu. 1956'da göktaşlarındaki kurşunla Dünya'nın yaşı yaklaşık 4,5 milyar yıl çıktı.
+
+Sence tesadüfen bulunan en önemli şey ne? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#radyoaktivite #fizik #bilimtarihi #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Rüyada kaslarımız gevşemeseydi (`ruya.mp4`)
+
+```text
+Her gece uyurken birkaç kez felç oluyorsun.
+
+Rüya görürken kaslarımız gevşemeseydi, ne olurdu?
+
+Canlı rüyaların çoğu REM uykusunda görülür. Bu sırada beyin sapı kol ve bacak kaslarını geçici olarak felç eder. Michel Jouvet bu kilidi bozulan kedilerin uykuda görünmeyen bir avın üstüne atladığını gördü. İnsanlarda da bu kilidin bozulduğu nadir bir bozukluk var: kişi rüyada kavga ederken gerçekten yumruk atabiliyor.
+
+Sence gördüğün en tuhaf rüya neydi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#rüya #uyku #beyin #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Koni salyangozları olmasaydı (`salyangoz.mp4`)
+
+```text
+Bir salyangozun zehri bugün ağrı kesici olarak kullanılıyor.
+
+Koni salyangozları hiç olmasaydı, ne olurdu?
+
+Koni salyangozları zehirli bir zıpkınla balık avlıyor. Coğrafya konisi avlanırken suya insülin bırakıyor, kan şekeri düşen balık sersemliyor. Başka bir koni türünün zehrinden geliştirilen ziconotide 2004'te Amerika'da onaylandı. Başka ilaçların işe yaramadığı şiddetli ağrılarda omurilik sıvısına veriliyor.
+
+Sence denizde başka hangi ilaçlar saklı? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#salyangoz #deniz #tıp #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Vanilyayı elle tozlaştırmayı kimse bulmasaydı (`vanilya.mp4`)
+
+```text
+Vanilyanın sırrını 12 yaşında bir çocuk çözdü.
+
+Vanilyayı elle tozlaştırmayı kimse bulmasaydı, ne olurdu?
+
+Vanilya, anavatanı Meksika olan bir orkide. Başka ülkelere götürülünce çiçek açtı ama yıllarca meyve vermedi. 1841'de Reunion Adası'nda köle olarak yaşayan 12 yaşındaki Edmond Albius, ince bir çubuk ve başparmağıyla çiçekleri tek tek tozlaştırmanın yolunu buldu. Her çiçek yaklaşık bir gün açık kalıyor. Yöntemi bugün de kullanılıyor, Albius ise yoksulluk içinde öldü.
+
+Sence tarih başka kimleri unuttu? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#vanilya #baharat #tarih #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Yüzleri tanıyamasaydık (`yuzler.mp4`)
+
+```text
+Kalabalıkta annenin yüzünü bir anda bulursun.
+
+Yüzleri tanıyamasaydık, ne olurdu?
+
+Buna yüz körlüğü, yani prozopagnozi deniyor. Bir Harvard araştırmasına göre her elli kişiden biri bundan etkileniyor olabilir. Bu kişiler insanları sesinden, yürüyüşünden ya da saçından tanımaya çalışıyor. Nörolog Oliver Sacks da yüz körüydü. Yeni doğmuş bebekler bile yüze benzeyen şekillere daha çok bakıyor.
+
+Sence birini en çok neyinden tanırsın? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#yüzkörlüğü #beyin #psikoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
