@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Denk Uyum Testi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Ciddi evlilik düşünenler için değerlere dayalı uyum testi. Kayıt yok, verileriniz cihazınızda kalır.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: tek sütun, dar okuma kolonu; nar kırmızısı yalnız eylem ve puanlarda. */
+:root{
+  --bg:#F6F3F4; --surface:#FFFFFF; --ink:#22181D; --muted:#6E6068; --line:#E4DBDF;
+  --nar:#B3284F; --nar-soft:#F6DCE4; --sage:#3F7A68; --sage-soft:#DCEDE6;
+  --display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#161013; --surface:#211A1E; --ink:#F3ECEF; --muted:#AFA0A8; --line:#3A2F35;
+  --nar:#F0688F; --nar-soft:#43202C; --sage:#7CC4AC; --sage-soft:#1D3A31; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161013; --surface:#211A1E; --ink:#F3ECEF; --muted:#AFA0A8; --line:#3A2F35;
+  --nar:#F0688F; --nar-soft:#43202C; --sage:#7CC4AC; --sage-soft:#1D3A31; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body);
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 56px;display:flex;flex-direction:column;gap:28px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font:800 26px/1 var(--display);letter-spacing:-.02em;color:var(--ink);text-decoration:none}
+.logo span{color:var(--nar)}
+.top a.lnk{color:var(--muted);font-size:15px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(34px,8vw,52px);line-height:1.05;font-weight:800}
+h2{font-size:clamp(24px,5vw,30px);line-height:1.15;font-weight:700}
+h3{font-size:19px;font-weight:700}
+p{margin:0}
+.eyebrow{font:600 13px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--nar)}
+.lead{font-size:19px;color:var(--muted);max-width:34em}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{appearance:none;border:0;cursor:pointer;font:600 17px/1 var(--body);padding:16px 22px;border-radius:999px;
+  background:var(--nar);color:var(--surface);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn:focus-visible,.opt:focus-visible,input:focus-visible{outline:3px solid var(--nar);outline-offset:3px}
+.btn:disabled{opacity:.45;cursor:default}
+.topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.topics div{background:var(--surface);padding:16px;display:flex;flex-direction:column;gap:4px}
+.topics b{font:700 17px var(--display)}
+.topics small{color:var(--muted);font-size:14px;line-height:1.45}
+.band{background:var(--sage-soft);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:10px}
+.band h2{color:var(--ink)}
+.band .tag{font-size:13px;font-weight:600;color:var(--sage);letter-spacing:.08em;text-transform:uppercase}
+.note{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:6px}
+/* anket */
+.prog{height:6px;background:var(--line);border-radius:9px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--nar);transition:width .25s}
+.qmeta{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+.q{font:700 clamp(22px,5vw,28px)/1.25 var(--display);text-wrap:balance;min-height:3.8em}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{appearance:none;text-align:left;font:500 17px var(--body);color:var(--ink);background:var(--surface);
+  border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;display:flex;gap:12px;align-items:center}
+.opt .dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex:none}
+.opt.on{border-color:var(--nar);background:var(--nar-soft)}
+.opt.on .dot{border-color:var(--nar);background:var(--nar);box-shadow:inset 0 0 0 3px var(--nar-soft)}
+@media (hover:hover){.opt:hover{border-color:var(--nar)}}
+/* sonuç */
+.persona{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:10px}
+.persona h2{font-size:clamp(30px,7vw,40px);color:var(--nar)}
+.bars{display:flex;flex-direction:column;gap:14px}
+.bar{display:grid;grid-template-columns:8.5em 1fr 3em;gap:12px;align-items:center;font-size:15px}
+.bar .t{height:10px;background:var(--line);border-radius:9px;overflow:hidden}
+.bar .t i{display:block;height:100%;background:var(--sage);border-radius:9px}
+.bar.n .t i{background:var(--nar)}
+.bar em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.bar .lbl{min-width:0}
+.bar .lbl small{display:block;color:var(--muted);font-size:13px;line-height:1.3}
+.code{font:700 clamp(20px,5.5vw,26px)/1.2 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;letter-spacing:.04em;
+  background:var(--surface);border:1.5px dashed var(--nar);border-radius:12px;padding:14px;text-align:center;user-select:all;word-break:break-all}
+label{font-weight:600;font-size:15px}
+input[type=text]{width:100%;font:500 18px var(--body);color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:14px}
+input.mono{font-family:ui-monospace,Menlo,Consolas,monospace;text-transform:uppercase;letter-spacing:.04em}
+.err{color:var(--nar);font-size:14px;min-height:1.4em}
+.score{display:flex;align-items:baseline;gap:10px}
+.score b{font:800 clamp(64px,18vw,96px)/1 var(--display);color:var(--nar);font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.score span{color:var(--muted)}
+.diffs{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.diffs li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.diffs .ans{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--muted)}
+.diffs .ans b{color:var(--ink);font-weight:600}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);
+  padding:10px 18px;border-radius:999px;font-size:15px}
+footer{font-size:13px;color:var(--muted);text-align:center}
+@media (max-width:480px){.topics{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:7em 1fr 2.6em}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#">denk<span>.</span></a>
+    <a class="lnk" href="#nasil">Puan nasıl hesaplanır?</a>
+  </header>
+  <main id="app"></main>
+  <footer>Denk · Cevaplarınız yalnızca bu cihazda saklanır, hiçbir sunucuya gönderilmez.</footer>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const DIMS = {
+  din:  {ad:"İnanç ve gelenek", kisa:"İnanç"},
+  aile: {ad:"Aile bağları",     kisa:"Aile"},
+  para: {ad:"Para yönetimi",    kisa:"Para"},
+  ilet: {ad:"İletişim tarzı",   kisa:"İletişim"}
+};
+// r: true ise kişilik puanında ters çevrilir (eşleşmede ham cevap kullanılır)
+const Q = [
+  ["din","Günlük hayatımda dini pratikler (namaz, oruç vb.) önemli bir yer tutar."],
+  ["din","Eşimin de benimle aynı ölçüde dindar olmasını isterim."],
+  ["din","Çocuklarımın dini eğitim almasını önemserim."],
+  ["din","Evde alkol bulunması benim için sorun olmaz.",true],
+  ["din","Bayramları ve dini günleri geleneklere uygun geçirmek isterim."],
+  ["aile","Evlendikten sonra ailemle haftada en az bir kez görüşmek isterim."],
+  ["aile","Büyük kararlarda ailemin fikrini almak benim için önemlidir."],
+  ["aile","Ailemin yakınında oturmayı tercih ederim."],
+  ["aile","Evlendikten sonra kararlar yalnızca çifte aittir, aileler karışmamalı.",true],
+  ["aile","Çocuk sahibi olmak benim için evliliğin olmazsa olmazı."],
+  ["para","Eşlerin gelirleri ortak bir hesapta toplanmalı."],
+  ["para","Gelecek için birikim yapmayı bugünkü harcamalara tercih ederim."],
+  ["para","Araba, tatil gibi büyük harcamalara birlikte karar verilmeli."],
+  ["para","Krediyle ya da taksitle alışveriş yapmak beni rahatsız etmez.",true],
+  ["para","Evliliğin ilk yıllarında iki eşin de çalışmasını isterim."],
+  ["ilet","Bir sorun çıktığında hemen konuşup çözmeyi tercih ederim."],
+  ["ilet","Duygularımı eşime açıkça söyleyebilirim."],
+  ["ilet","Tartışmada önce bir süre yalnız kalıp sakinleşmem gerekir.",true],
+  ["ilet","Eşimle her gün baş başa vakit geçirmek isterim."],
+  ["ilet","Evli olsam da arkadaşlarımla ayrı vakit geçirmem normaldir.",true]
+];
+const OPTS = ["Kesinlikle katılmıyorum","Katılmıyorum","Kararsızım","Katılıyorum","Kesinlikle katılıyorum"];
+const PERSONA = {
+  din: ["Değer Odaklı","İnancınız ve gelenekleriniz evlilik hayalinizin merkezinde. Sizin için uyumun ilk şartı aynı değerleri paylaşmak.","Adayla ilk görüşmelerde ibadet, bayramlar ve çocukların yetiştirilmesi hakkında açık konuşun."],
+  aile:["Aile Köprüsü","Evliliği iki kişinin değil iki ailenin birleşmesi olarak görüyorsunuz. Yakınlık ve dayanışma sizin için çok değerli.","Ailelerin evliliğe ne kadar dahil olacağını baştan konuşmak sonraki kırgınlıkları önler."],
+  para:["Planlı Ortak","Geleceği planlamayı ve ortak kararı seviyorsunuz. Güven sizin için düzenli bir bütçeyle başlıyor.","Gelirlerin nasıl paylaşılacağını ve borca bakışınızı erken konuşun."],
+  ilet:["Açık Kalp","Konuşmak, paylaşmak ve birlikte vakit geçirmek sizin için evliliğin özü. Sessizlik sizi yorar.","Adayın tartışmalarda nasıl davrandığını görmeye çalışın; sizin için en belirleyici konu bu."],
+  denge:["Dengeli Yol Arkadaşı","Hiçbir konuda uçta değilsiniz. Esnek ve uzlaşmaya açık birisiniz.","Esneklik güzel ama net olmadığınız konular adayı şaşırtabilir. Önceliklerinizi kendinize sorun."]
+};
+
+const $ = s => document.querySelector(s);
+const app = $("#app");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem("denk_"+k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem("denk_"+k, JSON.stringify(v)); }catch(e){} }
+};
+let S = { cevap: store.get("cevap"), es: null, mod: "tek", sira: [], i: 0, kim: "Siz" };
+
+function toast(t){ const el=$("#toast"); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,2200); }
+
+// Kod: 20 cevap (1-5) -> 0-4 basamakları, 4'lü bloklar halinde base-5 gruplar
+function kodla(c){ return "DENK-" + c.map(v=>v-1).join("").match(/.{5}/g).join("-"); }
+function coz(k){
+  const d = String(k).toUpperCase().replace(/DENK/,"").replace(/[^0-4]/g,"");
+  return d.length===Q.length ? [...d].map(x=>+x+1) : null;
+}
+
+function profil(c){
+  const p={};
+  for(const k in DIMS){
+    const idx=Q.map((q,i)=>q[0]===k?i:-1).filter(i=>i>=0);
+    p[k]=Math.round(idx.reduce((s,i)=>s+((Q[i][2]?6-c[i]:c[i])-1),0)/(idx.length*4)*100);
+  }
+  return p;
+}
+function personaSec(p){
+  const v=Object.values(p), en=Object.keys(p).reduce((a,b)=>p[a]>=p[b]?a:b);
+  return (Math.max(...v)-Math.min(...v)<15) ? PERSONA.denge : PERSONA[en];
+}
+function uyum(a,b){
+  const d={}; let top=0, n=0;
+  for(const k in DIMS){
+    const idx=Q.map((q,i)=>q[0]===k?i:-1).filter(i=>i>=0);
+    d[k]=Math.round(idx.reduce((s,i)=>s+(1-Math.abs(a[i]-b[i])/4),0)/idx.length*100);
+    top+=d[k]; n++;
+  }
+  const farklar=Q.map((q,i)=>({i,f:Math.abs(a[i]-b[i])})).filter(x=>x.f>=2).sort((x,y)=>y.f-x.f).slice(0,4);
+  return {genel:Math.round(top/n), d, farklar};
+}
+function barlar(obj, cls=""){
+  return `<div class="bars">${Object.keys(DIMS).map(k=>`
+    <div class="bar ${cls}"><div class="lbl">${DIMS[k].ad}</div><div class="t"><i style="width:${obj[k]}%"></i></div><em>${obj[k]}</em></div>`).join("")}</div>`;
+}
+
+/* ---------- görünümler ---------- */
+function anaSayfa(){
+  app.innerHTML = `<div class="stack" style="gap:28px">
+    <section class="stack">
+      <p class="eyebrow">Ciddi evlilik düşünenler için</p>
+      <h1>Size denk kişiyi değerlerinizle tanıyın.</h1>
+      <p class="lead">20 soruluk, yaklaşık 5 dakikalık bir testle evlilik profilinizi çıkarın. Sonra uyum kodunuzu tanıştığınız kişiyle paylaşın, hangi konularda denk olduğunuzu görün.</p>
+      <div class="row">
+        <button class="btn" id="b-basla">Teste başla</button>
+        ${S.cevap?`<a class="btn ghost" href="#sonuc">Sonucumu gör</a>`:""}
+      </div>
+    </section>
+    <section class="topics" aria-label="Testin konuları">
+      <div><b>İnanç ve gelenek</b><small>İbadet, bayramlar, çocukların yetiştirilmesi</small></div>
+      <div><b>Aile bağları</b><small>Görüşme sıklığı, kararlar, nerede oturulacağı</small></div>
+      <div><b>Para yönetimi</b><small>Ortak hesap, birikim, borca bakış</small></div>
+      <div><b>İletişim tarzı</b><small>Tartışma, duygular, birlikte geçen vakit</small></div>
+    </section>
+    <section class="band">
+      <span class="tag">Evli misiniz? · Kayıt gerekmez</span>
+      <h2>Eşinizle aynı telefondan çözün, en uyumlu olduğunuz konuları görün.</h2>
+      <div class="row"><button class="btn ghost" id="b-cift">Çift olarak başla</button></div>
+    </section>
+    <section class="stack">
+      <h3>Elinizde bir uyum kodu mu var?</h3>
+      <p style="color:var(--muted)">Biri size <b>DENK-</b> ile başlayan bir kod gönderdiyse testi çözün, sonuç sayfasında kodu girip karşılaştırın.</p>
+    </section>
+    <div class="note"><p>Cevaplarınız yalnızca bu cihazda saklanır. Kodunuzu siz paylaşmadıkça kimse göremez.</p></div>
+  </div>`;
+  $("#b-basla").onclick=()=>baslat("tek");
+  $("#b-cift").onclick=()=>baslat("cift1");
+}
+
+function baslat(mod){
+  S.mod=mod; S.sira=Array(Q.length).fill(0); S.i=0;
+  S.kim = mod==="cift1" ? "1. eş" : mod==="cift2" ? "2. eş" : "Siz";
+  location.hash="anket"; render();
+}
+
+function anket(){
+  if(!S.sira.length){ S.sira=Array(Q.length).fill(0); S.i=0; }
+  const i=S.i, q=Q[i];
+  app.innerHTML = `<div class="stack" style="gap:22px">
+    <div class="stack" style="gap:8px">
+      <div class="qmeta"><span>${esc(S.kim)} · ${DIMS[q[0]].ad}</span><span>${i+1} / ${Q.length}</span></div>
+      <div class="prog"><i style="width:${(i)/Q.length*100}%"></i></div>
+    </div>
+    <p class="q">${esc(q[1])}</p>
+    <div class="opts" role="radiogroup" aria-label="Cevabınız">
+      ${OPTS.map((o,k)=>`<button class="opt ${S.sira[i]===k+1?"on":""}" role="radio" aria-checked="${S.sira[i]===k+1}" data-v="${k+1}" id="o${k}"><span class="dot"></span>${o}</button>`).join("")}
+    </div>
+    <div class="row" style="justify-content:space-between">
+      <button class="btn ghost" id="b-geri" ${i===0?"disabled":""}>Geri</button>
+      ${S.sira[i]?`<button class="btn" id="b-ileri">${i===Q.length-1?"Sonucu gör":"İleri"}</button>`:""}
+    </div>
+  </div>`;
+  app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    S.sira[i]=+b.dataset.v;
+    if(i<Q.length-1){ S.i++; setTimeout(anket,140); app.querySelectorAll(".opt").forEach(x=>x.classList.toggle("on",x===b)); }
+    else bitir();
+  });
+  $("#b-geri").onclick=()=>{ if(S.i>0){S.i--; anket();} };
+  const ileri=$("#b-ileri"); if(ileri) ileri.onclick=()=>{ if(i<Q.length-1){S.i++; anket();} else bitir(); };
+}
+
+function bitir(){
+  const c=S.sira.slice(); S.sira=[];
+  if(S.mod==="cift1"){ S.es=c; app.innerHTML=`<div class="stack" style="gap:20px">
+      <p class="eyebrow">1. eş tamamladı</p><h2>Şimdi telefonu eşinize verin.</h2>
+      <p class="lead">Cevapları görmeden çözmesi sonucu daha dürüst yapar.</p>
+      <div class="row"><button class="btn" id="b-2">2. eş başlasın</button></div></div>`;
+    $("#b-2").onclick=()=>baslat("cift2"); return; }
+  if(S.mod==="cift2"){ S.karsi=c; S.karsiAd="2. eş"; S.ben=S.es; S.benAd="1. eş"; location.hash="uyum"; return render(); }
+  S.cevap=c; store.set("cevap",c); location.hash="sonuc"; render();
+}
+
+function sonuc(){
+  if(!S.cevap){ return baslat("tek"); }
+  const p=profil(S.cevap), [ad,acik,ipucu]=personaSec(p), kod=kodla(S.cevap);
+  app.innerHTML=`<div class="stack" style="gap:26px">
+    <div class="persona">
+      <p class="eyebrow">Evlilik profiliniz</p>
+      <h2>${ad}</h2>
+      <p>${acik}</p>
+      <p style="color:var(--muted);font-size:15px">${ipucu}</p>
+    </div>
+    <section class="stack"><h3>Konulara göre önem verdiğiniz düzey</h3>${barlar(p)}
+      <p style="color:var(--muted);font-size:14px">100: bu konuyu evlilikte çok belirleyici görüyorsunuz. 0: sizin için esnek.</p></section>
+    <section class="stack">
+      <h3>Uyum kodunuz</h3>
+      <p style="color:var(--muted)">Tanıştığınız kişiye gönderin. O da testi çözüp kodunuzu girince ikiniz de aynı uyum sonucunu görürsünüz.</p>
+      <div class="code" id="kod">${kod}</div>
+      <div class="row"><button class="btn ghost" id="b-kopya">Kodu kopyala</button><button class="btn ghost" id="b-yeni">Testi yeniden çöz</button></div>
+    </section>
+    <section class="stack">
+      <h3>Bir kodla karşılaştırın</h3>
+      <form id="f" class="stack" novalidate>
+        <div class="stack" style="gap:6px"><label for="k-ad">Kişinin adı (isteğe bağlı)</label><input type="text" id="k-ad" placeholder="Örneğin Elif" autocomplete="off"></div>
+        <div class="stack" style="gap:6px"><label for="k-kod">Uyum kodu</label><input type="text" id="k-kod" class="mono" placeholder="DENK-01234-..." autocomplete="off" spellcheck="false"></div>
+        <p class="err" id="err" role="alert"></p>
+        <div class="row"><button class="btn" type="submit">Uyumu hesapla</button></div>
+      </form>
+    </section>
+  </div>`;
+  $("#b-kopya").onclick=()=>{
+    navigator.clipboard?.writeText(kod).then(()=>toast("Kod kopyalandı"),()=>{selectEl($("#kod"));toast("Kodu seçtim, kopyalayabilirsiniz");})
+      ?? (selectEl($("#kod")), toast("Kodu seçtim, kopyalayabilirsiniz"));
+  };
+  $("#b-yeni").onclick=()=>baslat("tek");
+  $("#f").onsubmit=e=>{
+    e.preventDefault();
+    const c=coz($("#k-kod").value);
+    if(!c){ $("#err").textContent="Kod eksik ya da hatalı. DENK- ile başlayan kodun tamamını yapıştırın."; return; }
+    S.ben=S.cevap; S.benAd="Siz"; S.karsi=c; S.karsiAd=$("#k-ad").value.trim()||"Diğer kişi";
+    location.hash="uyum"; render();
+  };
+}
+function selectEl(el){ const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+function uyumSayfa(){
+  if(!S.ben||!S.karsi){ location.hash=S.cevap?"sonuc":""; return render(); }
+  const u=uyum(S.ben,S.karsi), A=esc(S.benAd), B=esc(S.karsiAd);
+  const sirali=Object.keys(u.d).sort((x,y)=>u.d[y]-u.d[x]);
+  const yorum = u.genel>=85?"Temel değerlerde büyük ölçüde denksiniz.":u.genel>=70?"Çoğu konuda aynı yerdesiniz. Farklı olduğunuz birkaç konuyu konuşun.":u.genel>=55?"Önemli farklarınız var. Bunlar konuşularak aşılabilir ama göz ardı edilmemeli.":"Birçok temel konuda farklı düşünüyorsunuz. Bunları açıkça konuşmadan karar vermeyin.";
+  app.innerHTML=`<div class="stack" style="gap:26px">
+    <section class="stack" style="gap:8px">
+      <p class="eyebrow">${A} ve ${B}</p>
+      <div class="score"><b>%${u.genel}</b><span>uyum</span></div>
+      <p class="lead">${yorum}</p>
+    </section>
+    <section class="stack"><h3>Konu konu uyum</h3>${barlar(u.d,"n")}
+      ${u.d[sirali[0]]>u.d[sirali[3]]?`<p style="color:var(--muted);font-size:15px">En denk olduğunuz konu: <b style="color:var(--ink)">${DIMS[sirali[0]].ad}</b>. En çok konuşmanız gereken: <b style="color:var(--ink)">${DIMS[sirali[3]].ad}</b>.</p>`:""}</section>
+    <section class="stack"><h3>Konuşmanız gereken sorular</h3>
+      ${u.farklar.length?`<ul class="diffs">${u.farklar.map(x=>`<li><span>${esc(Q[x.i][1])}</span>
+        <span class="ans"><span>${A}: <b>${OPTS[S.ben[x.i]-1]}</b></span><span>${B}: <b>${OPTS[S.karsi[x.i]-1]}</b></span></span></li>`).join("")}</ul>`
+        :`<p style="color:var(--muted)">Hiçbir soruda iki basamaktan fazla ayrılmadınız.</p>`}
+    </section>
+    <div class="row"><a class="btn" href="#">Ana sayfa</a>${S.cevap?`<a class="btn ghost" href="#sonuc">Profilime dön</a>`:""}</div>
+  </div>`;
+}
+
+function nasil(){
+  app.innerHTML=`<div class="stack" style="gap:18px">
+    <p class="eyebrow">Puan nasıl hesaplanır?</p>
+    <h2>Basit ve açık bir yöntem.</h2>
+    <p>Test dört konuda beşer sorudan oluşur. Her soruya 1 ile 5 arasında bir cevap verirsiniz.</p>
+    <p>İki kişinin aynı soruya verdiği cevaplar arasındaki fark ölçülür. Aynı cevap tam puan, en uç iki cevap sıfır puan alır. Bir konunun puanı o konudaki beş sorunun ortalamasıdır. Genel uyum, dört konunun ortalamasıdır.</p>
+    <p>Profiliniz, her konuya verdiğiniz önemin düzeyine göre belirlenir. Bazı sorular ters yönlüdür; örneğin “evde alkol bulunması sorun olmaz” sorusuna katılmak inanç puanını düşürür.</p>
+    <p style="color:var(--muted)">Bu test bir sohbet başlatıcıdır, psikolojik bir ölçek değildir. Evlilik kararını bir puana bırakmayın; farklı çıktığınız konuları yüz yüze konuşun.</p>
+    <div class="row"><a class="btn" href="#">Ana sayfa</a></div>
+  </div>`;
+}
+
+function render(){
+  const h=location.hash.slice(1);
+  window.scrollTo(0,0);
+  if(h==="anket") return S.sira.length?anket():baslat("tek");
+  if(h==="sonuc") return sonuc();
+  if(h==="uyum") return uyumSayfa();
+  if(h==="nasil") return nasil();
+  anaSayfa();
+}
+addEventListener("hashchange",render);
+render();
+</script>
+</body>
+</html>
