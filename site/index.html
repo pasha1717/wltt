@@ -111,6 +111,9 @@ nav.nav a{color:var(--muted);font-size:15px;text-decoration:none;font-weight:500
 nav.nav a.on{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
 nav.nav a.cta{color:var(--nar);font-weight:600}
 .demo{background:var(--nar-soft);color:var(--ink);font-size:14px;border-radius:10px;padding:10px 14px}
+.btn.google{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line);justify-content:center;width:100%}
+.ayrac{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:14px}
+.ayrac::before,.ayrac::after{content:"";flex:1;height:1px;background:var(--line)}
 .seg{display:flex;background:var(--line);border-radius:999px;padding:4px;gap:4px}
 .seg button{flex:1;appearance:none;border:0;background:transparent;font:600 15px var(--body);color:var(--muted);padding:10px;border-radius:999px;cursor:pointer}
 .seg button.on{background:var(--surface);color:var(--ink)}
@@ -274,7 +277,7 @@ const yas = y => y ? new Date().getFullYear()-y : "";
 /* ================= Veri katmanı ================= */
 // İki uygulama aynı arayüzü sunar: Supabase (gerçek) ve demo (bu cihazda, örnek profillerle).
 function supabaseApi(){
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {auth:{flowType:"pkce"}});
   let uid = null;
   const ok = ({data,error}) => { if(error) throw error; return data; };
   const PROFIL_ALAN = "id,ad,dogum_yili,cinsiyet,sehir,hakkinda,cevap,gorunur";
@@ -283,6 +286,8 @@ function supabaseApi(){
     async oturum(){ const u=(await sb.auth.getSession()).data.session?.user||null; uid=u?.id||null; return u; },
     async kayit(email,sifre){ const d=ok(await sb.auth.signUp({email,password:sifre})); uid=d.session?.user.id||null; return !!d.session; },
     async giris(email,sifre){ const d=ok(await sb.auth.signInWithPassword({email,password:sifre})); uid=d.user.id; },
+    // Google ile giriş: Google sayfasına gider, giriş sonrası bu sayfaya ?code= ile döner; supabase-js oturumu kendisi açar.
+    async google(){ ok(await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+location.pathname,queryParams:{prompt:"select_account"}}})); },
     async cikis(){ await sb.auth.signOut(); uid=null; },
     async profilim(){ return ok(await sb.from("profiles").select(PROFIL_ALAN).eq("id",uid).maybeSingle()); },
     async profilKaydet(p,iletisim){
@@ -333,6 +338,10 @@ function demoApi(){
       email=email.toLowerCase(); if(db.hesap[email]) hata("Bu e-posta ile zaten bir hesap var. Giriş yapın.");
       const id="u"+Date.now().toString(36); db.hesap[email]={id,sifre}; kaydet(); store.set("demo_oturum",id); return true;
     },
+    async google(){ // demo: Google girişini taklit eder
+      const email="demo.kullanici@gmail.com"; db.hesap[email] ??= {id:"g"+Date.now().toString(36),sifre:null}; kaydet();
+      store.set("demo_oturum",db.hesap[email].id); location.reload();
+    },
     async giris(email,sifre){ const h=db.hesap[email.toLowerCase()]; if(!h||h.sifre!==sifre) hata("E-posta ya da şifre hatalı."); store.set("demo_oturum",h.id); },
     async cikis(){ store.set("demo_oturum",null); },
     async profilim(){ return db.profil[uid()]||null; },
@@ -378,6 +387,7 @@ function hataMetni(e){
   if(/Invalid login/i.test(m)) return "E-posta ya da şifre hatalı.";
   if(/already registered/i.test(m)) return "Bu e-posta ile zaten bir hesap var. Giriş yapın.";
   if(/Password should be/i.test(m)) return "Şifre en az 6 karakter olmalı.";
+  if(/provider is not enabled/i.test(m)) return "Google ile giriş henüz açılmadı. Site yöneticisinin Supabase panelinde Google sağlayıcısını etkinleştirmesi gerekiyor.";
   if(/Email not confirmed/i.test(m)) return "E-postanızı doğrulamadınız. Gelen kutunuzdaki bağlantıya tıklayın.";
   if(/fetch|network/i.test(m)) return "Sunucuya ulaşılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.";
   return "Bir sorun oluştu: "+m;
@@ -602,6 +612,11 @@ function giris(){
   const ciz = () => {
     app.innerHTML=`<div class="stack" style="gap:22px;max-width:440px">
       <div class="stack" style="gap:8px"><p class="eyebrow">Hesabınız</p><h2>${mod==="kayit"?"Ücretsiz üye olun":"Tekrar hoş geldiniz"}</h2></div>
+      <div class="stack" style="gap:10px">
+        <button class="btn google" id="g-google" type="button"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Google ile devam et</button>
+        <p style="color:var(--muted);font-size:13px">Google ile devam ederek 18 yaşından büyük olduğunuzu, profil bilgilerinizin üye adaylara gösterilmesini ve iletişim bilginizin yalnızca karşılıklı ilgi olduğunda paylaşılmasını kabul etmiş olursunuz.</p>
+      </div>
+      <p class="ayrac">ya da e-posta ile</p>
       <div class="seg" role="tablist"><button id="t-kayit" class="${mod==="kayit"?"on":""}" role="tab">Üye ol</button><button id="t-giris" class="${mod==="giris"?"on":""}" role="tab">Giriş yap</button></div>
       <form id="fg" class="stack" novalidate>
         <div class="fld"><label for="g-email">E-posta</label><input type="email" id="g-email" autocomplete="email" required></div>
@@ -611,6 +626,10 @@ function giris(){
         <div class="row"><button class="btn" type="submit" id="g-btn">${mod==="kayit"?"Hesap oluştur":"Giriş yap"}</button></div>
       </form>
     </div>`;
+    $("#g-google").onclick=async()=>{
+      const b=$("#g-google"); b.disabled=true; store.set("oauth",1);
+      try{ await api.google(); }catch(ex){ store.set("oauth",null); $("#gerr").textContent=hataMetni(ex); b.disabled=false; }
+    };
     $("#t-kayit").onclick=()=>{ mod=S.girisMod="kayit"; ciz(); };
     $("#t-giris").onclick=()=>{ mod=S.girisMod="giris"; ciz(); };
     $("#fg").onsubmit=async e=>{
@@ -637,7 +656,8 @@ function giris(){
 /* ---------- profil ---------- */
 async function profilSayfa(){
   if(!S.user){ location.hash="giris"; return; }
-  const p=S.profil||{}, ilet = S.profil ? await api.iletisimim() : "";
+  const meta=S.user.user_metadata||{};
+  const p=S.profil||{ad:(meta.given_name||meta.full_name||meta.name||"").split(" ")[0]}, ilet = S.profil ? await api.iletisimim() : "";
   const c=gecerli(p.cevap)||S.cevap, yil=new Date().getFullYear();
   app.innerHTML=`<div class="stack" style="gap:26px">
     <div class="stack" style="gap:8px"><p class="eyebrow">Profilim</p><h2>${S.profil?"Profil bilgileriniz":"Profilinizi oluşturun"}</h2></div>
@@ -936,6 +956,8 @@ async function oturumYukle(){
   catch(e){ S.user=null; S.profil=null; toast(hataMetni(e)); }
   if(S.profil && !S.cevap && gecerli(S.profil.cevap)) S.cevap=gecerli(S.profil.cevap);
   if(S.user) cagriDinlemeyiBaslat();
+  // Google dönüşünden sonra kullanıcıyı doğru sayfaya götür
+  if(store.get("oauth")){ store.set("oauth",null); if(S.user) location.hash = S.profil ? "eslesmeler" : "profil"; }
 }
 
 async function render(){

@@ -19,3 +19,13 @@ Ciddi evlilik düşünenler için uyum testi, üyelik, profil ve eşleşme. Tek 
 - Görüntü ve ses WebRTC ile iki cihaz arasında doğrudan akar, kaydedilmez. Supabase yalnızca arama bildirimini ve bağlantı bilgisini taşır.
 - Varsayılan olarak yalnızca STUN sunucusu var. Bazı kısıtlı ağlarda (bazı mobil operatörler, kurumsal ağlar) bağlantı kurulamayabilir. Bunun için `index.html` içindeki `TURN_SUNUCU` satırına bir TURN sunucusu (ör. Cloudflare Calls, Twilio, Metered) girin.
 - Kamera ve mikrofon için site HTTPS üzerinden açılmalıdır (Vercel bunu sağlar).
+
+## Google (Gmail) ile giriş
+1. console.cloud.google.com → APIs & Services → **OAuth consent screen**: uygulama adını (Denk) ve destek e-postasını girin, yayınlayın.
+2. **Credentials → Create credentials → OAuth client ID**, tür: Web application.
+   - Authorized JavaScript origins: Vercel adresiniz (ör. `https://denk.vercel.app`)
+   - Authorized redirect URIs: `https://<proje-kodunuz>.supabase.co/auth/v1/callback`
+3. Çıkan **Client ID** ve **Client secret**'ı Supabase → Authentication → Providers → **Google** bölümüne yapıştırıp etkinleştirin.
+4. Supabase → Authentication → URL Configuration → **Redirect URLs** listesine Vercel adresinizi ekleyin.
+
+Kodda ek ayar gerekmez. Google ile gelen kullanıcının adı profil formuna otomatik yazılır.
