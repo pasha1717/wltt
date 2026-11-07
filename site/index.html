@@ -96,6 +96,15 @@ input.mono{font-family:ui-monospace,Menlo,Consolas,monospace;text-transform:uppe
 footer{font-size:13px;color:var(--muted);text-align:center}
 @media (max-width:480px){.topics{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:7em 1fr 2.6em}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.tests{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.test{appearance:none;text-align:left;cursor:pointer;font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:6px}
+.test b{font:700 22px/1.1 var(--display)}
+.test small{color:var(--muted);font-size:15px;line-height:1.45}
+.test .tm{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--nar)}
+.test.ana{border-color:var(--nar);background:var(--nar-soft)}
+.test:focus-visible{outline:3px solid var(--nar);outline-offset:3px}
+@media (hover:hover){.test:hover{border-color:var(--nar)}}
+@media (max-width:480px){.tests{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -111,41 +120,89 @@ footer{font-size:13px;color:var(--muted);text-align:center}
 
 <script>
 const DIMS = {
-  din:  {ad:"İnanç ve gelenek", kisa:"İnanç"},
-  aile: {ad:"Aile bağları",     kisa:"Aile"},
-  para: {ad:"Para yönetimi",    kisa:"Para"},
-  ilet: {ad:"İletişim tarzı",   kisa:"İletişim"}
+  din:    {ad:"İnanç ve gelenek",      alt:"İbadet, bayramlar, helal-haram hassasiyeti"},
+  aile:   {ad:"Aile bağları",          alt:"Görüşme sıklığı, kararlar, nerede oturulacağı"},
+  para:   {ad:"Para yönetimi",         alt:"Ortak hesap, birikim, borç, düğün masrafı"},
+  ilet:   {ad:"İletişim tarzı",        alt:"Tartışma, duygular, birlikte geçen vakit"},
+  roller: {ad:"Ev hayatı ve roller",   alt:"Geçim, ev işleri, son söz kimde"},
+  cocuk:  {ad:"Çocuk ve ebeveynlik",   alt:"Ne zaman, kaç çocuk, nasıl yetiştirme"},
+  yasam:  {ad:"Yaşam tarzı",           alt:"Hafta sonları, seyahat, misafir, şehir"},
+  gelecek:{ad:"Kariyer ve gelecek",    alt:"İş, taşınma, eğitim, uzun vadeli plan"}
 };
-// r: true ise kişilik puanında ters çevrilir (eşleşmede ham cevap kullanılır)
+// Her konuda 7 soru; ilk 3'ü hızlı testte de sorulur. Üçüncü alan true ise profil puanında ters çevrilir.
 const Q = [
   ["din","Günlük hayatımda dini pratikler (namaz, oruç vb.) önemli bir yer tutar."],
   ["din","Eşimin de benimle aynı ölçüde dindar olmasını isterim."],
-  ["din","Çocuklarımın dini eğitim almasını önemserim."],
   ["din","Evde alkol bulunması benim için sorun olmaz.",true],
+  ["din","Çocuklarımın dini eğitim almasını önemserim."],
   ["din","Bayramları ve dini günleri geleneklere uygun geçirmek isterim."],
+  ["din","Eşimin giyiminde dini hassasiyetlere dikkat etmesini isterim."],
+  ["din","Faiz, yeme-içme gibi helal-haram konularında hassasımdır."],
   ["aile","Evlendikten sonra ailemle haftada en az bir kez görüşmek isterim."],
   ["aile","Büyük kararlarda ailemin fikrini almak benim için önemlidir."],
-  ["aile","Ailemin yakınında oturmayı tercih ederim."],
   ["aile","Evlendikten sonra kararlar yalnızca çifte aittir, aileler karışmamalı.",true],
-  ["aile","Çocuk sahibi olmak benim için evliliğin olmazsa olmazı."],
+  ["aile","Ailemin yakınında oturmayı tercih ederim."],
+  ["aile","Gerekirse anne babamın bizimle yaşamasına sıcak bakarım."],
+  ["aile","Bayramları ve özel günleri geniş aileyle birlikte geçirmek isterim."],
+  ["aile","Eşimin, ailemle kendi ailesi kadar yakın olmasını beklerim."],
   ["para","Eşlerin gelirleri ortak bir hesapta toplanmalı."],
   ["para","Gelecek için birikim yapmayı bugünkü harcamalara tercih ederim."],
-  ["para","Araba, tatil gibi büyük harcamalara birlikte karar verilmeli."],
   ["para","Krediyle ya da taksitle alışveriş yapmak beni rahatsız etmez.",true],
-  ["para","Evliliğin ilk yıllarında iki eşin de çalışmasını isterim."],
+  ["para","Araba, tatil gibi büyük harcamalara birlikte karar verilmeli."],
+  ["para","Ev sahibi olmak, kirada oturup parayı başka şeylere harcamaktan önemlidir."],
+  ["para","Düğün ve çeyiz için büyük masraf yapmaya karşıyım."],
+  ["para","Her iki eşin de kimseye hesap vermeden harcayabileceği bir kişisel bütçesi olmalı.",true],
   ["ilet","Bir sorun çıktığında hemen konuşup çözmeyi tercih ederim."],
   ["ilet","Duygularımı eşime açıkça söyleyebilirim."],
   ["ilet","Tartışmada önce bir süre yalnız kalıp sakinleşmem gerekir.",true],
   ["ilet","Eşimle her gün baş başa vakit geçirmek isterim."],
-  ["ilet","Evli olsam da arkadaşlarımla ayrı vakit geçirmem normaldir.",true]
+  ["ilet","Evli olsam da arkadaşlarımla ayrı vakit geçirmem normaldir.",true],
+  ["ilet","Eşler arasında telefon, şifre gibi gizli alanlar olmamalı."],
+  ["ilet","Sevgimi sözle ve küçük jestlerle sık sık göstermek isterim."],
+  ["roller","Evin geçimini sağlamak öncelikle erkeğin sorumluluğudur."],
+  ["roller","Ev işleri iki eş arasında eşit paylaşılmalı.",true],
+  ["roller","Çocuklar küçükken annenin evde kalması en doğrusudur."],
+  ["roller","Ailede son sözü erkeğin söylemesi gerekir."],
+  ["roller","Eşimin benden fazla kazanması beni rahatsız etmez.",true],
+  ["roller","Yemek ve temizlik gibi işleri ağırlıklı olarak kadın üstlenmeli."],
+  ["roller","Eşimin iş için şehir dışına seyahat etmesi sorun olmaz.",true],
+  ["cocuk","Çocuk sahibi olmak benim için evliliğin olmazsa olmazı."],
+  ["cocuk","Evlendikten sonraki ilk iki yıl içinde çocuk isterim."],
+  ["cocuk","Üç ya da daha fazla çocuk isterim."],
+  ["cocuk","Çocuğumuz olmazsa evlat edinmeyi düşünürüm."],
+  ["cocuk","Çocukların bakımında büyükanne ve büyükbabadan destek almak isterim."],
+  ["cocuk","Çocuklarımızın iyi bir okula gitmesi için büyük fedakârlık yaparım."],
+  ["cocuk","Önceki evliliğinden çocuğu olan biriyle evlenmeye açığım."],
+  ["yasam","Hafta sonlarını dışarıda, arkadaşlarla geçirmeyi severim."],
+  ["yasam","Evde sakin bir akşam benim için idealdir.",true],
+  ["yasam","Yılda en az bir kez seyahate çıkmak isterim."],
+  ["yasam","Büyük şehirde yaşamayı küçük bir yere tercih ederim."],
+  ["yasam","Evimize sık sık misafir gelmesinden hoşlanırım."],
+  ["yasam","Sigara içen biriyle evlenmek benim için sorun olmaz."],
+  ["yasam","Spor ve sağlıklı beslenme eşimle ortak bir alışkanlık olmalı."],
+  ["gelecek","Kariyerim hayatımda çok önemli bir yer tutar."],
+  ["gelecek","Daha iyi bir iş için başka bir şehre ya da ülkeye taşınabilirim."],
+  ["gelecek","Tek bir yerde, istikrarlı bir işte çalışmayı tercih ederim.",true],
+  ["gelecek","Eğitimime evlendikten sonra da devam etmek isterim."],
+  ["gelecek","Kendi işimi kurmak gibi riskler almaktan çekinmem."],
+  ["gelecek","Eşimin kariyeri için kendi işimden fedakârlık edebilirim."],
+  ["gelecek","On yıl sonra nerede olacağımızı birlikte planlamak isterim."]
 ];
+const TESTLER = {
+  hizli:{ad:"Hızlı test", liste:Q.map((q,i)=>i).filter(i=>i%7<3)},
+  tam:  {ad:"Kapsamlı test", liste:Q.map((q,i)=>i)}
+};
 const OPTS = ["Kesinlikle katılmıyorum","Katılmıyorum","Kararsızım","Katılıyorum","Kesinlikle katılıyorum"];
 const PERSONA = {
-  din: ["Değer Odaklı","İnancınız ve gelenekleriniz evlilik hayalinizin merkezinde. Sizin için uyumun ilk şartı aynı değerleri paylaşmak.","Adayla ilk görüşmelerde ibadet, bayramlar ve çocukların yetiştirilmesi hakkında açık konuşun."],
-  aile:["Aile Köprüsü","Evliliği iki kişinin değil iki ailenin birleşmesi olarak görüyorsunuz. Yakınlık ve dayanışma sizin için çok değerli.","Ailelerin evliliğe ne kadar dahil olacağını baştan konuşmak sonraki kırgınlıkları önler."],
-  para:["Planlı Ortak","Geleceği planlamayı ve ortak kararı seviyorsunuz. Güven sizin için düzenli bir bütçeyle başlıyor.","Gelirlerin nasıl paylaşılacağını ve borca bakışınızı erken konuşun."],
-  ilet:["Açık Kalp","Konuşmak, paylaşmak ve birlikte vakit geçirmek sizin için evliliğin özü. Sessizlik sizi yorar.","Adayın tartışmalarda nasıl davrandığını görmeye çalışın; sizin için en belirleyici konu bu."],
-  denge:["Dengeli Yol Arkadaşı","Hiçbir konuda uçta değilsiniz. Esnek ve uzlaşmaya açık birisiniz.","Esneklik güzel ama net olmadığınız konular adayı şaşırtabilir. Önceliklerinizi kendinize sorun."]
+  din:    ["Değer Odaklı","İnancınız ve gelenekleriniz evlilik hayalinizin merkezinde. Sizin için uyumun ilk şartı aynı değerleri paylaşmak.","Adayla ilk görüşmelerde ibadet, bayramlar ve çocukların yetiştirilmesi hakkında açık konuşun."],
+  aile:   ["Aile Köprüsü","Evliliği iki kişinin değil iki ailenin birleşmesi olarak görüyorsunuz. Yakınlık ve dayanışma sizin için çok değerli.","Ailelerin evliliğe ne kadar dahil olacağını baştan konuşmak sonraki kırgınlıkları önler."],
+  para:   ["Planlı Ortak","Geleceği planlamayı ve ortak kararı seviyorsunuz. Güven sizin için düzenli bir bütçeyle başlıyor.","Gelirlerin nasıl paylaşılacağını ve borca bakışınızı erken konuşun."],
+  ilet:   ["Açık Kalp","Konuşmak, paylaşmak ve birlikte vakit geçirmek sizin için evliliğin özü. Sessizlik sizi yorar.","Adayın tartışmalarda nasıl davrandığını görmeye çalışın; sizin için en belirleyici konu bu."],
+  roller: ["Geleneksel Yuva","Evde görevlerin belli olmasını, rollerin geleneğe göre paylaşılmasını istiyorsunuz.","Geçim ve ev işleri konusundaki beklentinizi açıkça söyleyin. Bu konuda yarı yolda buluşmak zordur."],
+  cocuk:  ["Ebeveyn Ruhlu","Evlilik sizin için büyük ölçüde çocuklarla dolu bir ev demek.","Kaç çocuk ve ne zaman sorusunu ertelemeyin; adayın cevabı sizin için belirleyici olabilir."],
+  yasam:  ["Sosyal Ruh","Hareketli bir hayat, arkadaşlar, seyahat ve kalabalık sofralar size iyi geliyor.","Evde sakin vakit geçirmeyi seven biriyle haftanın düzenini nasıl kuracağınızı konuşun."],
+  gelecek:["Hedef Odaklı","Kariyeriniz ve kişisel gelişiminiz sizin için önemli. Evliliği birlikte büyüme yolu olarak görüyorsunuz.","Taşınma, eğitim ve iş değişikliği gibi kararlara adayın nasıl baktığını sorun."],
+  denge:  ["Dengeli Yol Arkadaşı","Hiçbir konuda uçta değilsiniz. Esnek ve uzlaşmaya açık birisiniz.","Esneklik güzel ama net olmadığınız konular adayı şaşırtabilir. Önceliklerinizi kendinize sorun."]
 };
 
 const $ = s => document.querySelector(s);
@@ -155,22 +212,31 @@ const store = {
   get(k){ try{ return JSON.parse(localStorage.getItem("denk_"+k)); }catch(e){ return null; } },
   set(k,v){ try{ localStorage.setItem("denk_"+k, JSON.stringify(v)); }catch(e){} }
 };
-let S = { cevap: store.get("cevap"), es: null, mod: "tek", sira: [], i: 0, kim: "Siz" };
+const bos = () => Array(Q.length).fill(0);
+let S = { cevap: gecerli(store.get("cevap2")), mod:"tek", test:"hizli", liste:[], cev:bos(), i:0, kim:"Siz" };
+function gecerli(c){ return Array.isArray(c)&&c.length===Q.length&&c.some(v=>v) ? c : null; }
+const sayi = c => c.filter(v=>v).length;
 
 function toast(t){ const el=$("#toast"); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,2200); }
 
-// Kod: 20 cevap (1-5) -> 0-4 basamakları, 4'lü bloklar halinde base-5 gruplar
-function kodla(c){ return "DENK-" + c.map(v=>v-1).join("").match(/.{5}/g).join("-"); }
+// Kod: her cevap 0-5 (0 = sorulmadı). İkişer cevap bir base-36 karakter olur.
+function kodla(c){
+  let s=""; for(let i=0;i<c.length;i+=2) s+=(c[i]*6+(c[i+1]||0)).toString(36).toUpperCase();
+  return "DENK-"+s.match(/.{1,4}/g).join("-");
+}
 function coz(k){
-  const d = String(k).toUpperCase().replace(/DENK/,"").replace(/[^0-4]/g,"");
-  return d.length===Q.length ? [...d].map(x=>+x+1) : null;
+  const d=String(k).toUpperCase().replace(/^\s*DENK/,"").replace(/[^0-9A-Z]/g,"");
+  if(d.length!==Q.length/2) return null;
+  const c=[]; for(const ch of d){ const n=parseInt(ch,36); c.push(Math.floor(n/6), n%6); }
+  return gecerli(c);
 }
 
+const konuSorulari = k => Q.map((q,i)=>q[0]===k?i:-1).filter(i=>i>=0);
 function profil(c){
   const p={};
   for(const k in DIMS){
-    const idx=Q.map((q,i)=>q[0]===k?i:-1).filter(i=>i>=0);
-    p[k]=Math.round(idx.reduce((s,i)=>s+((Q[i][2]?6-c[i]:c[i])-1),0)/(idx.length*4)*100);
+    const idx=konuSorulari(k).filter(i=>c[i]);
+    if(idx.length) p[k]=Math.round(idx.reduce((s,i)=>s+((Q[i][2]?6-c[i]:c[i])-1),0)/(idx.length*4)*100);
   }
   return p;
 }
@@ -179,133 +245,144 @@ function personaSec(p){
   return (Math.max(...v)-Math.min(...v)<15) ? PERSONA.denge : PERSONA[en];
 }
 function uyum(a,b){
-  const d={}; let top=0, n=0;
+  const d={}; let top=0, n=0, ortak=0;
   for(const k in DIMS){
-    const idx=Q.map((q,i)=>q[0]===k?i:-1).filter(i=>i>=0);
+    const idx=konuSorulari(k).filter(i=>a[i]&&b[i]);
+    if(!idx.length) continue;
+    ortak+=idx.length;
     d[k]=Math.round(idx.reduce((s,i)=>s+(1-Math.abs(a[i]-b[i])/4),0)/idx.length*100);
     top+=d[k]; n++;
   }
-  const farklar=Q.map((q,i)=>({i,f:Math.abs(a[i]-b[i])})).filter(x=>x.f>=2).sort((x,y)=>y.f-x.f).slice(0,4);
-  return {genel:Math.round(top/n), d, farklar};
+  const farklar=Q.map((q,i)=>({i,f:a[i]&&b[i]?Math.abs(a[i]-b[i]):0})).filter(x=>x.f>=2).sort((x,y)=>y.f-x.f).slice(0,6);
+  return {genel:n?Math.round(top/n):0, d, farklar, ortak};
 }
 function barlar(obj, cls=""){
-  return `<div class="bars">${Object.keys(DIMS).map(k=>`
+  return `<div class="bars">${Object.keys(obj).map(k=>`
     <div class="bar ${cls}"><div class="lbl">${DIMS[k].ad}</div><div class="t"><i style="width:${obj[k]}%"></i></div><em>${obj[k]}</em></div>`).join("")}</div>`;
 }
+const sure = n => Math.max(2, Math.round(n*10/60));
 
 /* ---------- görünümler ---------- */
 function anaSayfa(){
+  const h=TESTLER.hizli.liste.length, t=TESTLER.tam.liste.length;
   app.innerHTML = `<div class="stack" style="gap:28px">
     <section class="stack">
       <p class="eyebrow">Ciddi evlilik düşünenler için</p>
       <h1>Size denk kişiyi değerlerinizle tanıyın.</h1>
-      <p class="lead">20 soruluk, yaklaşık 5 dakikalık bir testle evlilik profilinizi çıkarın. Sonra uyum kodunuzu tanıştığınız kişiyle paylaşın, hangi konularda denk olduğunuzu görün.</p>
-      <div class="row">
-        <button class="btn" id="b-basla">Teste başla</button>
-        ${S.cevap?`<a class="btn ghost" href="#sonuc">Sonucumu gör</a>`:""}
-      </div>
+      <p class="lead">Sekiz konuda evlilik profilinizi çıkarın. Sonra uyum kodunuzu tanıştığınız kişiyle paylaşın, hangi konularda denk olduğunuzu görün.</p>
+      ${S.cevap?`<div class="row"><a class="btn ghost" href="#sonuc">Sonucumu gör</a></div>`:""}
     </section>
-    <section class="topics" aria-label="Testin konuları">
-      <div><b>İnanç ve gelenek</b><small>İbadet, bayramlar, çocukların yetiştirilmesi</small></div>
-      <div><b>Aile bağları</b><small>Görüşme sıklığı, kararlar, nerede oturulacağı</small></div>
-      <div><b>Para yönetimi</b><small>Ortak hesap, birikim, borca bakış</small></div>
-      <div><b>İletişim tarzı</b><small>Tartışma, duygular, birlikte geçen vakit</small></div>
+    <section class="tests" aria-label="Test seçin">
+      <button class="test" id="b-hizli"><span class="tm">${h} soru · yaklaşık ${sure(h)} dk</span><b>Hızlı test</b><small>Her konudan en belirleyici 3 soru. İlk tanışma için yeterli.</small></button>
+      <button class="test ana" id="b-tam"><span class="tm">${t} soru · yaklaşık ${sure(t)} dk</span><b>Kapsamlı test</b><small>Her konudan 7 soru. Daha ayrıntılı profil ve daha güvenilir uyum puanı.</small></button>
+    </section>
+    <section class="stack">
+      <h3>Testte neler soruluyor?</h3>
+      <div class="topics">${Object.values(DIMS).map(d=>`<div><b>${d.ad}</b><small>${d.alt}</small></div>`).join("")}</div>
     </section>
     <section class="band">
       <span class="tag">Evli misiniz? · Kayıt gerekmez</span>
       <h2>Eşinizle aynı telefondan çözün, en uyumlu olduğunuz konuları görün.</h2>
-      <div class="row"><button class="btn ghost" id="b-cift">Çift olarak başla</button></div>
+      <div class="row"><button class="btn ghost" id="b-cift-h">Hızlı (${h} soru)</button><button class="btn ghost" id="b-cift-t">Kapsamlı (${t} soru)</button></div>
     </section>
     <section class="stack">
       <h3>Elinizde bir uyum kodu mu var?</h3>
-      <p style="color:var(--muted)">Biri size <b>DENK-</b> ile başlayan bir kod gönderdiyse testi çözün, sonuç sayfasında kodu girip karşılaştırın.</p>
+      <p style="color:var(--muted)">Biri size <b>DENK-</b> ile başlayan bir kod gönderdiyse testi çözün, sonuç sayfasında kodu girip karşılaştırın. Farklı testleri çözmüş olsanız da ortak sorular karşılaştırılır.</p>
     </section>
     <div class="note"><p>Cevaplarınız yalnızca bu cihazda saklanır. Kodunuzu siz paylaşmadıkça kimse göremez.</p></div>
   </div>`;
-  $("#b-basla").onclick=()=>baslat("tek");
-  $("#b-cift").onclick=()=>baslat("cift1");
+  $("#b-hizli").onclick=()=>baslat("tek","hizli");
+  $("#b-tam").onclick=()=>baslat("tek","tam");
+  $("#b-cift-h").onclick=()=>baslat("cift1","hizli");
+  $("#b-cift-t").onclick=()=>baslat("cift1","tam");
 }
 
-function baslat(mod){
-  S.mod=mod; S.sira=Array(Q.length).fill(0); S.i=0;
+function baslat(mod, test, onceki){
+  S.mod=mod; S.test=test; S.i=0;
+  S.cev = onceki ? onceki.slice() : bos();
+  S.liste = TESTLER[test].liste.filter(i=>!S.cev[i]);
   S.kim = mod==="cift1" ? "1. eş" : mod==="cift2" ? "2. eş" : "Siz";
   location.hash="anket"; render();
 }
 
 function anket(){
-  if(!S.sira.length){ S.sira=Array(Q.length).fill(0); S.i=0; }
-  const i=S.i, q=Q[i];
+  const i=S.i, qi=S.liste[i], q=Q[qi], n=S.liste.length, secili=S.cev[qi];
   app.innerHTML = `<div class="stack" style="gap:22px">
     <div class="stack" style="gap:8px">
-      <div class="qmeta"><span>${esc(S.kim)} · ${DIMS[q[0]].ad}</span><span>${i+1} / ${Q.length}</span></div>
-      <div class="prog"><i style="width:${(i)/Q.length*100}%"></i></div>
+      <div class="qmeta"><span>${esc(S.kim)} · ${DIMS[q[0]].ad}</span><span>${i+1} / ${n}</span></div>
+      <div class="prog"><i style="width:${i/n*100}%"></i></div>
     </div>
     <p class="q">${esc(q[1])}</p>
     <div class="opts" role="radiogroup" aria-label="Cevabınız">
-      ${OPTS.map((o,k)=>`<button class="opt ${S.sira[i]===k+1?"on":""}" role="radio" aria-checked="${S.sira[i]===k+1}" data-v="${k+1}" id="o${k}"><span class="dot"></span>${o}</button>`).join("")}
+      ${OPTS.map((o,k)=>`<button class="opt ${secili===k+1?"on":""}" role="radio" aria-checked="${secili===k+1}" data-v="${k+1}" id="o${k}"><span class="dot"></span>${o}</button>`).join("")}
     </div>
     <div class="row" style="justify-content:space-between">
       <button class="btn ghost" id="b-geri" ${i===0?"disabled":""}>Geri</button>
-      ${S.sira[i]?`<button class="btn" id="b-ileri">${i===Q.length-1?"Sonucu gör":"İleri"}</button>`:""}
+      ${secili?`<button class="btn" id="b-ileri">${i===n-1?"Sonucu gör":"İleri"}</button>`:""}
     </div>
   </div>`;
   app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
-    S.sira[i]=+b.dataset.v;
-    if(i<Q.length-1){ S.i++; setTimeout(anket,140); app.querySelectorAll(".opt").forEach(x=>x.classList.toggle("on",x===b)); }
-    else bitir();
+    S.cev[qi]=+b.dataset.v;
+    app.querySelectorAll(".opt").forEach(x=>x.classList.toggle("on",x===b));
+    if(i<n-1){ S.i++; setTimeout(anket,140); } else bitir();
   });
   $("#b-geri").onclick=()=>{ if(S.i>0){S.i--; anket();} };
-  const ileri=$("#b-ileri"); if(ileri) ileri.onclick=()=>{ if(i<Q.length-1){S.i++; anket();} else bitir(); };
+  const ileri=$("#b-ileri"); if(ileri) ileri.onclick=()=>{ if(i<n-1){S.i++; anket();} else bitir(); };
 }
 
 function bitir(){
-  const c=S.sira.slice(); S.sira=[];
+  const c=S.cev.slice(); S.liste=[];
   if(S.mod==="cift1"){ S.es=c; app.innerHTML=`<div class="stack" style="gap:20px">
       <p class="eyebrow">1. eş tamamladı</p><h2>Şimdi telefonu eşinize verin.</h2>
       <p class="lead">Cevapları görmeden çözmesi sonucu daha dürüst yapar.</p>
       <div class="row"><button class="btn" id="b-2">2. eş başlasın</button></div></div>`;
-    $("#b-2").onclick=()=>baslat("cift2"); return; }
+    $("#b-2").onclick=()=>baslat("cift2",S.test); return; }
   if(S.mod==="cift2"){ S.karsi=c; S.karsiAd="2. eş"; S.ben=S.es; S.benAd="1. eş"; location.hash="uyum"; return render(); }
-  S.cevap=c; store.set("cevap",c); location.hash="sonuc"; render();
+  S.cevap=c; store.set("cevap2",c); location.hash="sonuc"; render();
 }
 
 function sonuc(){
-  if(!S.cevap){ return baslat("tek"); }
-  const p=profil(S.cevap), [ad,acik,ipucu]=personaSec(p), kod=kodla(S.cevap);
+  if(!S.cevap){ location.hash=""; return render(); }
+  const p=profil(S.cevap), [ad,acik,ipucu]=personaSec(p), kod=kodla(S.cevap), n=sayi(S.cevap), eksik=Q.length-n;
   app.innerHTML=`<div class="stack" style="gap:26px">
     <div class="persona">
-      <p class="eyebrow">Evlilik profiliniz</p>
+      <p class="eyebrow">Evlilik profiliniz · ${n} soru</p>
       <h2>${ad}</h2>
       <p>${acik}</p>
       <p style="color:var(--muted);font-size:15px">${ipucu}</p>
     </div>
+    ${eksik?`<section class="band"><span class="tag">Profilinizi derinleştirin</span>
+      <p>Kapsamlı teste geçin, yalnızca cevaplamadığınız ${eksik} soru sorulur. Cevaplarınız korunur.</p>
+      <div class="row"><button class="btn ghost" id="b-devam">Kalan ${eksik} soruyu çöz</button></div></section>`:""}
     <section class="stack"><h3>Konulara göre önem verdiğiniz düzey</h3>${barlar(p)}
-      <p style="color:var(--muted);font-size:14px">100: bu konuyu evlilikte çok belirleyici görüyorsunuz. 0: sizin için esnek.</p></section>
+      <p style="color:var(--muted);font-size:14px">100: bu konuda güçlü ve net bir beklentiniz var (rollerde geleneksel, yaşam tarzında sosyal, kariyerde hedef odaklı yön). 0: tersi ya da esnek.</p></section>
     <section class="stack">
       <h3>Uyum kodunuz</h3>
       <p style="color:var(--muted)">Tanıştığınız kişiye gönderin. O da testi çözüp kodunuzu girince ikiniz de aynı uyum sonucunu görürsünüz.</p>
       <div class="code" id="kod">${kod}</div>
-      <div class="row"><button class="btn ghost" id="b-kopya">Kodu kopyala</button><button class="btn ghost" id="b-yeni">Testi yeniden çöz</button></div>
+      <div class="row"><button class="btn ghost" id="b-kopya">Kodu kopyala</button><button class="btn ghost" id="b-yeni">Testi baştan çöz</button></div>
     </section>
     <section class="stack">
       <h3>Bir kodla karşılaştırın</h3>
       <form id="f" class="stack" novalidate>
         <div class="stack" style="gap:6px"><label for="k-ad">Kişinin adı (isteğe bağlı)</label><input type="text" id="k-ad" placeholder="Örneğin Elif" autocomplete="off"></div>
-        <div class="stack" style="gap:6px"><label for="k-kod">Uyum kodu</label><input type="text" id="k-kod" class="mono" placeholder="DENK-01234-..." autocomplete="off" spellcheck="false"></div>
+        <div class="stack" style="gap:6px"><label for="k-kod">Uyum kodu</label><input type="text" id="k-kod" class="mono" placeholder="DENK-A1B2-..." autocomplete="off" spellcheck="false"></div>
         <p class="err" id="err" role="alert"></p>
         <div class="row"><button class="btn" type="submit">Uyumu hesapla</button></div>
       </form>
     </section>
   </div>`;
+  const dv=$("#b-devam"); if(dv) dv.onclick=()=>baslat("tek","tam",S.cevap);
   $("#b-kopya").onclick=()=>{
-    navigator.clipboard?.writeText(kod).then(()=>toast("Kod kopyalandı"),()=>{selectEl($("#kod"));toast("Kodu seçtim, kopyalayabilirsiniz");})
-      ?? (selectEl($("#kod")), toast("Kodu seçtim, kopyalayabilirsiniz"));
+    const sec=()=>{selectEl($("#kod"));toast("Kodu seçtim, kopyalayabilirsiniz");};
+    if(navigator.clipboard) navigator.clipboard.writeText(kod).then(()=>toast("Kod kopyalandı"),sec); else sec();
   };
-  $("#b-yeni").onclick=()=>baslat("tek");
+  $("#b-yeni").onclick=()=>{ location.hash=""; };
   $("#f").onsubmit=e=>{
     e.preventDefault();
     const c=coz($("#k-kod").value);
     if(!c){ $("#err").textContent="Kod eksik ya da hatalı. DENK- ile başlayan kodun tamamını yapıştırın."; return; }
+    if(!uyum(S.cevap,c).ortak){ $("#err").textContent="Bu kodla ortak cevapladığınız soru yok."; return; }
     S.ben=S.cevap; S.benAd="Siz"; S.karsi=c; S.karsiAd=$("#k-ad").value.trim()||"Diğer kişi";
     location.hash="uyum"; render();
   };
@@ -315,16 +392,17 @@ function selectEl(el){ const r=document.createRange(); r.selectNodeContents(el);
 function uyumSayfa(){
   if(!S.ben||!S.karsi){ location.hash=S.cevap?"sonuc":""; return render(); }
   const u=uyum(S.ben,S.karsi), A=esc(S.benAd), B=esc(S.karsiAd);
-  const sirali=Object.keys(u.d).sort((x,y)=>u.d[y]-u.d[x]);
+  const sirali=Object.keys(u.d).sort((x,y)=>u.d[y]-u.d[x]), ilk=sirali[0], son=sirali[sirali.length-1];
   const yorum = u.genel>=85?"Temel değerlerde büyük ölçüde denksiniz.":u.genel>=70?"Çoğu konuda aynı yerdesiniz. Farklı olduğunuz birkaç konuyu konuşun.":u.genel>=55?"Önemli farklarınız var. Bunlar konuşularak aşılabilir ama göz ardı edilmemeli.":"Birçok temel konuda farklı düşünüyorsunuz. Bunları açıkça konuşmadan karar vermeyin.";
   app.innerHTML=`<div class="stack" style="gap:26px">
     <section class="stack" style="gap:8px">
       <p class="eyebrow">${A} ve ${B}</p>
       <div class="score"><b>%${u.genel}</b><span>uyum</span></div>
       <p class="lead">${yorum}</p>
+      <p style="color:var(--muted);font-size:14px">${u.ortak} ortak soru üzerinden hesaplandı.</p>
     </section>
     <section class="stack"><h3>Konu konu uyum</h3>${barlar(u.d,"n")}
-      ${u.d[sirali[0]]>u.d[sirali[3]]?`<p style="color:var(--muted);font-size:15px">En denk olduğunuz konu: <b style="color:var(--ink)">${DIMS[sirali[0]].ad}</b>. En çok konuşmanız gereken: <b style="color:var(--ink)">${DIMS[sirali[3]].ad}</b>.</p>`:""}</section>
+      ${u.d[ilk]>u.d[son]?`<p style="color:var(--muted);font-size:15px">En denk olduğunuz konu: <b style="color:var(--ink)">${DIMS[ilk].ad}</b>. En çok konuşmanız gereken: <b style="color:var(--ink)">${DIMS[son].ad}</b>.</p>`:""}</section>
     <section class="stack"><h3>Konuşmanız gereken sorular</h3>
       ${u.farklar.length?`<ul class="diffs">${u.farklar.map(x=>`<li><span>${esc(Q[x.i][1])}</span>
         <span class="ans"><span>${A}: <b>${OPTS[S.ben[x.i]-1]}</b></span><span>${B}: <b>${OPTS[S.karsi[x.i]-1]}</b></span></span></li>`).join("")}</ul>`
@@ -338,9 +416,9 @@ function nasil(){
   app.innerHTML=`<div class="stack" style="gap:18px">
     <p class="eyebrow">Puan nasıl hesaplanır?</p>
     <h2>Basit ve açık bir yöntem.</h2>
-    <p>Test dört konuda beşer sorudan oluşur. Her soruya 1 ile 5 arasında bir cevap verirsiniz.</p>
-    <p>İki kişinin aynı soruya verdiği cevaplar arasındaki fark ölçülür. Aynı cevap tam puan, en uç iki cevap sıfır puan alır. Bir konunun puanı o konudaki beş sorunun ortalamasıdır. Genel uyum, dört konunun ortalamasıdır.</p>
-    <p>Profiliniz, her konuya verdiğiniz önemin düzeyine göre belirlenir. Bazı sorular ters yönlüdür; örneğin “evde alkol bulunması sorun olmaz” sorusuna katılmak inanç puanını düşürür.</p>
+    <p>Test sekiz konuda yedişer sorudan oluşur (toplam ${Q.length}). Hızlı test her konunun ilk üç sorusunu sorar. Her soruya 1 ile 5 arasında bir cevap verirsiniz.</p>
+    <p>İki kişinin aynı soruya verdiği cevaplar arasındaki fark ölçülür. Aynı cevap tam puan, en uç iki cevap sıfır puan alır. Bir konunun puanı o konudaki ortak soruların ortalamasıdır. Genel uyum, konu puanlarının ortalamasıdır. Biri hızlı, diğeri kapsamlı testi çözdüyse yalnızca ikisinin de cevapladığı sorular sayılır.</p>
+    <p>Profiliniz, her konudaki beklentinizin ne kadar güçlü olduğuna göre belirlenir. Bazı sorular ters yönlüdür; örneğin “evde alkol bulunması sorun olmaz” sorusuna katılmak inanç puanını düşürür.</p>
     <p style="color:var(--muted)">Bu test bir sohbet başlatıcıdır, psikolojik bir ölçek değildir. Evlilik kararını bir puana bırakmayın; farklı çıktığınız konuları yüz yüze konuşun.</p>
     <div class="row"><a class="btn" href="#">Ana sayfa</a></div>
   </div>`;
@@ -349,7 +427,7 @@ function nasil(){
 function render(){
   const h=location.hash.slice(1);
   window.scrollTo(0,0);
-  if(h==="anket") return S.sira.length?anket():baslat("tek");
+  if(h==="anket") return S.liste.length?anket():(location.hash="",anaSayfa());
   if(h==="sonuc") return sonuc();
   if(h==="uyum") return uyumSayfa();
   if(h==="nasil") return nasil();
