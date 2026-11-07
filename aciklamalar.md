@@ -1137,3 +1137,19 @@ Her gün yeni bir "ne olurdu?" için takip et.
 
 #venüs #uzay #gezegen #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
 ```
+
+## Havadaki oksijen iki katına çıksaydı (`oksijen.mp4`)
+
+```text
+Soluduğumuz havanın sadece beşte biri oksijen.
+
+Bu oran iki katına çıksaydı, ne olurdu?
+
+Daha rahat nefes almazdık. Asıl değişen ateş olurdu. Yaklaşık 300 milyon yıl önce oksijen bazı modellere göre %30'un üstüne çıkmış olabilir. O dönemde orman yangınları bugünkünden sıktı.
+
+Sence havada en çok neyin değişmesi bizi etkilerdi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#oksijen #ateş #dünya #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
