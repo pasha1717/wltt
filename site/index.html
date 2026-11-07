@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Denk Uyum Testi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Ciddi evlilik düşünenler için değerlere dayalı uyum testi. Kayıt yok, verileriniz cihazınızda kalır.">
+<meta name="description" content="Ciddi evlilik düşünenler için değerlere dayalı uyum testi ve eşleşme.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap">
@@ -105,20 +105,57 @@ footer{font-size:13px;color:var(--muted);text-align:center}
 .test:focus-visible{outline:3px solid var(--nar);outline-offset:3px}
 @media (hover:hover){.test:hover{border-color:var(--nar)}}
 @media (max-width:480px){.tests{grid-template-columns:minmax(0,1fr)}}
+nav.nav{display:flex;gap:4px 14px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+nav.nav a{color:var(--muted);font-size:15px;text-decoration:none;font-weight:500}
+nav.nav a.on{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+nav.nav a.cta{color:var(--nar);font-weight:600}
+.demo{background:var(--nar-soft);color:var(--ink);font-size:14px;border-radius:10px;padding:10px 14px}
+.seg{display:flex;background:var(--line);border-radius:999px;padding:4px;gap:4px}
+.seg button{flex:1;appearance:none;border:0;background:transparent;font:600 15px var(--body);color:var(--muted);padding:10px;border-radius:999px;cursor:pointer}
+.seg button.on{background:var(--surface);color:var(--ink)}
+textarea,select{width:100%;font:500 17px var(--body);color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:14px}
+textarea{min-height:110px;resize:vertical;line-height:1.5}
+input[type=email],input[type=password],input[type=number]{width:100%;font:500 18px var(--body);color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:14px}
+textarea:focus-visible,select:focus-visible{outline:3px solid var(--nar);outline-offset:3px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.fld{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fld small{color:var(--muted);font-size:13px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:500}
+.chk input{width:20px;height:20px;margin-top:3px;accent-color:var(--nar)}
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{appearance:none;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:center;cursor:pointer}
+@media (hover:hover){.card:hover{border-color:var(--nar)}}
+.card:focus-visible{outline:3px solid var(--nar);outline-offset:3px}
+.card b{font:700 20px var(--display)}
+.card .meta{color:var(--muted);font-size:14px}
+.card .pct{grid-row:span 3;font:800 30px var(--display);color:var(--nar);font-variant-numeric:tabular-nums;text-align:right}
+.pill{display:inline-flex;align-items:center;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--line);color:var(--ink);width:max-content}
+.pill.ok{background:var(--sage-soft);color:var(--sage)}
+.pill.nar{background:var(--nar-soft);color:var(--nar)}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.contact{background:var(--sage-soft);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:6px}
+.contact b{font:600 18px var(--body);user-select:all;word-break:break-word}
+.danger{color:var(--nar)}
+@media (max-width:480px){.grid2{grid-template-columns:minmax(0,1fr)}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
     <a class="logo" href="#">denk<span>.</span></a>
-    <a class="lnk" href="#nasil">Puan nasıl hesaplanır?</a>
+    <nav class="nav" id="nav"></nav>
   </header>
+  <p class="demo" id="demo" hidden>Demo modu: hesaplar ve profiller yalnızca bu cihazda tutulur. “Örnek” etiketli profiller gerçek kişiler değildir.</p>
   <main id="app"></main>
-  <footer>Denk · Cevaplarınız yalnızca bu cihazda saklanır, hiçbir sunucuya gönderilmez.</footer>
+  <footer>Denk · <a href="#nasil" style="color:inherit">Puan nasıl hesaplanır?</a> · İletişim bilgileri yalnızca iki taraf da istediğinde açılır.</footer>
 </div>
 <div class="toast" id="toast" hidden></div>
 
 <script>
+/* Supabase ayarı: boş bırakılırsa site demo modunda çalışır. Kurulum için site/README.md */
+const SUPABASE_URL = "";
+const SUPABASE_ANON_KEY = "";
 const DIMS = {
   din:    {ad:"İnanç ve gelenek",      alt:"İbadet, bayramlar, helal-haram hassasiyeti"},
   aile:   {ad:"Aile bağları",          alt:"Görüşme sıklığı, kararlar, nerede oturulacağı"},
@@ -207,17 +244,116 @@ const PERSONA = {
 
 const $ = s => document.querySelector(s);
 const app = $("#app");
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const store = {
   get(k){ try{ return JSON.parse(localStorage.getItem("denk_"+k)); }catch(e){ return null; } },
   set(k,v){ try{ localStorage.setItem("denk_"+k, JSON.stringify(v)); }catch(e){} }
 };
 const bos = () => Array(Q.length).fill(0);
-let S = { cevap: gecerli(store.get("cevap2")), mod:"tek", test:"hizli", liste:[], cev:bos(), i:0, kim:"Siz" };
-function gecerli(c){ return Array.isArray(c)&&c.length===Q.length&&c.some(v=>v) ? c : null; }
+function gecerli(c){ return Array.isArray(c)&&c.length===Q.length&&c.some(v=>v) ? c.map(Number) : null; }
 const sayi = c => c.filter(v=>v).length;
+const yas = y => y ? new Date().getFullYear()-y : "";
 
-function toast(t){ const el=$("#toast"); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,2200); }
+/* ================= Veri katmanı ================= */
+// İki uygulama aynı arayüzü sunar: Supabase (gerçek) ve demo (bu cihazda, örnek profillerle).
+function supabaseApi(){
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let uid = null;
+  const ok = ({data,error}) => { if(error) throw error; return data; };
+  const PROFIL_ALAN = "id,ad,dogum_yili,cinsiyet,sehir,hakkinda,cevap,gorunur";
+  return {
+    demo:false,
+    async oturum(){ const u=(await sb.auth.getSession()).data.session?.user||null; uid=u?.id||null; return u; },
+    async kayit(email,sifre){ const d=ok(await sb.auth.signUp({email,password:sifre})); uid=d.session?.user.id||null; return !!d.session; },
+    async giris(email,sifre){ const d=ok(await sb.auth.signInWithPassword({email,password:sifre})); uid=d.user.id; },
+    async cikis(){ await sb.auth.signOut(); uid=null; },
+    async profilim(){ return ok(await sb.from("profiles").select(PROFIL_ALAN).eq("id",uid).maybeSingle()); },
+    async profilKaydet(p,iletisim){
+      ok(await sb.from("profiles").upsert({...p,id:uid,guncelleme:new Date().toISOString()}));
+      if(iletisim!==undefined) ok(await sb.from("iletisim").upsert({id:uid,bilgi:iletisim}));
+    },
+    async profilSil(){ ok(await sb.from("profiles").delete().eq("id",uid)); },
+    async iletisimim(){ return ok(await sb.from("iletisim").select("bilgi").eq("id",uid).maybeSingle())?.bilgi||""; },
+    async adaylar(){ return ok(await sb.from("profiles").select(PROFIL_ALAN).neq("id",uid).eq("gorunur",true).limit(500)); },
+    async kisi(id){ return ok(await sb.from("profiles").select(PROFIL_ALAN).eq("id",id).maybeSingle()); },
+    async ilgiler(){
+      const d=ok(await sb.from("ilgi").select("from_id,to_id"));
+      return { giden:new Set(d.filter(r=>r.from_id===uid).map(r=>r.to_id)), gelen:new Set(d.filter(r=>r.to_id===uid).map(r=>r.from_id)) };
+    },
+    async ilgiGonder(id){ ok(await sb.from("ilgi").insert({from_id:uid,to_id:id})); },
+    async ilgiGeriAl(id){ ok(await sb.from("ilgi").delete().eq("from_id",uid).eq("to_id",id)); },
+    async iletisimGetir(id){ return ok(await sb.from("iletisim").select("bilgi").eq("id",id).maybeSingle())?.bilgi||null; }
+  };
+}
+
+function demoApi(){
+  const db = store.get("demo") || {};
+  db.hesap ??= {}; db.profil ??= {}; db.iletisim ??= {}; db.ilgi ??= [];
+  if(!db.tohum){ tohumla(db); db.tohum=1; store.set("demo", db); }
+  const kaydet = () => store.set("demo", db);
+  const uid = () => store.get("demo_oturum");
+  const hata = m => { const e=new Error(m); e.tr=true; throw e; };
+  return {
+    demo:true,
+    async oturum(){ const u=uid(); return u&&Object.values(db.hesap).some(h=>h.id===u) ? {id:u} : null; },
+    async kayit(email,sifre){
+      email=email.toLowerCase(); if(db.hesap[email]) hata("Bu e-posta ile zaten bir hesap var. Giriş yapın.");
+      const id="u"+Date.now().toString(36); db.hesap[email]={id,sifre}; kaydet(); store.set("demo_oturum",id); return true;
+    },
+    async giris(email,sifre){ const h=db.hesap[email.toLowerCase()]; if(!h||h.sifre!==sifre) hata("E-posta ya da şifre hatalı."); store.set("demo_oturum",h.id); },
+    async cikis(){ store.set("demo_oturum",null); },
+    async profilim(){ return db.profil[uid()]||null; },
+    async profilKaydet(p,iletisim){ db.profil[uid()]={...db.profil[uid()],...p,id:uid()}; if(iletisim!==undefined) db.iletisim[uid()]=iletisim; kaydet(); },
+    async profilSil(){ delete db.profil[uid()]; delete db.iletisim[uid()]; db.ilgi=db.ilgi.filter(([a,b])=>a!==uid()&&b!==uid()); kaydet(); },
+    async iletisimim(){ return db.iletisim[uid()]||""; },
+    async adaylar(){ return Object.values(db.profil).filter(p=>p.id!==uid()&&p.gorunur); },
+    async kisi(id){ return db.profil[id]||null; },
+    async ilgiler(){ const u=uid(); return { giden:new Set(db.ilgi.filter(r=>r[0]===u).map(r=>r[1])), gelen:new Set(db.ilgi.filter(r=>r[1]===u).map(r=>r[0])) }; },
+    async ilgiGonder(id){
+      const u=uid(); if(!db.ilgi.some(r=>r[0]===u&&r[1]===id)) db.ilgi.push([u,id]);
+      // Örnek profillerin bir kısmı demoyu göstermek için karşılık verir
+      if(db.profil[id]?.karsilik && !db.ilgi.some(r=>r[0]===id&&r[1]===u)) db.ilgi.push([id,u]);
+      kaydet();
+    },
+    async ilgiGeriAl(id){ const u=uid(); db.ilgi=db.ilgi.filter(r=>!(r[0]===u&&r[1]===id)); kaydet(); },
+    async iletisimGetir(id){ const u=uid(); const k=db.ilgi.some(r=>r[0]===u&&r[1]===id)&&db.ilgi.some(r=>r[0]===id&&r[1]===u); return k?(db.iletisim[id]||null):null; }
+  };
+}
+function tohumla(db){
+  let s=20261107; const r=()=>{ s=(s+0x6D2B79F5)|0; let t=Math.imul(s^s>>>15,1|s); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+  const ornek=[
+    ["Elif",1996,"kadin","İstanbul","Öğretmenim. Kitap okumayı, hafta sonu kahvaltılarını ve uzun yürüyüşleri severim.",true],
+    ["Zeynep",1994,"kadin","Ankara","Hemşireyim. Ailemle çok yakınım, sakin ve huzurlu bir yuva hayal ediyorum.",false],
+    ["Merve",1998,"kadin","İzmir","Mimarım. Seyahat etmeyi ve yeni yerler keşfetmeyi seviyorum.",true],
+    ["Ayşe",1993,"kadin","Bursa","Muhasebeciyim. Planlı ve düzenli biriyim, dürüstlük benim için her şeyden önce gelir.",false],
+    ["Ahmet",1992,"erkek","İstanbul","Yazılım mühendisiyim. Sade bir hayat, sağlam bir aile istiyorum.",true],
+    ["Mehmet",1995,"erkek","Konya","Kendi işim var. Geleneklerime bağlıyım, kalabalık sofraları severim.",false],
+    ["Emre",1997,"erkek","Antalya","Doktorum. Spor yapmayı ve doğada vakit geçirmeyi seviyorum.",true],
+    ["Burak",1994,"erkek","Ankara","Bankacıyım. Ailemle sık görüşürüm, birikim yapmayı önemserim.",false]
+  ];
+  ornek.forEach(([ad,dy,cin,sehir,hak,kars],n)=>{
+    const id="ornek"+n, egilim={}, kk=Object.keys(DIMS); kk.forEach(k=>egilim[k]=1.5+r()*2.5); egilim[kk[n]]=4.8; // her örneğin baskın konusu farklı
+    const cevap=Q.map(q=>{ const t=q[2]?6-egilim[q[0]]:egilim[q[0]]; return Math.min(5,Math.max(1,Math.round(t+(r()-.5)*2))); });
+    db.profil[id]={id,ad,dogum_yili:dy,cinsiyet:cin,sehir,hakkinda:hak,cevap,gorunur:true,ornek:true,karsilik:kars};
+    db.iletisim[id]="Örnek profil: gerçek iletişim bilgisi yok";
+  });
+}
+const api = (SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase) ? supabaseApi() : demoApi();
+function hataMetni(e){
+  if(e?.tr) return e.message;
+  const m=String(e?.message||e);
+  if(/Invalid login/i.test(m)) return "E-posta ya da şifre hatalı.";
+  if(/already registered/i.test(m)) return "Bu e-posta ile zaten bir hesap var. Giriş yapın.";
+  if(/Password should be/i.test(m)) return "Şifre en az 6 karakter olmalı.";
+  if(/Email not confirmed/i.test(m)) return "E-postanızı doğrulamadınız. Gelen kutunuzdaki bağlantıya tıklayın.";
+  if(/fetch|network/i.test(m)) return "Sunucuya ulaşılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.";
+  return "Bir sorun oluştu: "+m;
+}
+
+/* ================= Durum ================= */
+let S = { cevap: gecerli(store.get("cevap2")), mod:"tek", test:"hizli", liste:[], cev:bos(), i:0, kim:"Siz", user:null, profil:null };
+
+function toast(t){ const el=$("#toast"); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,2400); }
 
 // Kod: her cevap 0-5 (0 = sorulmadı). İkişer cevap bir base-36 karakter olur.
 function kodla(c){
@@ -261,16 +397,30 @@ function barlar(obj, cls=""){
     <div class="bar ${cls}"><div class="lbl">${DIMS[k].ad}</div><div class="t"><i style="width:${obj[k]}%"></i></div><em>${obj[k]}</em></div>`).join("")}</div>`;
 }
 const sure = n => Math.max(2, Math.round(n*10/60));
+const yorumMetni = g => g>=85?"Temel değerlerde büyük ölçüde denksiniz.":g>=70?"Çoğu konuda aynı yerdesiniz. Farklı olduğunuz birkaç konuyu konuşun.":g>=55?"Önemli farklarınız var. Bunlar konuşularak aşılabilir ama göz ardı edilmemeli.":"Birçok temel konuda farklı düşünüyorsunuz. Bunları açıkça konuşmadan karar vermeyin.";
+function farkListesi(u,a,b,A,B){
+  return u.farklar.length?`<ul class="diffs">${u.farklar.map(x=>`<li><span>${esc(Q[x.i][1])}</span>
+    <span class="ans"><span>${A}: <b>${OPTS[a[x.i]-1]}</b></span><span>${B}: <b>${OPTS[b[x.i]-1]}</b></span></span></li>`).join("")}</ul>`
+    :`<p style="color:var(--muted)">Hiçbir soruda iki basamaktan fazla ayrılmadınız.</p>`;
+}
+function selectEl(el){ const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
 
-/* ---------- görünümler ---------- */
+function navCiz(h){
+  const l=(href,t,cls="")=>`<a href="#${href}" class="${cls} ${h===href?"on":""}">${t}</a>`;
+  $("#nav").innerHTML = S.user
+    ? l("eslesmeler","Eşleşmeler")+l("profil","Profilim")
+    : l("nasil","Nasıl çalışır?")+l("giris","Giriş yap","cta");
+}
+
+/* ================= Görünümler ================= */
 function anaSayfa(){
   const h=TESTLER.hizli.liste.length, t=TESTLER.tam.liste.length;
   app.innerHTML = `<div class="stack" style="gap:28px">
     <section class="stack">
       <p class="eyebrow">Ciddi evlilik düşünenler için</p>
       <h1>Size denk kişiyi değerlerinizle tanıyın.</h1>
-      <p class="lead">Sekiz konuda evlilik profilinizi çıkarın. Sonra uyum kodunuzu tanıştığınız kişiyle paylaşın, hangi konularda denk olduğunuzu görün.</p>
-      ${S.cevap?`<div class="row"><a class="btn ghost" href="#sonuc">Sonucumu gör</a></div>`:""}
+      <p class="lead">Sekiz konuda evlilik profilinizi çıkarın. Üye olursanız size en uyumlu adaylar listelenir; iletişim bilgileri yalnızca iki taraf da istediğinde açılır.</p>
+      <div class="row">${S.cevap?`<a class="btn ghost" href="#sonuc">Sonucumu gör</a>`:""}${S.user?`<a class="btn ghost" href="#eslesmeler">Eşleşmelerim</a>`:`<a class="btn ghost" href="#giris">Zaten üyeyim, giriş yap</a>`}</div>
     </section>
     <section class="tests" aria-label="Test seçin">
       <button class="test" id="b-hizli"><span class="tm">${h} soru · yaklaşık ${sure(h)} dk</span><b>Hızlı test</b><small>Her konudan en belirleyici 3 soru. İlk tanışma için yeterli.</small></button>
@@ -287,9 +437,8 @@ function anaSayfa(){
     </section>
     <section class="stack">
       <h3>Elinizde bir uyum kodu mu var?</h3>
-      <p style="color:var(--muted)">Biri size <b>DENK-</b> ile başlayan bir kod gönderdiyse testi çözün, sonuç sayfasında kodu girip karşılaştırın. Farklı testleri çözmüş olsanız da ortak sorular karşılaştırılır.</p>
+      <p style="color:var(--muted)">Biri size <b>DENK-</b> ile başlayan bir kod gönderdiyse testi çözün, sonuç sayfasında kodu girip karşılaştırın. Bunun için üyelik gerekmez.</p>
     </section>
-    <div class="note"><p>Cevaplarınız yalnızca bu cihazda saklanır. Kodunuzu siz paylaşmadıkça kimse göremez.</p></div>
   </div>`;
   $("#b-hizli").onclick=()=>baslat("tek","hizli");
   $("#b-tam").onclick=()=>baslat("tek","tam");
@@ -330,7 +479,7 @@ function anket(){
   const ileri=$("#b-ileri"); if(ileri) ileri.onclick=()=>{ if(i<n-1){S.i++; anket();} else bitir(); };
 }
 
-function bitir(){
+async function bitir(){
   const c=S.cev.slice(); S.liste=[];
   if(S.mod==="cift1"){ S.es=c; app.innerHTML=`<div class="stack" style="gap:20px">
       <p class="eyebrow">1. eş tamamladı</p><h2>Şimdi telefonu eşinize verin.</h2>
@@ -338,12 +487,18 @@ function bitir(){
       <div class="row"><button class="btn" id="b-2">2. eş başlasın</button></div></div>`;
     $("#b-2").onclick=()=>baslat("cift2",S.test); return; }
   if(S.mod==="cift2"){ S.karsi=c; S.karsiAd="2. eş"; S.ben=S.es; S.benAd="1. eş"; location.hash="uyum"; return render(); }
-  S.cevap=c; store.set("cevap2",c); location.hash="sonuc"; render();
+  S.cevap=c; store.set("cevap2",c);
+  if(S.user && S.profil){ try{ await api.profilKaydet({cevap:c}); S.profil.cevap=c; toast("Cevaplarınız profilinize kaydedildi"); }catch(e){ toast(hataMetni(e)); } }
+  location.hash="sonuc"; render();
 }
 
 function sonuc(){
-  if(!S.cevap){ location.hash=""; return render(); }
+  if(!S.cevap){ location.hash=""; return; }
   const p=profil(S.cevap), [ad,acik,ipucu]=personaSec(p), kod=kodla(S.cevap), n=sayi(S.cevap), eksik=Q.length-n;
+  const uyelik = S.user ? (S.profil?"":`<section class="band"><span class="tag">Son adım</span><h2>Profilinizi tamamlayın, adaylarınız listelensin.</h2><div class="row"><a class="btn" href="#profil">Profili tamamla</a></div></section>`)
+    : `<section class="band"><span class="tag">Eşleşmeler için üye olun</span><h2>Sonucunuza göre size en uyumlu adayları görün.</h2>
+       <p>Ücretsiz hesap açın, profilinizi tamamlayın. İletişim bilgileriniz yalnızca karşılıklı ilgi olduğunda paylaşılır.</p>
+       <div class="row"><a class="btn" href="#giris">Üye ol</a></div></section>`;
   app.innerHTML=`<div class="stack" style="gap:26px">
     <div class="persona">
       <p class="eyebrow">Evlilik profiliniz · ${n} soru</p>
@@ -351,14 +506,15 @@ function sonuc(){
       <p>${acik}</p>
       <p style="color:var(--muted);font-size:15px">${ipucu}</p>
     </div>
-    ${eksik?`<section class="band"><span class="tag">Profilinizi derinleştirin</span>
-      <p>Kapsamlı teste geçin, yalnızca cevaplamadığınız ${eksik} soru sorulur. Cevaplarınız korunur.</p>
+    ${uyelik}
+    ${eksik?`<section class="stack"><h3>Profilinizi derinleştirin</h3>
+      <p style="color:var(--muted)">Kapsamlı teste geçin, yalnızca cevaplamadığınız ${eksik} soru sorulur. Cevaplarınız korunur.</p>
       <div class="row"><button class="btn ghost" id="b-devam">Kalan ${eksik} soruyu çöz</button></div></section>`:""}
     <section class="stack"><h3>Konulara göre önem verdiğiniz düzey</h3>${barlar(p)}
       <p style="color:var(--muted);font-size:14px">100: bu konuda güçlü ve net bir beklentiniz var (rollerde geleneksel, yaşam tarzında sosyal, kariyerde hedef odaklı yön). 0: tersi ya da esnek.</p></section>
     <section class="stack">
       <h3>Uyum kodunuz</h3>
-      <p style="color:var(--muted)">Tanıştığınız kişiye gönderin. O da testi çözüp kodunuzu girince ikiniz de aynı uyum sonucunu görürsünüz.</p>
+      <p style="color:var(--muted)">Site dışında tanıştığınız birine gönderin. O da testi çözüp kodunuzu girince ikiniz de aynı uyum sonucunu görürsünüz.</p>
       <div class="code" id="kod">${kod}</div>
       <div class="row"><button class="btn ghost" id="b-kopya">Kodu kopyala</button><button class="btn ghost" id="b-yeni">Testi baştan çöz</button></div>
     </section>
@@ -384,57 +540,230 @@ function sonuc(){
     if(!c){ $("#err").textContent="Kod eksik ya da hatalı. DENK- ile başlayan kodun tamamını yapıştırın."; return; }
     if(!uyum(S.cevap,c).ortak){ $("#err").textContent="Bu kodla ortak cevapladığınız soru yok."; return; }
     S.ben=S.cevap; S.benAd="Siz"; S.karsi=c; S.karsiAd=$("#k-ad").value.trim()||"Diğer kişi";
-    location.hash="uyum"; render();
+    location.hash="uyum";
   };
 }
-function selectEl(el){ const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
 
 function uyumSayfa(){
-  if(!S.ben||!S.karsi){ location.hash=S.cevap?"sonuc":""; return render(); }
+  if(!S.ben||!S.karsi){ location.hash=S.cevap?"sonuc":""; return; }
   const u=uyum(S.ben,S.karsi), A=esc(S.benAd), B=esc(S.karsiAd);
   const sirali=Object.keys(u.d).sort((x,y)=>u.d[y]-u.d[x]), ilk=sirali[0], son=sirali[sirali.length-1];
-  const yorum = u.genel>=85?"Temel değerlerde büyük ölçüde denksiniz.":u.genel>=70?"Çoğu konuda aynı yerdesiniz. Farklı olduğunuz birkaç konuyu konuşun.":u.genel>=55?"Önemli farklarınız var. Bunlar konuşularak aşılabilir ama göz ardı edilmemeli.":"Birçok temel konuda farklı düşünüyorsunuz. Bunları açıkça konuşmadan karar vermeyin.";
   app.innerHTML=`<div class="stack" style="gap:26px">
     <section class="stack" style="gap:8px">
       <p class="eyebrow">${A} ve ${B}</p>
       <div class="score"><b>%${u.genel}</b><span>uyum</span></div>
-      <p class="lead">${yorum}</p>
+      <p class="lead">${yorumMetni(u.genel)}</p>
       <p style="color:var(--muted);font-size:14px">${u.ortak} ortak soru üzerinden hesaplandı.</p>
     </section>
     <section class="stack"><h3>Konu konu uyum</h3>${barlar(u.d,"n")}
       ${u.d[ilk]>u.d[son]?`<p style="color:var(--muted);font-size:15px">En denk olduğunuz konu: <b style="color:var(--ink)">${DIMS[ilk].ad}</b>. En çok konuşmanız gereken: <b style="color:var(--ink)">${DIMS[son].ad}</b>.</p>`:""}</section>
-    <section class="stack"><h3>Konuşmanız gereken sorular</h3>
-      ${u.farklar.length?`<ul class="diffs">${u.farklar.map(x=>`<li><span>${esc(Q[x.i][1])}</span>
-        <span class="ans"><span>${A}: <b>${OPTS[S.ben[x.i]-1]}</b></span><span>${B}: <b>${OPTS[S.karsi[x.i]-1]}</b></span></span></li>`).join("")}</ul>`
-        :`<p style="color:var(--muted)">Hiçbir soruda iki basamaktan fazla ayrılmadınız.</p>`}
-    </section>
+    <section class="stack"><h3>Konuşmanız gereken sorular</h3>${farkListesi(u,S.ben,S.karsi,A,B)}</section>
     <div class="row"><a class="btn" href="#">Ana sayfa</a>${S.cevap?`<a class="btn ghost" href="#sonuc">Profilime dön</a>`:""}</div>
   </div>`;
 }
 
+/* ---------- giriş / kayıt ---------- */
+function giris(){
+  if(S.user){ location.hash = S.profil ? "eslesmeler" : "profil"; return; }
+  let mod = S.girisMod || "kayit";
+  const ciz = () => {
+    app.innerHTML=`<div class="stack" style="gap:22px;max-width:440px">
+      <div class="stack" style="gap:8px"><p class="eyebrow">Hesabınız</p><h2>${mod==="kayit"?"Ücretsiz üye olun":"Tekrar hoş geldiniz"}</h2></div>
+      <div class="seg" role="tablist"><button id="t-kayit" class="${mod==="kayit"?"on":""}" role="tab">Üye ol</button><button id="t-giris" class="${mod==="giris"?"on":""}" role="tab">Giriş yap</button></div>
+      <form id="fg" class="stack" novalidate>
+        <div class="fld"><label for="g-email">E-posta</label><input type="email" id="g-email" autocomplete="email" required></div>
+        <div class="fld"><label for="g-sifre">Şifre</label><input type="password" id="g-sifre" autocomplete="${mod==="kayit"?"new-password":"current-password"}" minlength="6" required>${mod==="kayit"?`<small>En az 6 karakter.</small>`:""}</div>
+        ${mod==="kayit"?`<label class="chk"><input type="checkbox" id="g-onay"><span>18 yaşından büyüğüm. Profil bilgilerimin üye adaylara gösterilmesini ve iletişim bilgimin yalnızca karşılıklı ilgi olduğunda paylaşılmasını kabul ediyorum.</span></label>`:""}
+        <p class="err" id="gerr" role="alert"></p>
+        <div class="row"><button class="btn" type="submit" id="g-btn">${mod==="kayit"?"Hesap oluştur":"Giriş yap"}</button></div>
+      </form>
+    </div>`;
+    $("#t-kayit").onclick=()=>{ mod=S.girisMod="kayit"; ciz(); };
+    $("#t-giris").onclick=()=>{ mod=S.girisMod="giris"; ciz(); };
+    $("#fg").onsubmit=async e=>{
+      e.preventDefault();
+      const email=$("#g-email").value.trim(), sifre=$("#g-sifre").value, err=$("#gerr");
+      if(!/^\S+@\S+\.\S+$/.test(email)) return err.textContent="Geçerli bir e-posta adresi girin.";
+      if(sifre.length<6) return err.textContent="Şifre en az 6 karakter olmalı.";
+      if(mod==="kayit" && !$("#g-onay").checked) return err.textContent="Devam etmek için onay kutusunu işaretleyin.";
+      const b=$("#g-btn"); b.disabled=true; err.textContent="";
+      try{
+        if(mod==="kayit"){
+          const acik = await api.kayit(email,sifre);
+          if(!acik){ app.innerHTML=`<div class="stack"><p class="eyebrow">Neredeyse bitti</p><h2>E-postanızı doğrulayın.</h2><p class="lead">${esc(email)} adresine bir bağlantı gönderdik. Bağlantıya tıkladıktan sonra buradan giriş yapın.</p><div class="row"><a class="btn" href="#giris" id="b-g2">Giriş yap</a></div></div>`; S.girisMod="giris"; return; }
+        } else await api.giris(email,sifre);
+        await oturumYukle();
+        location.hash = S.profil ? "eslesmeler" : "profil";
+        toast(mod==="kayit"?"Hesabınız oluşturuldu":"Giriş yapıldı");
+      }catch(ex){ err.textContent=hataMetni(ex); b.disabled=false; }
+    };
+  };
+  ciz();
+}
+
+/* ---------- profil ---------- */
+async function profilSayfa(){
+  if(!S.user){ location.hash="giris"; return; }
+  const p=S.profil||{}, ilet = S.profil ? await api.iletisimim() : "";
+  const c=gecerli(p.cevap)||S.cevap, yil=new Date().getFullYear();
+  app.innerHTML=`<div class="stack" style="gap:26px">
+    <div class="stack" style="gap:8px"><p class="eyebrow">Profilim</p><h2>${S.profil?"Profil bilgileriniz":"Profilinizi oluşturun"}</h2></div>
+    <section class="persona">
+      ${c?`<p class="eyebrow">Test sonucunuz · ${sayi(c)} soru</p><h2>${personaSec(profil(c))[0]}</h2>
+        <div class="row">${sayi(c)<Q.length?`<button class="btn ghost" id="b-tamamla">Kalan ${Q.length-sayi(c)} soruyu çöz</button>`:""}<a class="btn ghost" href="#sonuc">Ayrıntılı sonuç</a></div>`
+      :`<p class="eyebrow">Test sonucunuz</p><p>Eşleşmelerin hesaplanması için önce testi çözmelisiniz.</p><div class="row"><button class="btn" id="b-test">Teste başla</button></div>`}
+    </section>
+    <form id="fp" class="stack" novalidate>
+      <div class="grid2">
+        <div class="fld"><label for="p-ad">Adınız</label><input type="text" id="p-ad" maxlength="40" value="${esc(p.ad)}" autocomplete="given-name"><small>Soyadınızı yazmanız gerekmez.</small></div>
+        <div class="fld"><label for="p-yil">Doğum yılı</label><input type="number" id="p-yil" min="${yil-80}" max="${yil-18}" value="${esc(p.dogum_yili)}" inputmode="numeric"></div>
+        <div class="fld"><label for="p-cins">Cinsiyet</label><select id="p-cins"><option value="">Seçin</option><option value="kadin" ${p.cinsiyet==="kadin"?"selected":""}>Kadın</option><option value="erkek" ${p.cinsiyet==="erkek"?"selected":""}>Erkek</option></select></div>
+        <div class="fld"><label for="p-sehir">Şehir</label><input type="text" id="p-sehir" maxlength="40" value="${esc(p.sehir)}" autocomplete="address-level2"></div>
+      </div>
+      <div class="fld"><label for="p-hak">Kendinizi kısaca tanıtın</label><textarea id="p-hak" maxlength="400" placeholder="Mesleğiniz, nelerden hoşlandığınız, nasıl bir evlilik hayal ettiğiniz...">${esc(p.hakkinda)}</textarea></div>
+      <div class="fld"><label for="p-ilet">İletişim bilgisi</label><input type="text" id="p-ilet" maxlength="120" value="${esc(ilet)}" placeholder="Telefon, e-posta ya da Instagram"><small>Yalnızca ikiniz de birbirinizle ilgilendiğinizde karşı tarafa gösterilir.</small></div>
+      <label class="chk"><input type="checkbox" id="p-gor" ${p.gorunur!==false?"checked":""}><span>Profilim aday listelerinde görünsün</span></label>
+      <p class="err" id="perr" role="alert"></p>
+      <div class="row"><button class="btn" type="submit" id="p-btn">${S.profil?"Kaydet":"Profili oluştur"}</button></div>
+    </form>
+    <section class="note">
+      <p>${S.user.email?`${esc(S.user.email)} ile giriş yaptınız.`:"Giriş yaptınız."}</p>
+      <div class="row"><button class="btn ghost" id="b-cikis">Çıkış yap</button>${S.profil?`<button class="btn ghost danger" id="b-sil">Profilimi sil</button>`:""}</div>
+      <div id="sil-onay" hidden class="stack" style="gap:10px"><p class="danger">Profiliniz, cevaplarınız ve ilgileriniz silinecek. Bu geri alınamaz.</p><div class="row"><button class="btn" id="b-sil-evet">Evet, sil</button><button class="btn ghost" id="b-sil-hayir">Vazgeç</button></div></div>
+    </section>
+  </div>`;
+  const bt=$("#b-test"); if(bt) bt.onclick=()=>baslat("tek","hizli");
+  const tm=$("#b-tamamla"); if(tm) tm.onclick=()=>baslat("tek","tam",c);
+  $("#b-cikis").onclick=async()=>{ await api.cikis(); S.user=null; S.profil=null; location.hash=""; toast("Çıkış yapıldı"); };
+  const sil=$("#b-sil"); if(sil){
+    sil.onclick=()=>{ $("#sil-onay").hidden=false; };
+    $("#b-sil-hayir").onclick=()=>{ $("#sil-onay").hidden=true; };
+    $("#b-sil-evet").onclick=async()=>{ try{ await api.profilSil(); S.profil=null; toast("Profiliniz silindi"); render(); }catch(e){ toast(hataMetni(e)); } };
+  }
+  $("#fp").onsubmit=async e=>{
+    e.preventDefault();
+    const err=$("#perr"), v={
+      ad:$("#p-ad").value.trim(), dogum_yili:+$("#p-yil").value||null, cinsiyet:$("#p-cins").value,
+      sehir:$("#p-sehir").value.trim(), hakkinda:$("#p-hak").value.trim(), gorunur:$("#p-gor").checked
+    };
+    if(!v.ad) return err.textContent="Adınızı yazın.";
+    if(!v.dogum_yili||v.dogum_yili>yil-18||v.dogum_yili<yil-80) return err.textContent=`Doğum yılınızı girin (${yil-80} ile ${yil-18} arası).`;
+    if(!v.cinsiyet) return err.textContent="Cinsiyetinizi seçin.";
+    if(!v.sehir) return err.textContent="Şehrinizi yazın.";
+    if(!c) return err.textContent="Profili kaydetmeden önce testi çözün.";
+    v.cevap=c;
+    const b=$("#p-btn"); b.disabled=true; err.textContent="";
+    try{
+      await api.profilKaydet(v, $("#p-ilet").value.trim());
+      const ilk=!S.profil; S.profil={...S.profil,...v};
+      toast("Profiliniz kaydedildi");
+      if(ilk) location.hash="eslesmeler"; else b.disabled=false;
+    }catch(ex){ err.textContent=hataMetni(ex); b.disabled=false; }
+  };
+}
+
+/* ---------- eşleşmeler ---------- */
+async function eslesmeler(){
+  if(!S.user){ location.hash="giris"; return; }
+  if(!S.profil){ location.hash="profil"; return; }
+  app.innerHTML=`<p style="color:var(--muted)">Adaylarınız hesaplanıyor…</p>`;
+  const ben=gecerli(S.profil.cevap);
+  let adaylar, ilgi;
+  try{ [adaylar,ilgi]=await Promise.all([api.adaylar(),api.ilgiler()]); }
+  catch(e){ app.innerHTML=`<p class="err">${esc(hataMetni(e))}</p>`; return; }
+  const karsi = S.profil.cinsiyet==="kadin"?"erkek":"kadin";
+  const liste = adaylar.filter(a=>a.cinsiyet===karsi && gecerli(a.cevap))
+    .map(a=>({...a, u:uyum(ben,gecerli(a.cevap))})).filter(a=>a.u.ortak)
+    .sort((x,y)=>y.u.genel-x.u.genel);
+  const sekme = S.sekme || "tum";
+  const filtre = { tum:liste, gelen:liste.filter(a=>ilgi.gelen.has(a.id)), karsilikli:liste.filter(a=>ilgi.gelen.has(a.id)&&ilgi.giden.has(a.id)) }[sekme];
+  const durum = a => ilgi.giden.has(a.id)&&ilgi.gelen.has(a.id) ? `<span class="pill ok">Karşılıklı ilgi</span>`
+    : ilgi.gelen.has(a.id) ? `<span class="pill nar">Sizinle ilgileniyor</span>`
+    : ilgi.giden.has(a.id) ? `<span class="pill">İlgi gönderildi</span>` : "";
+  const kG=liste.filter(a=>ilgi.gelen.has(a.id)).length, kK=liste.filter(a=>ilgi.gelen.has(a.id)&&ilgi.giden.has(a.id)).length;
+  app.innerHTML=`<div class="stack" style="gap:22px">
+    <div class="stack" style="gap:8px"><p class="eyebrow">Eşleşmeler</p><h2>Size en uyumlu adaylar</h2>
+      <p style="color:var(--muted)">Uyum puanına göre sıralandı. Bir adaya ilgi gönderin; o da size ilgi gönderirse iletişim bilgileriniz karşılıklı açılır.</p></div>
+    <div class="seg" role="tablist">
+      <button data-s="tum" class="${sekme==="tum"?"on":""}">Tümü (${liste.length})</button>
+      <button data-s="gelen" class="${sekme==="gelen"?"on":""}">Gelen (${kG})</button>
+      <button data-s="karsilikli" class="${sekme==="karsilikli"?"on":""}">Karşılıklı (${kK})</button>
+    </div>
+    ${filtre.length?`<div class="cards">${filtre.map(a=>`
+      <button class="card" data-id="${esc(a.id)}">
+        <b>${esc(a.ad)}, ${yas(a.dogum_yili)}</b><span class="pct">%${a.u.genel}</span>
+        <span class="meta">${esc(a.sehir)} · ${personaSec(profil(gecerli(a.cevap)))[0]}</span>
+        <span class="pills">${a.ornek?`<span class="pill">Örnek</span>`:""}${durum(a)}</span>
+      </button>`).join("")}</div>`
+    :`<p style="color:var(--muted)">${sekme==="tum"?"Şu an size uygun aday yok. Yeni üyeler katıldıkça burada görünecek.":sekme==="gelen"?"Henüz size ilgi gönderen olmadı.":"Henüz karşılıklı ilgi yok."}</p>`}
+  </div>`;
+  app.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{ S.sekme=b.dataset.s; eslesmeler(); });
+  app.querySelectorAll(".card").forEach(b=>b.onclick=()=>{ S.kisiId=b.dataset.id; location.hash="aday"; });
+}
+
+async function adaySayfa(){
+  if(!S.user||!S.profil||!S.kisiId){ location.hash=S.user?"eslesmeler":"giris"; return; }
+  let a, ilgi, ilet;
+  try{ [a,ilgi]=await Promise.all([api.kisi(S.kisiId),api.ilgiler()]); }
+  catch(e){ app.innerHTML=`<p class="err">${esc(hataMetni(e))}</p>`; return; }
+  if(!a||!gecerli(a.cevap)){ app.innerHTML=`<div class="stack"><p>Bu profil artık mevcut değil.</p><div class="row"><a class="btn" href="#eslesmeler">Eşleşmelere dön</a></div></div>`; return; }
+  const ben=gecerli(S.profil.cevap), o=gecerli(a.cevap), u=uyum(ben,o);
+  const giden=ilgi.giden.has(a.id), gelen=ilgi.gelen.has(a.id), karsilikli=giden&&gelen;
+  if(karsilikli){ try{ ilet=await api.iletisimGetir(a.id); }catch(e){} }
+  const A="Siz", B=esc(a.ad);
+  const [pad,pacik]=personaSec(profil(o));
+  app.innerHTML=`<div class="stack" style="gap:26px">
+    <a href="#eslesmeler" style="color:var(--muted);font-size:15px">← Eşleşmeler</a>
+    <section class="stack" style="gap:10px">
+      <div class="pills">${a.ornek?`<span class="pill">Örnek profil</span>`:""}${karsilikli?`<span class="pill ok">Karşılıklı ilgi</span>`:gelen?`<span class="pill nar">Sizinle ilgileniyor</span>`:""}</div>
+      <h2>${esc(a.ad)}, ${yas(a.dogum_yili)}</h2>
+      <p style="color:var(--muted)">${esc(a.sehir)}</p>
+      ${a.hakkinda?`<p>${esc(a.hakkinda)}</p>`:""}
+    </section>
+    <section class="stack" style="gap:8px">
+      <div class="score"><b>%${u.genel}</b><span>uyum</span></div>
+      <p class="lead">${yorumMetni(u.genel)}</p>
+      <p style="color:var(--muted);font-size:14px">${esc(a.ad)} profili: <b style="color:var(--ink)">${pad}</b>. ${pacik}</p>
+    </section>
+    ${karsilikli?`<section class="contact"><span class="tag" style="font-size:13px;font-weight:600;color:var(--sage);letter-spacing:.08em;text-transform:uppercase">İletişim bilgisi</span><b>${esc(ilet||"Henüz iletişim bilgisi eklememiş.")}</b><small style="color:var(--muted)">İlk görüşmeyi kalabalık ve güvenli bir yerde yapın. Para isteyenlere karşı dikkatli olun.</small></section>`
+      :`<section class="stack"><div class="row">${giden?`<button class="btn ghost" id="b-geri-al">İlgiyi geri al</button>`:`<button class="btn" id="b-ilgi">${gelen?"Ben de ilgileniyorum":"İlgileniyorum"}</button>`}</div>
+        <p style="color:var(--muted);font-size:14px">${giden?`${esc(a.ad)} de ilgi gönderirse iletişim bilgileriniz karşılıklı açılır.`:`${esc(a.ad)} ilgi gönderdiğinizi ${gelen?"görecek ve iletişim bilgileriniz hemen açılacak":"görür; o da ilgilenirse iletişim bilgileriniz açılır"}.`}</p></section>`}
+    <section class="stack"><h3>Konu konu uyum</h3>${barlar(u.d,"n")}</section>
+    <section class="stack"><h3>Konuşmanız gereken sorular</h3>${farkListesi(u,ben,o,A,B)}</section>
+  </div>`;
+  const bi=$("#b-ilgi"); if(bi) bi.onclick=async()=>{ bi.disabled=true; try{ await api.ilgiGonder(a.id); toast("İlgi gönderildi"); adaySayfa(); }catch(e){ toast(hataMetni(e)); bi.disabled=false; } };
+  const bg=$("#b-geri-al"); if(bg) bg.onclick=async()=>{ bg.disabled=true; try{ await api.ilgiGeriAl(a.id); toast("İlgi geri alındı"); adaySayfa(); }catch(e){ toast(hataMetni(e)); bg.disabled=false; } };
+}
+
 function nasil(){
   app.innerHTML=`<div class="stack" style="gap:18px">
-    <p class="eyebrow">Puan nasıl hesaplanır?</p>
+    <p class="eyebrow">Nasıl çalışır?</p>
     <h2>Basit ve açık bir yöntem.</h2>
     <p>Test sekiz konuda yedişer sorudan oluşur (toplam ${Q.length}). Hızlı test her konunun ilk üç sorusunu sorar. Her soruya 1 ile 5 arasında bir cevap verirsiniz.</p>
     <p>İki kişinin aynı soruya verdiği cevaplar arasındaki fark ölçülür. Aynı cevap tam puan, en uç iki cevap sıfır puan alır. Bir konunun puanı o konudaki ortak soruların ortalamasıdır. Genel uyum, konu puanlarının ortalamasıdır. Biri hızlı, diğeri kapsamlı testi çözdüyse yalnızca ikisinin de cevapladığı sorular sayılır.</p>
-    <p>Profiliniz, her konudaki beklentinizin ne kadar güçlü olduğuna göre belirlenir. Bazı sorular ters yönlüdür; örneğin “evde alkol bulunması sorun olmaz” sorusuna katılmak inanç puanını düşürür.</p>
+    <p>Üye olursanız adınız, yaşınız, şehriniz, tanıtım yazınız ve test cevaplarınız diğer üyelere gösterilir. İletişim bilginiz yalnızca siz ve karşı taraf birbirinize ilgi gönderdiğinizde açılır. Profilinizi istediğiniz zaman gizleyebilir ya da silebilirsiniz.</p>
     <p style="color:var(--muted)">Bu test bir sohbet başlatıcıdır, psikolojik bir ölçek değildir. Evlilik kararını bir puana bırakmayın; farklı çıktığınız konuları yüz yüze konuşun.</p>
     <div class="row"><a class="btn" href="#">Ana sayfa</a></div>
   </div>`;
 }
 
-function render(){
-  const h=location.hash.slice(1);
-  window.scrollTo(0,0);
-  if(h==="anket") return S.liste.length?anket():(location.hash="",anaSayfa());
-  if(h==="sonuc") return sonuc();
-  if(h==="uyum") return uyumSayfa();
-  if(h==="nasil") return nasil();
-  anaSayfa();
+async function oturumYukle(){
+  try{ S.user=await api.oturum(); S.profil = S.user ? await api.profilim() : null; }
+  catch(e){ S.user=null; S.profil=null; toast(hataMetni(e)); }
+  if(S.profil && !S.cevap && gecerli(S.profil.cevap)) S.cevap=gecerli(S.profil.cevap);
 }
+
+async function render(){
+  const h=location.hash.slice(1);
+  navCiz(h);
+  window.scrollTo(0,0);
+  if(h==="anket") return S.liste.length?anket():(location.hash="");
+  const v={sonuc, uyum:uyumSayfa, nasil, giris, profil:profilSayfa, eslesmeler, aday:adaySayfa}[h];
+  return (v||anaSayfa)();
+}
+$("#demo").hidden = !api.demo;
 addEventListener("hashchange",render);
-render();
+oturumYukle().then(render);
 </script>
 </body>
 </html>
