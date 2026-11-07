@@ -5,8 +5,18 @@ compatibility_date = "2025-10-01"
 # Sitenin geri kalanı (Astro) olduğu gibi kalır; yalnız /forum altı bu Worker'a gider.
 routes = [
   { pattern = "toolpano.com/forum*", zone_name = "toolpano.com" },
-  { pattern = "www.toolpano.com/forum*", zone_name = "toolpano.com" }
+  { pattern = "www.toolpano.com/forum*", zone_name = "toolpano.com" },
+  # Sitenin kök keşif dosyaları: Pages'teki asıl dosya alınır, foruma dair satırlar eklenir.
+  { pattern = "toolpano.com/robots.txt", zone_name = "toolpano.com" },
+  { pattern = "toolpano.com/sitemap-index.xml", zone_name = "toolpano.com" },
+  { pattern = "toolpano.com/llms.txt", zone_name = "toolpano.com" }
 ]
+
+rules = [{ type = "Data", globs = ["**/*.png"], fallthrough = false }]
+
+[vars]
+# IndexNow anahtarı gizli değildir; /forum/<anahtar>.txt adresinde yayımlanır.
+INDEXNOW_KEY = "a2f812803956e4a829fb138089d7133c"
 
 [[d1_databases]]
 binding = "DB"

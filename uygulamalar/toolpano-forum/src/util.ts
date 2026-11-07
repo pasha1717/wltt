@@ -2,9 +2,12 @@ export interface Env {
   DB: D1Database;
   ADMIN_TOKEN?: string;
   IP_SALT?: string;
+  INDEXNOW_KEY?: string;
 }
 
 export const BASE = '/forum';
+/** Kanonik adres: www ve yerel adresler yerine her zaman bu kullanılır. */
+export const SITE = 'https://toolpano.com';
 
 export const now = () => Math.floor(Date.now() / 1000);
 
