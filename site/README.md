@@ -54,3 +54,29 @@ Kodda ek ayar gerekmez. Google ile gelen kullanıcının adı profil formuna oto
 
 ## SQL'in sınanması
 `supabase.sql`, Supabase'in auth, storage ve realtime şemalarını taklit eden yerel bir PostgreSQL 16 üzerinde kuruldu ve 24 senaryoyla sınandı. Sınanan senaryolar: karşılıklı ilgi olmadan mesaj, başkası adına mesaj, mesaj metnini değiştirme, başkasının adına fotoğraf, net fotoğraf erişimi, görüşme kanalı, engel sonrası görünürlük, şikayet okuma, askıya alma, hesap silme. Gerçek Supabase üzerinde henüz çalıştırılmadı.
+
+## Doğrulama rozeti
+İki yol var; ikisinden biri yeterli, rozet "Doğrulandı" olarak görünür (üzerine gelince hangisi olduğu yazar). Doğrulanmış profiller eşit puanda listede öne çıkar ve filtrelenebilir.
+
+**Fotoğraf (selfie) doğrulama:** Üye, ekranda gösterilen 4 haneli kodu bir kağıda yazıp yüzünün yanında tutarak selfie yükler. Yönetici, Yönetim → Doğrulama sekmesinde selfieyi profil fotoğrafıyla yan yana görür, onaylar ya da sebep seçerek reddeder. Selfieyi yalnızca üye ve yöneticiler görebilir. Kimlik kartı fotoğrafı bilerek istenmiyor: KVKK açısından çok daha ağır yükümlülük getirir.
+
+**Telefon doğrulama:** SMS ile 6 haneli kod. Bunun için Supabase → Authentication → Providers → **Phone**'u açıp bir SMS sağlayıcısı (Twilio, Vonage, MessageBird vb.) bağlamanız gerekir; SMS başına ücretlidir. Numara diğer üyelere gösterilmez. Rozet, Supabase numarayı doğruladığında veritabanı tetikleyicisiyle otomatik açılır; kullanıcı kendisi açamaz.
+
+## E-posta bildirimleri
+"Biri sizinle ilgileniyor", "Karşılıklı ilgi" ve "Yeni mesaj" e-postaları `supabase/functions/bildirim` fonksiyonuyla gönderilir.
+- Kişi son 5 dakikada sitedeyse e-posta gitmez (site açıkken her 2 dakikada bir "çevrimiçi" bilgisi yazılır).
+- Aynı kişiden aynı türde bildirim mesajda 6 saatte, ilgide 24 saatte bir gider. Engel varsa ya da gönderen askıdaysa gitmez.
+- Üye, Profilim sayfasından e-postaları kapatabilir.
+
+Kurulum:
+1. resend.com'da hesap açın, alan adınızı doğrulayın, bir API anahtarı oluşturun.
+2. Supabase CLI ile (bilgisayarınızda, `site` klasöründe):
+   ```
+   npx supabase login
+   npx supabase link --project-ref <proje-kodunuz>
+   npx supabase secrets set RESEND_API_KEY=re_xxx BILDIRIM_FROM="Denk <bildirim@alanadiniz.com>" SITE_URL=https://denk.vercel.app WEBHOOK_SECRET=<uzun-rastgele-metin>
+   npx supabase functions deploy bildirim --no-verify-jwt
+   ```
+3. Supabase → Database → **Webhooks** → iki webhook oluşturun: biri `ilgi`, biri `mesaj` tablosu için, olay **Insert**, tür "Supabase Edge Functions", fonksiyon `bildirim`, HTTP başlığı `x-webhook-secret: <aynı uzun rastgele metin>`.
+
+Fonksiyonun karar mantığı (kime, ne zaman, hangi e-posta) sahte Supabase/Resend yanıtlarıyla 9 senaryoda sınandı; gerçek Resend ile gönderim denenmedi.

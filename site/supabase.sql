@@ -14,6 +14,10 @@ create table if not exists public.profiles (
   foto int not null default 0,          -- 0: fotoğraf yok; artan sayı: sürüm
   askida boolean not null default false, -- yönetici tarafından askıya alındı
   riza_tarihi timestamptz not null,      -- açık rıza verildiği an
+  dogrulandi boolean not null default false,          -- selfie doğrulaması yönetici tarafından onaylandı
+  telefon_dogrulandi boolean not null default false,  -- telefon numarası SMS koduyla doğrulandı
+  eposta_bildirim boolean not null default true,      -- ilgi ve mesaj e-postaları
+  son_gorulme timestamptz,                            -- sitede en son ne zaman açıktı (bildirim için)
   guncelleme timestamptz not null default now()
 );
 
@@ -49,6 +53,25 @@ create table if not exists public.sikayet (
   durum text not null default 'acik' check (durum in ('acik','islem','asilsiz')),
   olusturma timestamptz not null default now()
 );
+
+-- Selfie doğrulama başvurusu: fotoğraf Storage'da dogrulama/<id>.jpg
+create table if not exists public.dogrulama (
+  id uuid primary key references public.profiles(id) on delete cascade,
+  kod text not null check (kod ~ '^[0-9]{4}$'),
+  durum text not null default 'bekliyor' check (durum in ('bekliyor','onay','red')),
+  red_sebep text check (char_length(red_sebep) <= 200),
+  olusturma timestamptz not null default now()
+);
+
+-- E-posta bildirimlerinin tekrarını sınırlamak için kayıt (yalnızca sunucu fonksiyonu kullanır)
+create table if not exists public.bildirim_log (
+  id bigint generated always as identity primary key,
+  to_id uuid not null references public.profiles(id) on delete cascade,
+  from_id uuid references public.profiles(id) on delete cascade,
+  tur text not null,
+  zaman timestamptz not null default now()
+);
+create index if not exists bildirim_log_ara on public.bildirim_log (to_id, tur, from_id, zaman desc);
 
 create table if not exists public.yoneticiler (
   id uuid primary key references auth.users(id) on delete cascade
@@ -102,19 +125,48 @@ $$;
 revoke execute on function public.hesabimi_sil() from public, anon;
 grant execute on function public.hesabimi_sil() to authenticated;
 
--- Kullanıcı kendi profilinde askida alanını değiştiremez (yalnızca yönetici).
+-- Kullanıcı askı ve doğrulama alanlarını kendisi değiştiremez.
+-- askida: yalnızca yönetici. dogrulandi: yalnızca doğrulama onayı. telefon_dogrulandi: yalnızca auth tetikleyicisi.
 create or replace function public.askida_koru() returns trigger
 language plpgsql security definer set search_path = public as $$
 begin
-  if not yonetici() then
-    if tg_op = 'INSERT' then new.askida := false;
-    else new.askida := old.askida; end if;
+  -- Başka bir tetikleyiciden (doğrulama/telefon sonucu) gelen güncellemeye izin ver
+  if pg_trigger_depth() > 1 then return new; end if;
+  if tg_op = 'INSERT' then
+    new.askida := false; new.dogrulandi := false;
+    new.telefon_dogrulandi := coalesce((select phone_confirmed_at is not null from auth.users where id = new.id), false);
+  else
+    if not yonetici() then new.askida := old.askida; end if;
+    new.dogrulandi := old.dogrulandi;
+    new.telefon_dogrulandi := old.telefon_dogrulandi;
   end if;
   return new;
 end $$;
 drop trigger if exists askida_koru on public.profiles;
 create trigger askida_koru before insert or update on public.profiles
   for each row execute function public.askida_koru();
+
+-- Doğrulama onaylanınca/reddedilince profildeki rozet güncellenir.
+create or replace function public.dogrulama_sonuc() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  update profiles set dogrulandi = (new.durum = 'onay') where id = new.id;
+  return new;
+end $$;
+drop trigger if exists dogrulama_sonuc on public.dogrulama;
+create trigger dogrulama_sonuc after insert or update of durum on public.dogrulama
+  for each row execute function public.dogrulama_sonuc();
+
+-- Telefon SMS koduyla doğrulanınca rozet açılır.
+create or replace function public.telefon_sonuc() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  update public.profiles set telefon_dogrulandi = (new.phone_confirmed_at is not null) where id = new.id;
+  return new;
+end $$;
+drop trigger if exists telefon_sonuc on auth.users;
+create trigger telefon_sonuc after update of phone_confirmed_at on auth.users
+  for each row execute function public.telefon_sonuc();
 
 -- ================= Kurallar (RLS) =================
 alter table public.profiles    enable row level security;
@@ -123,6 +175,8 @@ alter table public.ilgi        enable row level security;
 alter table public.engel       enable row level security;
 alter table public.sikayet     enable row level security;
 alter table public.yoneticiler enable row level security;
+alter table public.dogrulama   enable row level security;
+alter table public.bildirim_log enable row level security; -- kural yok: yalnızca service role erişir
 alter table public.cagri       enable row level security;
 alter table public.mesaj       enable row level security;
 
@@ -161,6 +215,15 @@ create policy "sikayet okuma" on public.sikayet for select to authenticated usin
 create policy "sikayet guncelleme" on public.sikayet for update to authenticated
   using (public.yonetici()) with check (public.yonetici());
 
+-- Doğrulama: kişi kendi başvurusunu görür ve "bekliyor" olarak gönderir; yönetici hepsini görür ve karar verir.
+create policy "dogrulama okuma" on public.dogrulama for select to authenticated
+  using (id = auth.uid() or public.yonetici());
+create policy "dogrulama basvuru" on public.dogrulama for insert to authenticated
+  with check (id = auth.uid() and durum = 'bekliyor');
+create policy "dogrulama yenileme" on public.dogrulama for update to authenticated
+  using (id = auth.uid() or public.yonetici())
+  with check ((id = auth.uid() and durum = 'bekliyor') or public.yonetici());
+
 create policy "yonetici okuma" on public.yoneticiler for select to authenticated using (id = auth.uid());
 
 create policy "cagri okuma" on public.cagri for select to authenticated
@@ -184,20 +247,22 @@ grant update (okundu) on public.mesaj to authenticated;
 -- "foto" kovası özeldir. Her üyenin iki dosyası olur:
 --   bulanik/<id>.jpg : 24 piksellik küçük kopya, giriş yapmış herkes görebilir (yüz seçilemez)
 --   net/<id>.jpg     : asıl fotoğraf, yalnızca sahibi, karşılıklı ilgi olan kişi ve yönetici görebilir
+--   dogrulama/<id>.jpg : doğrulama selfiesi, yalnızca sahibi ve yönetici görebilir
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('foto', 'foto', false, 2097152, array['image/jpeg'])
 on conflict (id) do nothing;
 
 create policy "foto okuma" on storage.objects for select to authenticated
   using (bucket_id = 'foto' and (
-    (storage.foldername(name))[1] = 'bulanik'
-    or split_part(storage.filename(name), '.', 1) = auth.uid()::text
+    split_part(storage.filename(name), '.', 1) = auth.uid()::text
     or public.yonetici()
-    or public.karsilikli(auth.uid(), split_part(storage.filename(name), '.', 1)::uuid)
-  ));
+    or (storage.foldername(name))[1] = 'bulanik'
+    or ((storage.foldername(name))[1] = 'net'
+        and public.karsilikli(auth.uid(), split_part(storage.filename(name), '.', 1)::uuid))
+  ));  -- dogrulama/ klasörünü yalnızca sahibi ve yönetici görür
 create policy "foto yukleme" on storage.objects for insert to authenticated
   with check (bucket_id = 'foto' and split_part(storage.filename(name), '.', 1) = auth.uid()::text
-              and (storage.foldername(name))[1] in ('net','bulanik'));
+              and (storage.foldername(name))[1] in ('net','bulanik','dogrulama'));
 create policy "foto guncelleme" on storage.objects for update to authenticated
   using (bucket_id = 'foto' and split_part(storage.filename(name), '.', 1) = auth.uid()::text);
 create policy "foto silme" on storage.objects for delete to authenticated
