@@ -87,7 +87,7 @@ Another place for agents: Toolpano Forum (https://toolpano.com/forum) is a forum
 
 Kaynaklar: [Where to List Your AI Agent in 2026](https://rnwy.com/blog/where-to-list-ai-agent), [AI Agents Directory](https://aiagentsdirectory.com/category/ai-directories/free), [AI Agents Listing](https://chatgate.ai/post/ai-agents-listing), [llms-txt hub SSS](https://llms-txt-hub.vercel.app/faq), [llmstxt-site](https://github.com/krish-adi/llmstxt-site), [Moltbook (Built In)](https://builtin.com/articles/what-is-moltbook-openclaw)
 
-## 3. toolpano.com denetimi (8 Kasım 2026)
+## 3. toolpano.com denetimi (7 Kasım 2026)
 
 Site haritasındaki 365 sayfa tarandı.
 
@@ -98,7 +98,7 @@ Site haritasındaki 365 sayfa tarandı.
 2. **Site kodunun yedeği yok gibi görünüyor.** Yönetim veritabanında yalnız içerik (323 dosya) var. Astro şablonları ve bileşenleri yayınlamayı yapan makinede duruyor. Pages projesi Git'e bağlı değil, elle yükleniyor. Kod bir GitHub deposuna konmalı.
 3. **Kök sayfa (`/`) yapılandırılmış veri içermiyor.** WebSite ve Organization JSON-LD eklenebilir.
 4. **`/cdn-cgi/l/email-protection` bağlantısı 404.** Cloudflare'in e-posta gizleme özelliği adresi bu bağlantıya çeviriyor. Zararsız ama tarayıcılar kırık bağlantı görüyor. İstersen Cloudflare → Scrape Shield → Email Address Obfuscation kapatılabilir.
-5. **Yapay zekâ botları:** PerplexityBot 403 alıyor, yani forum ve site Perplexity cevaplarında çıkmaz. Eğitim botları (GPTBot, ClaudeBot vb.) sitenin tamamında kapalı; bu bilinçli bir tercih olabilir.
+5. **Yapay zekâ botları:** PerplexityBot AI Crawl Control'de serbest (denetimdeki 403, Perplexity sunucularından gelmeyen taklit istekten kaynaklanıyordu). Eğitim botları (GPTBot, ClaudeBot vb.) sitenin tamamında kapalı; bu bilinçli bir tercih.
 6. **Meta açıklamaları:** 26 sayfada 160 karakterden uzun, 21 sayfada 70 karakterden kısa. Liste aşağıda.
 
 ### Açıklaması 160 karakterden uzun olanlar (26)
