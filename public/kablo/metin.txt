@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Bu videoyu belki okyanusun dibinden izliyorsun.
+[pause] Deniz altındaki kablolar kopsaydı, ne olurdu?
+Çoğu kişi internetin uydularla geldiğini düşünür.
+[pause] Kıtalar arası verinin neredeyse hepsi denizin altından gidiyor.
+[calm] Tahminlere göre bu trafiğin yaklaşık %99'u|yüzde_doksan_dokuzu kablolardan geçiyor.
+Uyduların taşıyabildiği veri, kabloların yanında çok az kalıyor.
+Kabloların toplam uzunluğu bir buçuk milyon kilometreyi buluyor.
+Her yıl yaklaşık 200|iki_yüz arıza oluyor. Çoğunu balıkçı ağları ve gemi çapaları yapıyor.
+[pause] Köpekbalığı ısırığı ise kayıtlarda neredeyse hiç yok.
+Bir kablo kopunca trafik ötekilere kayıyor, tamir gemisi de kabloyu dipten çekip onarıyor.
+[slowly] En önemli şeyler bazen görünmez.
+[softly] İnternet, denizin dibinde uzanan bir ip.
+[pause] Sence internetsiz kaç gün dayanırdın? Yorumlara yaz.

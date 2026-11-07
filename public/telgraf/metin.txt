@@ -1,0 +1,13 @@
+[curious, calm storyteller, unhurried] Bir savaş, barıştan iki hafta sonra yapıldı.
+[pause] Telgraf hiç icat edilmeseydi, ne olurdu?
+Çoğu kişi haberlerin biraz geç geleceğini düşünür.
+[pause] Bazen o gecikme can alıyordu.
+[calm] 24|Yirmi_dört Aralık 1814'te|bin_sekiz_yüz_on_dörtte ABD ile İngiltere barış imzaladı.
+Haber ancak gemiyle, haftalarca okyanus geçerek giderdi.
+8|Sekiz Ocak 1815'te|bin_sekiz_yüz_on_beşte iki ordu New Orleans'ta|Nyu_Orlins'te çarpıştı.
+İngilizler iki bine yakın kayıp verdi. Haber Washington'a|Vaşingtın'a şubat ortasında ulaştı.
+[pause] 1844'te|Bin_sekiz_yüz_kırk_dörtte Samuel Morse|Samuel_Mors, Washington'dan|Vaşingtın'dan ünlü telgrafını çekti.
+Artık haber dakikalar içinde gidiyordu.
+[slowly] Bilgi geç kalınca bedeli insanlar öder.
+[softly] Hız bazen hayat kurtarır.
+[pause] Sence en hızlı yayılması gereken haber hangisi? Yorumlara yaz.
