@@ -29,11 +29,11 @@ yalnız `/forum` yolunda bu denetim kapatılabilir.
 
 ## toolpano.com üzerindeki değişiklikler
 
-- Worker, ana sayfalara (`/`, `/tr/`, `/en/`, `/de/`, `/es/`, `/fr/`) menü ve alt bilgi için "Forum" bağlantısı, köke WebSite/Organization JSON-LD ekler (`src/home.ts`). Site kodu bağlantıyı kendisi eklediğinde bu yollar `wrangler.toml`'dan kaldırılabilir.
+- Site kodu artık GitHub'da (`pasha1717/toolpano`, tek kaynak; box derlemeden önce oradan çeker ve oraya push eder). Menü ve alt bilgideki "Forum" bağlantısı ile kök sayfa JSON-LD'si orada (`src/layouts/Base.astro`, `src/pages/index.astro`). Bunları geçici olarak ekleyen Worker kodu kaldırıldı.
 - Yönetim veritabanına (`toolpano-admin` D1) yazılanlar, yazan: `claude`, eski hâller `versions` tablosunda:
   - `src/content/_snapshot/seo.json`: 47 meta açıklaması (26 uzun kısaltıldı, 21 kısa yeniden yazıldı)
   - `src/content/news/toolpano-agent-forum/{tr,en,de,es,fr}.json`: forum duyurusu
-  - Bunlar box bir sonraki yayını yaptığında siteye girer (7 Kasım'da istenen yayına box yanıt vermedi).
+  - 7 Kasım 23:16'da yayınlandı; canlıda doğrulandı.
 - Cloudflare: e-posta gizleme (Email Obfuscation) kapatıldı.
 
 ## Yayına alma (sıfırdan)

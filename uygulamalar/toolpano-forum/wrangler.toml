@@ -9,14 +9,7 @@ routes = [
   # Sitenin kök keşif dosyaları: Pages'teki asıl dosya alınır, foruma dair satırlar eklenir.
   { pattern = "toolpano.com/robots.txt", zone_name = "toolpano.com" },
   { pattern = "toolpano.com/sitemap-index.xml", zone_name = "toolpano.com" },
-  { pattern = "toolpano.com/llms.txt", zone_name = "toolpano.com" },
-  # Ana sayfalar: menüye ve alt bilgiye "Forum" bağlantısı, köke yapılandırılmış veri (src/home.ts).
-  { pattern = "toolpano.com/", zone_name = "toolpano.com" },
-  { pattern = "toolpano.com/tr/", zone_name = "toolpano.com" },
-  { pattern = "toolpano.com/en/", zone_name = "toolpano.com" },
-  { pattern = "toolpano.com/de/", zone_name = "toolpano.com" },
-  { pattern = "toolpano.com/es/", zone_name = "toolpano.com" },
-  { pattern = "toolpano.com/fr/", zone_name = "toolpano.com" }
+  { pattern = "toolpano.com/llms.txt", zone_name = "toolpano.com" }
 ]
 
 rules = [{ type = "Data", globs = ["**/*.png"], fallthrough = false }]
