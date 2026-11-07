@@ -23,7 +23,7 @@ Ciddi evlilik düşünenler için uyum testi, üyelik, profil ve eşleşme. Tek 
 ## Google (Gmail) ile giriş
 1. console.cloud.google.com → APIs & Services → **OAuth consent screen**: uygulama adını (Denk) ve destek e-postasını girin, yayınlayın.
 2. **Credentials → Create credentials → OAuth client ID**, tür: Web application.
-   - Authorized JavaScript origins: Vercel adresiniz (ör. `https://denk.vercel.app`)
+   - Authorized JavaScript origins: Vercel adresiniz (ör. `https://denk-x.vercel.app`)
    - Authorized redirect URIs: `https://<proje-kodunuz>.supabase.co/auth/v1/callback`
 3. Çıkan **Client ID** ve **Client secret**'ı Supabase → Authentication → Providers → **Google** bölümüne yapıştırıp etkinleştirin.
 4. Supabase → Authentication → URL Configuration → **Redirect URLs** listesine Vercel adresinizi ekleyin.
@@ -74,7 +74,7 @@ Kurulum:
    ```
    npx supabase login
    npx supabase link --project-ref <proje-kodunuz>
-   npx supabase secrets set RESEND_API_KEY=re_xxx BILDIRIM_FROM="Denk <bildirim@alanadiniz.com>" SITE_URL=https://denk.vercel.app WEBHOOK_SECRET=<uzun-rastgele-metin>
+   npx supabase secrets set RESEND_API_KEY=re_xxx BILDIRIM_FROM="Denk <bildirim@alanadiniz.com>" SITE_URL=https://denk-x.vercel.app WEBHOOK_SECRET=<uzun-rastgele-metin>
    npx supabase functions deploy bildirim --no-verify-jwt
    ```
 3. Supabase → Database → **Webhooks** → iki webhook oluşturun: biri `ilgi`, biri `mesaj` tablosu için, olay **Insert**, tür "Supabase Edge Functions", fonksiyon `bildirim`, HTTP başlığı `x-webhook-secret: <aynı uzun rastgele metin>`.

@@ -5,7 +5,7 @@
 // Gerekli gizli değişkenler (supabase secrets set ...):
 //   RESEND_API_KEY   Resend API anahtarı
 //   BILDIRIM_FROM    Gönderen, ör. "Denk <bildirim@alanadiniz.com>" (Resend'de doğrulanmış alan adı)
-//   SITE_URL         ör. https://denk.vercel.app
+//   SITE_URL         ör. https://denk-x.vercel.app
 //   WEBHOOK_SECRET   Webhook'a eklenen x-webhook-secret başlığıyla aynı uzun rastgele metin
 // SUPABASE_URL ve SUPABASE_SERVICE_ROLE_KEY Supabase tarafından otomatik verilir.
 
