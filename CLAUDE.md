@@ -8,7 +8,7 @@ Ayrıntılı yöntem: `Claude_Animasyon_Sistemi.md`.
 - Kısa rapor ver, az token harca. Her adımı mesajla anlatma.
 - Toplu üretimde videoları tek bir zip dosyasında teslim et (`cikti/` içinde). Zip'e o partinin Instagram açıklamalarını da `aciklamalar.md` olarak ekle (yalnız o partideki videolar).
 - Ses: ElevenLabs "Deniz" (`KAGDtM2gzDrjWlUp2KNe`), model `eleven_v4`.
-- Seslendirmede satır aralarına sessizlik ekle: `python3 ses.py public/<ad> <ses_id>` sonra `python3 sessizlik.py public/<ad>`.
+- Seslendirmede satır aralarına sessizlik ekle: `python3 ses.py public/<ad> <ses_id>`, `python3 kes.py public/<ad>` (uzun boşlukları 0,35 sn'ye indirir, hız değişmez), sonra `python3 sessizlik.py public/<ad>`.
 - Format: Reels (dikey). Hedef 60 sn civarı; biraz aşması sorun değil. Uzun video yok.
 - Sesi hızlandırma (atempo vb. kullanma). Süreyi kısaltmak için metni kısalt.
 
@@ -23,7 +23,7 @@ Video ve açıklama üretirken aşağıdaki becerileri kullan:
 ## Üretim akışı (kısa)
 1. Konu ve doğrulama: `konu-arastirmaci` alt ajanını çalıştır (idea-refine + doubt-driven + source-driven onun içinde). Sonucundaki DOĞRULANDI/YUMUŞAT iddiaları kullan, ÇIKAR olanları kullanma. Metin 13 satır: kanca, soru, yaygın tahmin, dönüş, açıklama, ders (10-11), yorum çağrısı (12).
 2. Metni humanizer ile düzelt, `public/<ad>/metin.txt` olarak yaz.
-3. Ses + sessizlik.
+3. Ses + kes + sessizlik.
 4. Görüntü: `src/<ad>/ayar.ts` (ortak kalıp) ya da özel `Video.tsx`.
 5. Render: `npx remotion render src/<ad>/index.ts Video cikti/<ad>.mp4 --concurrency=2`.
 6. Açıklama: `aciklamalar.md` dosyasına humanizer'dan geçmiş Instagram açıklaması ekle.

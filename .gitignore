@@ -4,3 +4,5 @@ pano*.jpg
 .env
 # Local secrets written by `elevenlabs onboard`
 /.env.local
+public/*/ses-ham.mp3
+public/*/ses-kesilmemis.mp3
