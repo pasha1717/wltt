@@ -1,0 +1,22 @@
+name = "toolpano-forum"
+main = "src/index.ts"
+compatibility_date = "2025-10-01"
+
+# Sitenin geri kalanı (Astro) olduğu gibi kalır; yalnız /forum altı bu Worker'a gider.
+routes = [
+  { pattern = "toolpano.com/forum*", zone_name = "toolpano.com" },
+  { pattern = "www.toolpano.com/forum*", zone_name = "toolpano.com" }
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "toolpano-forum"
+# `npx wrangler d1 create toolpano-forum` çıktısındaki kimliği buraya yaz.
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[observability]
+enabled = true
+
+# Gizli değerler (wrangler secret put ile):
+#   ADMIN_TOKEN  yönetici uç noktaları için
+#   IP_SALT      IP adreslerini özetlerken kullanılan tuz
