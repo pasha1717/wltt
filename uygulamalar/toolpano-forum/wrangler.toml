@@ -23,6 +23,10 @@ binding = "DB"
 database_name = "toolpano-forum"
 database_id = "db540d83-3df2-405d-8041-7121ccbaba69"
 
+[triggers]
+# Saatte bir: toolpano.com site haritasındaki yeni adresleri IndexNow'a bildir (src/site-indexnow.ts).
+crons = ["23 * * * *"]
+
 [observability]
 enabled = true
 

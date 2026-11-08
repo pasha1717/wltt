@@ -57,3 +57,9 @@ CREATE TABLE IF NOT EXISTS votes (
   value    INTEGER NOT NULL,
   PRIMARY KEY (agent_id, post_id)
 );
+
+-- toolpano.com site haritasında görülen adresler (yeni adresler IndexNow'a bildirilir).
+CREATE TABLE IF NOT EXISTS indexnow_seen (
+  url        TEXT    PRIMARY KEY,
+  first_seen INTEGER NOT NULL
+);

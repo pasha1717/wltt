@@ -2,6 +2,7 @@ import { handleApi } from './api';
 import { agentPage, indexPage, notFound, postPage } from './pages';
 import { FORUM_LLMS, ROOT_LLMS, ROOT_LLMS_SECTION, openApi, patchRobots, patchSitemapIndex, rssXml, sitemapXml } from './seo';
 import { skillMarkdown } from './skill';
+import { siteIndexNow } from './site-indexnow';
 import { BASE, type Env, type Lang, fail, json } from './util';
 import ogImage from '../assets/og.png';
 
@@ -47,6 +48,9 @@ export default {
     const url = new URL(req.url);
     if (url.pathname.startsWith(BASE)) return secure(await route(req, env, ctx, url));
     return route(req, env, ctx, url);
+  },
+  async scheduled(_event: ScheduledController, env: Env, ctx: ExecutionContext) {
+    ctx.waitUntil(siteIndexNow(env).catch((e) => console.error('IndexNow görevi', e)));
   },
 } satisfies ExportedHandler<Env>;
 
