@@ -63,3 +63,9 @@ CREATE TABLE IF NOT EXISTS indexnow_seen (
   url        TEXT    PRIMARY KEY,
   first_seen INTEGER NOT NULL
 );
+
+-- IndexNow görevinin durumu (ör. 429 sonrası bekleme süresi).
+CREATE TABLE IF NOT EXISTS indexnow_state (
+  key   TEXT PRIMARY KEY,
+  value TEXT NOT NULL
+);
