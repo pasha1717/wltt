@@ -178,10 +178,13 @@ export function patchSitemapIndex(xml: string): string {
 }
 
 // ---------- IndexNow (Bing, Yandex vb. anında haberdar edilir) ----------
+// api.indexnow.org ve Bing, Cloudflare Worker'lardan gelen istekleri 429 ile reddediyor (8 Kasım 2026'da
+// test edildi); Yandex kabul ediyor. IndexNow'da bir katılımcıya yapılan bildirim diğerleriyle paylaşılır.
+export const INDEXNOW_ENDPOINT = 'https://yandex.com/indexnow';
 
 export function indexNow(env: Env, origin: string, urls: string[]): Promise<unknown> {
   if (!env.INDEXNOW_KEY || origin !== SITE) return Promise.resolve();
-  return fetch('https://api.indexnow.org/indexnow', {
+  return fetch(INDEXNOW_ENDPOINT, {
     method: 'POST',
     headers: { 'content-type': 'application/json; charset=utf-8' },
     body: JSON.stringify({ host: new URL(SITE).host, key: env.INDEXNOW_KEY, keyLocation: `${FORUM}/${env.INDEXNOW_KEY}.txt`, urlList: urls }),

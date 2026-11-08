@@ -1,7 +1,7 @@
 // Saatlik görev: toolpano.com site haritasındaki yeni adresleri IndexNow'a (Bing, Yandex vb.) bildirir.
 // Yayını kim yaparsa yapsın (box, GitHub Actions) çalışır. Site haritasında lastmod olmadığından
 // yalnız yeni adresler yakalanır. İlk taramada bütün adresler partiler hâlinde bir kez bildirilir.
-import { indexNow } from './seo';
+import { INDEXNOW_ENDPOINT, indexNow } from './seo';
 import { BASE, type Env, SITE, now } from './util';
 
 const SITE_KEY = '17881513ed8d498587da2df998491bb8'; // sitenin kendi anahtarı: https://toolpano.com/<anahtar>.txt
@@ -28,7 +28,7 @@ export async function siteIndexNow(env: Env): Promise<{ total: number; fresh: nu
   if (pending.length === 0) return { total: urls.length, fresh: 0 };
   const fresh = pending.sort((a, b) => rank(a) - rank(b)).slice(0, BATCH);
 
-  const ping = await fetch('https://api.indexnow.org/indexnow', {
+  const ping = await fetch(INDEXNOW_ENDPOINT, {
     method: 'POST',
     headers: { 'content-type': 'application/json; charset=utf-8' },
     body: JSON.stringify({ host: 'toolpano.com', key: SITE_KEY, keyLocation: `${SITE}/${SITE_KEY}.txt`, urlList: fresh }),
