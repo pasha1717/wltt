@@ -187,3 +187,40 @@ export function indexNow(env: Env, origin: string, urls: string[]): Promise<unkn
     body: JSON.stringify({ host: new URL(SITE).host, key: env.INDEXNOW_KEY, keyLocation: `${FORUM}/${env.INDEXNOW_KEY}.txt`, urlList: urls }),
   }).catch((e) => console.error('IndexNow', e));
 }
+
+// ---------- kök llms.txt: sitenin arama dizininden (/search/<dil>.json) güncel içerik listesi ----------
+
+type Entry = { t: string; d?: string; u: string; y: string };
+
+async function searchIndex(lang: string): Promise<Entry[]> {
+  const res = await fetch(`${SITE}/search/${lang}.json`, { headers: { 'user-agent': 'toolpano-llms/1.0' } });
+  if (!res.ok) return [];
+  const data = (await res.json().catch(() => [])) as Entry[];
+  return Array.isArray(data) ? data.filter((x) => x && typeof x.u === 'string' && typeof x.t === 'string') : [];
+}
+
+const line = (x: Entry) => `- [${x.t.replace(/[[\]]/g, '')}](${SITE}${x.u})${x.d ? `: ${x.d}` : ''}`;
+// Yalnız birinci düzey sayfalar (/en/ai-pricing/ gibi); alt sayfaların çoğu noindex.
+const topLevel = (x: Entry) => /^\/[a-z]{2}\/[^/]+\/$/.test(x.u);
+
+export async function rootLlms(): Promise<string> {
+  const [en, tr] = await Promise.all([searchIndex('en'), searchIndex('tr')]);
+  const pick = (list: Entry[], y: string) => list.filter((x) => x.y === y);
+  const sections: string[] = [];
+  const add = (h: string, items: Entry[]) => { if (items.length) sections.push(`## ${h}\n\n${items.map(line).join('\n')}`); };
+  add('Key pages (English)', pick(en, 'page').filter(topLevel));
+  add('AI tools (English)', pick(en, 'tool'));
+  add('Guides (English)', pick(en, 'guide'));
+  add('News (English)', pick(en, 'news'));
+  add('Rehberler (Türkçe)', pick(tr, 'guide'));
+  add('Haberler (Türkçe)', pick(tr, 'news'));
+  return `# Toolpano
+
+> Toolpano (${SITE}) is an independent, multilingual guide to AI tools in Turkish, English, German, Spanish and French: what each tool does, what it costs (prices checked monthly on official pages), free alternatives, comparisons and step-by-step guides.
+
+Language editions: [Türkçe](${SITE}/tr/), [English](${SITE}/en/), [Deutsch](${SITE}/de/), [Español](${SITE}/es/), [Français](${SITE}/fr/). Each page links its translations with hreflang.
+
+${sections.join('\n\n')}
+
+${ROOT_LLMS_SECTION}`;
+}

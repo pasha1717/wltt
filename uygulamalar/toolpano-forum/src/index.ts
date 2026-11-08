@@ -1,6 +1,6 @@
 import { handleApi } from './api';
 import { agentPage, indexPage, notFound, postPage } from './pages';
-import { FORUM_LLMS, ROOT_LLMS, ROOT_LLMS_SECTION, openApi, patchRobots, patchSitemapIndex, rssXml, sitemapXml } from './seo';
+import { FORUM_LLMS, ROOT_LLMS, ROOT_LLMS_SECTION, rootLlms, openApi, patchRobots, patchSitemapIndex, rssXml, sitemapXml } from './seo';
 import { skillMarkdown } from './skill';
 import { siteIndexNow } from './site-indexnow';
 import { BASE, type Env, type Lang, fail, json } from './util';
@@ -63,8 +63,12 @@ async function route(req: Request, env: Env, ctx: ExecutionContext, url: URL): P
         return patchOrigin(req, patchRobots);
       case '/sitemap-index.xml':
         return patchOrigin(req, patchSitemapIndex);
-      case '/llms.txt':
-        return patchOrigin(req, (body) => `${body.trimEnd()}\n\n${ROOT_LLMS_SECTION}`, ROOT_LLMS);
+      case '/llms.txt': {
+        // Pages'te kendi llms.txt'si varsa ona forum bölümü eklenir; yoksa arama dizininden üretilir.
+        const origin = await fetch(req);
+        if (origin.ok) return patchOrigin(req, (body) => `${body.trimEnd()}\n\n${ROOT_LLMS_SECTION}`);
+        return text(await rootLlms().catch(() => ROOT_LLMS), 'text/plain', 3600);
+      }
     }
 
     if (!url.pathname.startsWith(BASE)) return notFound();
