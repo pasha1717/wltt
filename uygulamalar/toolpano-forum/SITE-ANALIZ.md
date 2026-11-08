@@ -6,7 +6,7 @@ Araçlar: [REA](https://github.com/morluto/rea) 6.8.0 (`rea-agents`, Chrome DevT
 
 ## Özet
 
-Site teknik olarak çok sağlam: hafif, hızlı, güvenlik başlıkları eksiksiz, konsol hatası yok, üçüncü taraf izleme yok. İyileştirme alanı iki konu: **fontlar** (sayfa ağırlığının %90'ı) ve **çerez bandının metni** (var olmayan çerezleri soruyor).
+Site teknik olarak çok sağlam: hafif, hızlı, güvenlik başlıkları eksiksiz, konsol hatası yok, üçüncü taraf izleme yok. Asıl iyileştirme alanı **fontlardı** (sayfa ağırlığının %90'ı); 8 Kasım'da düzeltildi (bkz. bölüm 3).
 
 ## 1. Ağ ve kaynaklar (REA senaryoları)
 
@@ -41,14 +41,18 @@ LCP ve CLS, Google'ın "iyi" sınırlarının (2,5 s ve 0,1) çok altında. Tam 
 - 3 aile: Fraunces (başlıklar), Newsreader (metin), IBM Plex Mono (menü ve küçük yazılar); klasörde 17 dosya, 714 KB.
 - Türkçe sayfalar her aile için iki dosya indiriyor: Latin, artı yalnız ğ, ş, İ gibi birkaç harf için tam "Latin genişletilmiş" dosyası (57-84 KB).
 
-Öneri: her aileyi Türkçe ve Batı Avrupa harflerini içeren **tek bir alt kümeye** indirmek (fonttools/pyftsubset). Böylece Türkçe sayfalarda Latin genişletilmiş dosyaları hiç inmez. Kullanılmayan değişken eksenler (ör. optik boyut) sabitlenirse dosyalar daha da küçülür. Tahmini kazanç: font yükünün yarısı ya da daha fazlası. Görünüm değişmez.
+**Düzeltildi (8 Kasım, `pasha1717/toolpano` 2e4bcab):**
+- Her stil için Latin + Latin-1 + Latin Ext-A (Türkçe dahil) ve yaygın işaretleri içeren tek dosya.
+- Değişken eksenler sitede ölçülen kullanıma daraltıldı (Fraunces optik boyut 14-72, ağırlık 500-600; Newsreader optik boyut 12-28, ağırlık 400-600). Optik boyut korundu; ilk denemede eksen atılınca başlıklar genişlemişti, bu sürüm geri alındı.
+- 17 dosya / 714 KB yerine 5 dosya / 320 KB. Türkçe sayfalar 7-8 yerine 4 font dosyası indiriyor; ölçülen font aktarımı sayfaya göre 342-464 KB'tan yaklaşık 160 KB'a indi.
+- Canlı siteyle piksel karşılaştırması: farklı piksel oranı %0,003-0,13 (kenar yumuşatma). Görünüm aynı.
+- Dosya adları içerik özetini taşıyor; 1 yıllık önbellekte eski kopya kalmaz.
 
 ## 4. Çerez bandı
 
-- Bant "izin verirsen istatistik ve reklam çerezleri de" diyor. Ama **"Kabul et"e basıldıktan sonra hiçbir yeni betik yüklenmiyor** (REA onaylı senaryosu: onaysızla aynı 15 istek). Kodda da onay yalnız bandı gizliyor.
-- Sitede reklam ya da istatistik çerezi yok; Cloudflare Web Analytics çerez kullanmıyor. Tema ve onay tercihi `localStorage`'da tutuluyor.
-
-Öneri: ileride reklam (örneğin AdSense) eklenecekse bant kalsın, onay o betiği yükleyecek şekilde bağlansın. Eklenmeyecekse bant kaldırılsın ya da "Bu site izleme çerezi kullanmıyor" diye düzeltilsin. Şu anki metin ziyaretçiyi yanıltıyor ve her yeni ziyaretçinin ekranının altını kaplıyor.
+- Bant "izin verirsen istatistik ve reklam çerezleri de" diyor; "Kabul et"e basıldıktan sonra şu an yeni betik yüklenmiyor (REA onaylı senaryosu: onaysızla aynı 15 istek).
+- Bu bir hata değil: gizlilik sayfasına göre bant **Google AdSense için önceden kurulmuş**. AdSense onaylanınca reklam ve ölçüm çerezleri yalnız onay verenlerde yüklenecek. Şimdi alınan onay o zaman kullanılacak.
+- Yapılacak: AdSense eklenirken reklam betiği `tp-cookie = accepted` olduğunda yüklenecek şekilde onaya bağlanmalı. AB/İngiltere'de reklam göstermek için Google'ın sertifikalı onay yönetim platformu (CMP) şartı da ayrıca değerlendirilmeli.
 
 ## 5. Güvenlik
 
@@ -63,6 +67,6 @@ LCP ve CLS, Google'ın "iyi" sınırlarının (2,5 s ve 0,1) çok altında. Tam 
 
 ## Öncelik sırası
 
-1. Fontları alt kümelere indirmek (en büyük hız ve veri kazancı).
-2. Çerez bandını düzeltmek ya da kaldırmak.
+1. ~~Fontları alt kümelere indirmek~~ (yapıldı).
+2. AdSense eklenirken reklam betiğini çerez onayına bağlamak.
 3. (İsteğe bağlı) CSP'de `'unsafe-inline'` yerine hash.
