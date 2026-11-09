@@ -2593,3 +2593,83 @@ Her gün yeni bir "ne olurdu?" için takip et.
 
 #yılan #zehir #tıp #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
 ```
+
+## Parmaklarımız suda buruşmasaydı (`burusma.mp4`)
+
+```text
+Parmakların suda buruşmasını sinirlerin yönetiyor.
+
+Parmaklarımız suda hiç buruşmasaydı, ne olurdu?
+
+Çoğumuz derinin su çekip şiştiğini sanıyoruz. Oysa 1930'lardan beri biliniyor ki parmaktaki sinir hasar görmüşse o parmak suda buruşmuyor. Sinir sistemi deri altındaki damarları daraltıyor, deri de içe çekiliyor. 2013'te Newcastle Üniversitesi'ndeki bir deneyde gönüllüler ıslak bilyeleri buruşuk parmaklarla yaklaşık %12 daha hızlı topladı, kuru bilyelerde fark çıkmadı. Sonraki bir çalışma aynı farkı bulamadı, yani tartışma sürüyor.
+
+Sence vücudumuzun en tuhaf özelliği hangisi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#parmak #insanvücudu #sinirsistemi #biyoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Emniyet kemerinin patenti tek şirkette kalsaydı (`kemer.mp4`)
+
+```text
+Arabandaki emniyet kemerinin patenti herkese açıldı.
+
+Bu patent tek bir şirkette kalsaydı, ne olurdu?
+
+Volvo 1958'de mühendis Nils Bohlin'i işe aldı. Bohlin daha önce uçaklarda fırlatma koltuğu üzerinde çalışmıştı. O yıllarda kemerler çoğunlukla yalnız beli tutuyordu. Bohlin'in 1959'da bitirdiği üç noktalı kemer hem göğsü hem kalçayı tutuyordu. Volvo patenti aldı ama öteki üreticilere de açtı. ABD'nin trafik güvenliği kurumu NHTSA'ya göre kemer yalnız o ülkede yılda yaklaşık 15 bin hayat kurtarıyor. Volvo'nun tahminine göre dünyadaki sayı bir milyonu geçti.
+
+Sence başka hangi buluş herkese açık olmalı? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#emniyetkemeri #volvo #buluş #trafik #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Mavi LED hiç yapılamasaydı (`led.mp4`)
+
+```text
+Mavi LED'i yapmak yaklaşık otuz yıl sürdü.
+
+Mavi LED hiç yapılamasaydı, ne olurdu?
+
+İlk kırmızı LED 1962'de yapıldı, yeşili de onu izledi. Ama beyaz ışık için mavi gerekiyordu ve o bir türlü olmuyordu. 1990'ların başında Japonya'da Akasaki, Amano ve Nakamura bunu başardı, 2014'te de Nobel Fizik Ödülü'nü aldı. Bugünkü beyaz LED ampullerin çoğunda mavi bir LED ve onu saran fosfor tabakası var. Nobel komitesine göre dünyadaki elektriğin yaklaşık dörtte biri aydınlatmaya gidiyor.
+
+Sence hangi buluş hayatını en çok değiştirdi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#led #maviled #nobel #teknoloji #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## Ay biraz daha küçük olsaydı (`tutulma.mp4`)
+
+```text
+Tam güneş tutulması büyük bir tesadüf.
+
+Ay biraz daha küçük olsaydı, ne olurdu?
+
+Güneş, Ay'dan yaklaşık 400 kat büyük ama bize yaklaşık 400 kat da uzak. Bu yüzden gökyüzünde neredeyse aynı boyda görünüyorlar ve Ay araya girince Güneş'i tam örtebiliyor. 1919'daki tutulmada gökbilimciler yıldız ışığının Güneş'in yanında büküldüğünü ölçtü, bu da Einstein'ın genel görelilik kuramını destekledi. Ay her yıl yaklaşık 3,8 santim uzaklaşıyor. NASA'ya göre 600 milyon yıl kadar sonra Güneş'i tam örtemeyecek.
+
+Sen hiç güneş tutulması izledin mi? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#güneştutulması #ay #uzay #astronomi #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
+
+## At nalı yengeçleri olmasaydı (`yengec.mp4`)
+
+```text
+At nalı yengecinin kanı havayla temas edince maviye dönüyor.
+
+At nalı yengeçleri hiç olmasaydı, ne olurdu?
+
+1956'da Fred Bang, bu kanın bakteriyle karşılaşınca pıhtılaştığını bildirdi. Ölü bakteri bile yetiyordu. Bu tepkiden geliştirilen LAL testi ABD'de 1977'de onaylandı. Ondan önce ilaçlar tavşanlar üzerinde deneniyordu. Onlarca yıldır iğneyle verilen ilaçlar ve aşılar bu testle kontrol ediliyor. Yengeçlerden kan alınıp denize bırakılıyor ama tahminlere göre %10 ile %30'u ölüyor. 2025'te ABD ilaç standartları sentetik bir seçeneği de tanıdı.
+
+Sence en çok hangi hayvana borçluyuz? Yorumlara yaz.
+
+Her gün yeni bir "ne olurdu?" için takip et.
+
+#atnalıyengeci #mavikan #tıp #deniz #neolurdu #bilgi #bilim #keşfet #reels #ilginçbilgiler
+```
