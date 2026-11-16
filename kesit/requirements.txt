@@ -1,0 +1,8 @@
+yt-dlp[default]
+curl_cffi
+faster-whisper
+opencv-python-headless
+numpy
+# yalnız YouTube'a yükleme (yukle.py) için:
+google-api-python-client
+google-auth-oauthlib
