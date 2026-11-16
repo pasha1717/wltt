@@ -19,8 +19,11 @@ def calistir(cmd, **kw):
     return subprocess.run([str(c) for c in cmd], check=True, **kw)
 
 
+CEREZ = []  # --cerez ile doldurulur (YouTube "bot değilim" doğrulaması için)
+
+
 def ytdlp_temel():
-    cmd = [sys.executable, "-m", "yt_dlp", "-q", "--no-warnings", "--no-playlist"]
+    cmd = [sys.executable, "-m", "yt_dlp", "-q", "--no-warnings", "--no-playlist"] + CEREZ
     if not shutil.which("deno") and shutil.which("node"):
         cmd += ["--js-runtimes", "node:" + shutil.which("node")]
     return cmd
@@ -50,10 +53,11 @@ def kaynagi_coz(girdi):
             sys.exit(f"Tanınmayan girdi: {girdi}")
         plat = {"twitch.tv": "twitch", "kick.com": "kick", "youtube.com": "youtube"}[m[1]]
         liste = KANAL_LISTESI[plat].format(m[2])
-    out = subprocess.run(ytdlp_temel() + ["--flat-playlist", "-I", "1", "--print", "url", liste],
-                         capture_output=True, text=True).stdout.strip().splitlines()
+    r = subprocess.run(ytdlp_temel() + ["--flat-playlist", "-I", "1", "--print", "url", liste],
+                       capture_output=True, text=True)
+    out = r.stdout.strip().splitlines()
     if not out:
-        sys.exit(f"Son yayın bulunamadı: {liste}")
+        sys.exit(f"Son yayın bulunamadı: {liste}\n{r.stderr.strip()[-500:] or '(kanalda kayıtlı yayın yok)'}")
     return out[-1].split("#")[0]
 
 
@@ -61,8 +65,12 @@ def bilgi_al(url, is_dizini):
     f = is_dizini / "bilgi.json"
     if f.exists():
         return json.loads(f.read_text())
-    out = subprocess.run(ytdlp_temel() + ["-J", url], capture_output=True, text=True, check=True).stdout
-    j = json.loads(out)
+    r = subprocess.run(ytdlp_temel() + ["-J", url], capture_output=True, text=True)
+    if r.returncode:
+        hata = r.stderr.strip().splitlines()[-1] if r.stderr.strip() else "bilinmeyen hata"
+        ipucu = "\nYouTube doğrulama istiyorsa: --cerez chrome (ya da firefox, edge)" if "bot" in hata else ""
+        sys.exit(f"Yayın bilgisi alınamadı: {hata}{ipucu}")
+    j = json.loads(r.stdout)
     b = {"url": url, "baslik": j.get("title") or "", "sure": j.get("duration") or 0,
          "kanal": j.get("uploader") or j.get("channel") or j.get("uploader_id") or "",
          "platform": j.get("extractor_key", "")}
@@ -130,18 +138,30 @@ def adaylari_bul(db, n, pencere, ofset):
 
 
 # ---------- 3. Yalnız adayları yazıya dök ----------
+_MODEL = {}
+
+
+def whisper(model_adi):
+    if model_adi not in _MODEL:
+        from faster_whisper import WhisperModel
+        _MODEL[model_adi] = WhisperModel(model_adi, device="cpu", compute_type="int8")
+    return _MODEL[model_adi]
+
+
+def sesi_oku(dosya, bas, sure):
+    ham = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(bas), "-t", str(sure), "-i", str(dosya),
+                          "-ac", "1", "-ar", "16000", "-f", "f32le", "-"], capture_output=True, check=True).stdout
+    return np.frombuffer(ham, dtype=np.float32)
+
+
 def yaziya_dok(ses, adaylar, is_dizini, model_adi, dil, ofset):
-    f = is_dizini / "metinler.json"
+    f = is_dizini / f"metinler_{len(adaylar)}.json"
     if f.exists():
         return json.loads(f.read_text())
-    from faster_whisper import WhisperModel
-    model = WhisperModel(model_adi, device="cpu", compute_type="int8")
+    model = whisper(model_adi)
     sonuc = []
     for i, a in enumerate(adaylar):
-        ham = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(a["bas"] - ofset), "-t", str(a["son"] - a["bas"]),
-                              "-i", str(ses), "-ac", "1", "-ar", "16000", "-f", "f32le", "-"],
-                             capture_output=True, check=True).stdout
-        seg, info = model.transcribe(np.frombuffer(ham, dtype=np.float32), language=dil,
+        seg, info = model.transcribe(sesi_oku(ses, a["bas"] - ofset, a["son"] - a["bas"]), language=dil,
                                      word_timestamps=True, vad_filter=True)
         kelimeler, cumleler = [], []
         for s in seg:
@@ -156,7 +176,7 @@ def yaziya_dok(ses, adaylar, is_dizini, model_adi, dil, ofset):
 
 # ---------- 4. En iyi anları seç (Claude, yoksa gürültü puanı) ----------
 def sec(metinler, b, adet, is_dizini, llm):
-    f = is_dizini / "secim.json"
+    f = is_dizini / f"secim_{adet}_{len(metinler)}.json"
     if f.exists():
         return json.loads(f.read_text())
     secim = None
@@ -187,14 +207,16 @@ def sec(metinler, b, adet, is_dizini, llm):
                           "baslik": ilk or f"{b['kanal']} yayınından", "aciklama": "", "etiketler": []})
     aday = {m["id"]: m for m in metinler}
     temiz = []
-    for s in secim:
-        a = aday.get(s.get("id"))
-        if not a:
+    for s in secim if isinstance(secim, list) else []:
+        try:
+            a = aday[int(s["id"])]
+            bas = max(a["bas"], float(s["bas"]))
+            son = min(a["son"], float(s["son"]), bas + 59)
+        except (KeyError, TypeError, ValueError):
             continue
-        bas = max(a["bas"], float(s["bas"]))
-        son = min(a["son"], float(s["son"]), bas + 59)
         if son - bas >= 10:
-            temiz.append({**s, "bas": bas, "son": son})
+            temiz.append({"baslik": "", "aciklama": "", "etiketler": [], **s, "id": a["id"], "bas": bas, "son": son})
+    temiz = temiz[:adet]
     f.write_text(json.dumps(temiz, ensure_ascii=False, indent=1))
     return temiz
 
@@ -229,23 +251,29 @@ def yuz_bul(video):
     n = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) or 1
     W, H = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     bul = yuz_algilayici(W, H)
-    kutular = []
+    kumeler = []  # yüzleri konumlarına göre grupla: en çok karede görünen = yayıncı kamerası
     for i in range(16):
         cap.set(cv2.CAP_PROP_POS_FRAMES, int(n * (i + 0.5) / 16))
         ok, kare = cap.read()
         if not ok:
             continue
-        yuz = bul(kare)
-        if len(yuz):
-            kutular.append(max(yuz, key=lambda r: r[2] * r[3]))
+        for x, y, w, h in bul(kare):
+            cx, cy = x + w / 2, y + h / 2
+            for k in kumeler:
+                if abs(k["cx"] - cx) < max(k["w"], w) and abs(k["cy"] - cy) < max(k["w"], w) * 1.3:
+                    k["kutular"].append((cx, cy, w)); k["kareler"].add(i)
+                    break
+            else:
+                kumeler.append({"cx": cx, "cy": cy, "w": w, "kutular": [(cx, cy, w)], "kareler": {i}})
     cap.release()
-    if len(kutular) < 5:
+    kumeler = [k for k in kumeler if len(k["kareler"]) >= 5]
+    if not kumeler:
         return W, H, None
-    k = np.array(kutular, dtype=float)
-    cx, cy = k[:, 0] + k[:, 2] / 2, k[:, 1] + k[:, 3] / 2
-    if cx.std() > W * 0.12:  # tutarsız: yüz bir yerde sabit değil
-        return W, H, None
-    return W, H, (float(np.median(cx)), float(np.median(cy)), float(np.median(k[:, 2])))
+    en = max(kumeler, key=lambda k: (len(k["kareler"]), np.median([b[2] for b in k["kutular"]])))
+    b = np.array(en["kutular"], dtype=float)
+    w = float(np.median(b[:, 2]))
+    sabit = float(b[:, 0].std()) < w * 0.6 and float(b[:, 1].std()) < w * 0.6
+    return W, H, (float(np.median(b[:, 0])), float(np.median(b[:, 1])), w, sabit)
 
 
 def cift(x):
@@ -253,11 +281,12 @@ def cift(x):
 
 
 def yerlesim(W, H, yuz):
-    if yuz and yuz[2] / W > 0.16:  # yüz büyük: sohbet yayını, yüze ortalı tam dikey kırp
+    if yuz and (yuz[2] / W > 0.10 or (not yuz[3] and yuz[2] / W > 0.06)):
+        # yüz büyük (sohbet yayını) ya da hareketli kişi: yüze ortalı tam dikey kırp
         cw = cift(min(W, H * 9 / 16))
         x = cift(min(max(yuz[0] - cw / 2, 0), W - cw))
         return "yuz", f"[0:v]crop={cw}:{H}:{x}:0,scale=1080:1920,setsar=1[v]"
-    if yuz:  # köşede kamera: üstte kamera, altta oyun
+    if yuz and yuz[3]:  # köşede sabit kamera: üstte kamera, altta oyun
         cw = min(W, yuz[2] * 7)
         ch = min(H, cw / 1.6875)
         cw = ch * 1.6875
@@ -310,28 +339,34 @@ def altyazi_yaz(kelimeler, bas, son, dil, dosya, mod):
     dosya.write_text("\n".join(satirlar) + "\n", encoding="utf-8")
 
 
-def kesitleri_uret(b, secim, metinler, is_dizini, cikti):
+def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi):
     dil_haritasi = {m["id"]: m for m in metinler}
     uretilen = []
     for i, s in enumerate(secim, 1):
-        son_dosya = cikti / f"kesit_{i:02d}.mp4"
+        anahtar = f"{int(s['bas'])}-{int(s['son'])}"
+        son_dosya = cikti / f"kesit_{i:02d}_{anahtar}.mp4"
         uretilen.append((son_dosya, s))
         if son_dosya.exists():
             continue
         pay = 2.0
-        ham = is_dizini / f"ham_{i:02d}.mp4"
+        ham = is_dizini / f"ham_{anahtar}.mp4"
         if not ham.exists():
-            calistir(ytdlp_temel() + ["-f", "bv*[height<=1080]+ba/b[height<=1080]/b", "--merge-output-format", "mp4",
+            calistir(ytdlp_temel() + ["-f", "bv*[height<=1080][vcodec^=avc1]+ba/bv*[height<=1080]+ba/b[height<=1080]/b", "--merge-output-format", "mp4",
                                       "--download-sections", f"*{max(0, s['bas'] - pay)}-{s['son'] + pay}",
                                       "-o", str(ham), b["url"]])
         W, H, yuz = yuz_bul(ham)
         mod, filtre = yerlesim(W, H, yuz)
         print(f"  kesit {i}: {mod} yerleşim")
         m = dil_haritasi[s["id"]]
-        ass = is_dizini / f"altyazi_{i:02d}.ass"
-        altyazi_yaz(m["kelimeler"], s["bas"], s["son"], m["dil"], ass, mod)
-        bas_pay = min(pay, s["bas"])
-        calistir(["ffmpeg", "-v", "error", "-y", "-ss", bas_pay, "-t", s["son"] - s["bas"], "-i", ham,
+        bas_pay, sure = min(pay, s["bas"]), s["son"] - s["bas"]
+        # Altyazı zamanları kesitin kendi sesinden: indirilen parça anahtar karede başladığı için
+        # analiz sesindeki zamanlar birkaç yüz ms kayabiliyor.
+        seg, _ = whisper(model_adi).transcribe(sesi_oku(ham, bas_pay, sure), language=m["dil"],
+                                               word_timestamps=True, vad_filter=True)
+        kel = [{"k": w.word.strip(), "b": w.start, "s": w.end} for x in seg for w in (x.words or [])]
+        ass = is_dizini / f"altyazi_{anahtar}.ass"
+        altyazi_yaz(kel, 0, sure, m["dil"], ass, mod)
+        calistir(["ffmpeg", "-v", "error", "-y", "-ss", bas_pay, "-t", sure, "-i", ham,
                   "-filter_complex", f"{filtre};[v]fps=30,ass={ass.name}[o]", "-map", "[o]", "-map", "0:a:0?",
                   "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
                   "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", son_dosya.resolve()], cwd=is_dizini)
@@ -356,11 +391,14 @@ def main():
     ap.add_argument("--aralik", help="yalnız bu bölümü tara, saniye: 3600-7200")
     ap.add_argument("--dil", default=None, help="konuşma dili (tr, en...); boşsa otomatik")
     ap.add_argument("--model", default="small", help="whisper modeli: tiny/base/small/medium (varsayılan small)")
+    ap.add_argument("--cerez", help="tarayıcı çerezlerini kullan (chrome/firefox/edge); YouTube bot doğrulaması için")
     ap.add_argument("--llm-yok", action="store_true", help="Claude kullanma, yalnız gürültü puanıyla seç")
     ap.add_argument("--is", dest="is_dir", default=str(KOK / "is"), help="ara dosyalar")
     ap.add_argument("--cikti", default=str(KOK / "cikti"), help="kesitlerin yazılacağı yer")
     a = ap.parse_args()
 
+    if a.cerez:
+        CEREZ.extend(["--cookies-from-browser", a.cerez])
     url = kaynagi_coz(a.kaynak)
     kimlik = re.sub(r"[^\w-]", "_", url.rstrip("/").split("/")[-1].split("=")[-1])[:40]
     if a.aralik:
@@ -384,7 +422,7 @@ def main():
     print("5/6 En iyi anlar seçiliyor")
     secim = sec(metinler, b, a.adet, is_dizini, not a.llm_yok)
     print("6/6 Kesitler hazırlanıyor")
-    uretilen = kesitleri_uret(b, secim, metinler, is_dizini, cikti)
+    uretilen = kesitleri_uret(b, secim, metinler, is_dizini, cikti, a.model)
     aciklama_yaz(b, uretilen, cikti)
     print(f"\nBitti: {len(uretilen)} kesit -> {cikti}")
 

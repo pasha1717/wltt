@@ -6,7 +6,7 @@ Twitch, Kick ve YouTube yayın kayıtlarından dikey (1080x1920) kısa kesitler 
 ```
 pip install -r requirements.txt
 ```
-Ayrıca gerekenler: `ffmpeg`, YouTube için `node` ya da `deno`, seçim için Claude Code (`claude` komutu, isteğe bağlı).
+Ayrıca gerekenler: `ffmpeg`, YouTube için `node` ya da `deno`, seçim için Claude Code (`claude` komutu, isteğe bağlı). YouTube "bot değilim" doğrulaması isterse `--cerez chrome` ekle.
 
 ## Kullanım
 ```
