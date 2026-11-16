@@ -23,6 +23,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .top{display:flex;align-items:center;gap:10px;padding-block:10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .back{display:flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);font-weight:600;font-size:13px}
 .ttl{min-width:0;flex:1}
+@media (max-width:560px){.ttl{flex:1 1 55%}.top .kasa{margin-left:auto}}
 .eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--green)}
 .ttl h1{margin:0;font-family:var(--display);font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand{font-family:var(--display);font-weight:800;font-size:18px;color:var(--gold);line-height:1;letter-spacing:.02em}
@@ -183,6 +184,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:22px}
 .lrow b{font-weight:600}
 .lrow small{display:block;color:var(--muted);font-size:11.8px;margin-top:2px;line-height:1.4}
 .lrow .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:560px){.lrow{grid-template-columns:minmax(0,1fr)}.lrow .acts{justify-content:flex-start}}
 .log{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
 .log div{padding:7px 10px;border-radius:9px;background:var(--panel2);color:var(--muted)}
 .log div b{color:var(--ink);font-weight:500}
@@ -768,8 +770,9 @@ function pazarlikPenceresi(pid,mid,mesaj){const p=S.projeler.find(x=>x.id===pid)
   M={t:"pz",pid,mid}}
 function pazarlikKarsi(){const p=S.projeler.find(x=>x.id===M.pid),m=p.musteri.find(x=>x.id===M.mid);const v=+$("#pz").value;pazarlikPenceresi.v=v;
   if(v<=m.max){sat(p,m.qty,v,m.ad);p.musteri=p.musteri.filter(x=>x.id!==m.id);toast(`Anlaştınız: ${tl(v)}/${birimAd(p)}`,"ev");pencere(null);ciz(1);return}
-  m.sabir--;if(m.sabir<=0){p.musteri=p.musteri.filter(x=>x.id!==m.id);log(p,`${m.ad} pazarlıkta anlaşamayıp gitti.`);pencere(`<h3>${esc(m.ad)} gitti</h3><div class="bubble">"Bu fiyata alırsam ben zarar ederim. Kolay gelsin."</div><button class="btn gold" data-a="kapatm">Tamam</button>`);dirty=1;return}
-  m.teklif=Math.min(m.max*.99,m.teklif+(v-m.teklif)*rnd(.3,.55));
+  const acgoz=v>m.max*1.15;m.sabir-=acgoz?2:1;if(m.sabir<=0){p.musteri=p.musteri.filter(x=>x.id!==m.id);log(p,`${m.ad} pazarlıkta anlaşamayıp gitti.`);pencere(`<h3>${esc(m.ad)} gitti</h3><div class="bubble">"Bu fiyata alırsam ben zarar ederim. Kolay gelsin."</div><button class="btn gold" data-a="kapatm">Tamam</button>`);dirty=1;return}
+  if(acgoz){pazarlikPenceresi(p.id,m.id,`Dalga mı geçiyorsun? Bu fiyatı kimse vermez. Teklifim hâlâ <b>${tl(m.teklif)}</b>.`);dirty=1;return}
+  m.teklif=Math.min(m.max*.99,m.teklif+(v-m.teklif)*rnd(.25,.45));
   pazarlikPenceresi(p.id,m.id,pick([`Olmaz öyle, piyasa belli. Son sözüm <b>${tl(m.teklif)}</b>.`,`Biraz insaf! <b>${tl(m.teklif)}</b> diyelim, tamam mı?`,`Nakliyesi de bana kalıyor. <b>${tl(m.teklif)}</b> verebilirim.`]))}
 
 function cark(){const today=new Date().toISOString().slice(0,10);const used=S.cark===today;
@@ -798,10 +801,10 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b
       <div class="sumline"><span>Arazi bedeli</span><b class="num">${tl(ar.fiyat)}</b></div><div class="sumline"><span>Tapu harcı (%4)</span><b class="num">${tl(harc)}</b></div>
       <div class="total"><span class="lbl">Toplam</span><b class="num">${tl(ar.fiyat+harc)}</b></div><div class="note">${["I","II","III","IV"][ar.cls]}. sınıf toprak · ${SU[ar.su]} · Ada ${ar.ada} / Parsel ${ar.parsel}</div>
       <div class="row"><button class="btn" data-a="kapatm">Vazgeç</button><button class="btn gold" data-a="arsaal" data-il="${d.il}" data-ii="${d.ii}" data-id="${ar.id}">Tapuyu al</button></div>`);M={t:"arsa"};break}
-  case"arsaal":{const ar=araziler(+d.il,+d.ii).find(x=>x.id===d.id);const tot=ar.fiyat+Math.round(ar.fiyat*.04);if(!odeme(tot))break;
+  case"arsaal":{const ar=araziler(+d.il,+d.ii).find(x=>x.id===d.id);if(!ar){pencere(null);toast("Bu ilan yenilendi, listeye tekrar bak.","bad");ciz(1);break}const tot=ar.fiyat+Math.round(ar.fiyat*.04);if(!odeme(tot))break;
     ar.endeks0=S.endeks;S.arsalar.push(ar);pencere(null);toast(`Tapu senin: ${ar.ilce}, ${ar.donum} dönüm.`,"ev");tasarlaAc(ar.id);break}
   case"tasarla":tasarlaAc(d.id);break;
-  case"dtip":{const D=c.p.D,t=TIPLER[d.k];if(t.lvl>S.ofis){toast(`${t.ad} için merkezini ${OFIS[t.lvl].ad} seviyesine taşı.`,"bad");break}D.tip=d.k;
+  case"dtip":{const D=c.p.D,t=TIPLER[d.k];if(t.lvl>S.ofis){toast(`${t.ad} için merkezini ${OFIS[t.lvl].ad} seviyesine taşı.`,"bad");break}D.tip=d.k;D.don={};
     if(VARS[d.k]){const a=S.arsalar.find(x=>x.id===D.arsa);D.urun=Object.keys(URUN).filter(k=>URUN[k].tip===d.k).sort((x,y)=>fit(y,a.il)-fit(x,a.il))[0]}
     const P=plan(D);if(P.max)D.adet=Math.min(D.adet,P.max);ciz(1);break}
   case"dset":{const D=c.p.D;D[d.k]=d.k==="urun"?d.v:+d.v;ciz(1);break}
@@ -881,7 +884,7 @@ function canli(){const t=now();
     const l=p.durum==="kurulum"?p.bas+p.sure-t:p.tekrar?p.dongu+p.tekrar-t:0;e.textContent=l>0?gunTxt(l)+" kaldı":"bitti"});
   document.querySelectorAll("[data-ih]").forEach(e=>{const i=S.ihaleler.find(x=>x.id===e.dataset.ih);if(i)e.textContent=gunTxt(Math.max(0,i.bitis-t))+" sonra"});
   document.querySelectorAll("[data-kr]").forEach(e=>{const k=S.krediler.find(x=>x.id===e.dataset.kr);if(k)e.textContent=gunTxt(Math.max(0,k.sonraki-t))+" sonra"})}
-function dongu(){const r=Date.now();let dt=r-S.real;S.real=r;if(dt<0||dt>GUN*2)dt=Math.min(Math.max(dt,0),GUN*2);ilerle(dt);
+function dongu(){const r=Date.now();let dt=r-S.real;S.real=r;dt=clamp(dt,0,OFFLINE_MAX*GUN);if(dt>GUN)toast(`Sen yokken ${gunTxt(dt/GUN)} geçti.`,"ev");ilerle(dt);
   const sc=cur().s;if(dirty&&sc!=="tasarla"&&!(M&&M.t)&&sc!=="banka")ciz();else canli();if(M&&M.t==="pz"&&!S.projeler.find(x=>x.id===M.pid)?.musteri.find(m=>m.id===M.mid))pencere(null)}
 
 /* ================= Başlangıç ================= */
