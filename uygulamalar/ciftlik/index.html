@@ -68,7 +68,8 @@ h2{font-family:var(--display);font-size:16px;margin:0;font-weight:700}
 .pos{color:var(--green)} .negc{color:var(--red)}
 .taksit{display:flex;justify-content:space-between;gap:8px;padding:10px 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--blue);font-size:13px}
 .taksit b{color:var(--blue)}
-.tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.tiles{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+@media (max-width:460px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media (max-width:460px){.tiles{gap:6px}.tile{padding:10px 2px 8px}.tile b{font-size:11.5px}.tile small{font-size:9.5px}.tile svg{width:26px;height:26px}}
 .tile{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;position:relative}
 .tile svg{width:30px;height:30px}
@@ -349,6 +350,19 @@ const IHALE_T=[
   {ad:"Devlet çiftliği arazi işleme",k:"Tarım İşletmeleri",m:3,b:[2.5e7,7e7],s:6},
   {ad:"Organize tarım bölgesi altyapısı",k:"Tarım ve Orman Bakanlığı",m:4,b:[8e7,2e8],s:9}
 ];
+// İşleme tesisleri. gir: hammadde, kap: günlük kg, oran: kg başına çıktı, f: çıktı ₺/kg
+const TESIS={
+  un:{ad:"Un fabrikası",gir:"bugday",cik:"un",kap:20000,oran:.75,f:26,c:8000000,lvl:1},
+  paket:{ad:"Yumurta paketleme",carp:"kanatli",oranY:.25,d:"Kanatlı tesislerinin günlük geliri %25 artar",c:6000000,lvl:1},
+  yag:{ad:"Ayçiçek yağı fabrikası",gir:"aycicegi",cik:"yağ",kap:15000,oran:.42,f:90,c:12000000,lvl:2},
+  salca:{ad:"Salça fabrikası",gir:"domates",cik:"salça",kap:40000,oran:.2,f:125,c:10000000,lvl:2},
+  mandira:{ad:"Mandıra",carp:"sut",oranY:.3,d:"Süt çiftliklerinin günlük geliri %30 artar",c:9000000,lvl:2},
+  seker:{ad:"Şeker fabrikası",gir:"pancar",cik:"şeker",kap:200000,oran:.14,f:40,c:25000000,lvl:3},
+  zeytinyagi:{ad:"Zeytinyağı fabrikası",gir:"zeytin",cik:"zeytinyağı",kap:10000,oran:.2,f:450,c:15000000,lvl:3},
+  cirkir:{ad:"Çırçır fabrikası",gir:"pamuk",cik:"pamuk lifi",kap:30000,oran:.38,f:129,c:18000000,lvl:3},
+  kombina:{ad:"Et kombinası",carp:"besi",oranY:.15,d:"Besi danaları %15 daha pahalı satılır",c:14000000,lvl:3}
+};
+const tesisCarp=t=>{let m=1;for(const k in TESIS){const x=TESIS[k];if(x.carp===t&&S.tesis&&S.tesis[k])m+=x.oranY}return m};
 const RAKIP=["Bereket Tarım","Anadolu Agro","Yeşilova Çiftlikleri","Toros Ziraat","Kızılırmak Tarım","Ege Hasat","Fırat Agro","Karadeniz Organik"];
 const TUCCAR_AD=["Hacı Mehmet","Osman Bey","Kemal Usta","Zeynep Hanım","Rıza Ağa","Selim Bey","Fatma Hanım","Hüseyin Bey","Ayten Hanım","Murat Bey","Cemil Efendi","Gülsüm Hanım"];
 const TUCCAR_FIRMA=["Hububat","Gıda","Tarım Ürünleri","Hal Komisyonculuğu","Toptan","Un Sanayi","İhracat","Market Zinciri"];
@@ -457,11 +471,11 @@ const bahceMev=(u,m=mevsim())=>[1.6,.95,.5,.95][(m-hasatMev(u)+4)%4];
 const piyasa=(u)=>URUN[u].f*fiyatM(u)*sezonF(u);
 function stopaj(){return .08*(1-pers("muhasebe")*2.5)}
 function gunlukMaas(){let t=0;for(const r in S.personel)if(S.personel[r])t+=KALITE[S.personel[r]-1].maas*ROLLER[r].m;return Math.round(t)}
-function gunlukGelir(){let t=0;for(const p of S.projeler){if(p.durum==="uretimde"&&p.net)t+=p.net*(1-(p.yari||0));if(p.durum==="kirada")t+=p.kira}
+function gunlukGelir(){let t=0;for(const p of S.projeler){if(p.durum==="uretimde"&&p.net)t+=p.net*(1-(p.yari||0))*tesisCarp(p.tip);if(p.durum==="kirada")t+=p.kira}
   for(const y of YATIRIM)t+=(S.yatirim[y.k]||0)*y.g;return Math.round(t)}
 const borc=()=>S.krediler.reduce((a,k)=>a+k.taksit*k.kalan,0);
 function servet(){let v=S.kasa-borc();for(const a of S.arsalar)v+=arsaDeger(a);for(const p of S.projeler)if(p.durum!=="bitti"&&p.tip!=="kira"&&p.tip!=="ihale")v+=p.yatirim*.55;
-  for(const y of YATIRIM)v+=(S.yatirim[y.k]||0)*y.c*.8;return v}
+  for(const y of YATIRIM)v+=(S.yatirim[y.k]||0)*y.c*.8;for(const k in S.tesis||{})v+=TESIS[k].c*.7;return v}
 const aktifProje=()=>S.projeler.filter(p=>!["bitti","kirada"].includes(p.durum)&&p.tip!=="ihale").length;
 const notAd=n=>n<500?"Zayıf":n<650?"Orta":n<750?"İyi":"Çok iyi";
 const krediLimit=()=>Math.max(0,Math.round((Math.max(3e6,servet()*.5)*(S.not/700)-borc())/100000)*100000);
@@ -526,7 +540,14 @@ function mevsimBildir(){const m=mevsim(S.gun+.01);const ek=Object.keys(EK).filte
   const ha=Object.keys(URUN).filter(k=>hasatMev(k)===m).slice(0,4).map(k=>URUN[k].ad.toLowerCase());
   const ek2=ek.length?` Ekim zamanı: ${ek.join(", ")}.`:m===3?" Açık tarlada verim düşük; sera ve hayvancılık sürer.":"";
   toast(`${MEVSIM[m]} geldi.${ek2}${ha.length?` Hasadı gelen ${ha.join(", ")} bu mevsim ucuzlar.`:""}`,"ev");dirty=1}
+function stokCek(u,kg){let al=0;for(const p of S.projeler){if(al>=kg)break;if(p.urun!==u||!(p.stok>0))continue;const q=Math.min(p.stok,kg-al);p.stok-=q;al+=q;
+    p.musteri.forEach(m=>m.qty=Math.min(m.qty,p.stok));p.musteri=p.musteri.filter(m=>m.qty>0);
+    if(p.stok<=0&&p.durum==="satista"){p.durum="bitti";p.bitti=now();log(p,"Ürünün tamamı fabrikaya gitti. Arazi yeni sezona hazır.")}}return al}
+function tesisGunu(){S.tesis=S.tesis||{};for(const k in TESIS){const t=TESIS[k],o=S.tesis[k];if(!o||!t.gir)continue;
+  const own=stokCek(t.gir,t.kap),buy=o.hal?t.kap-own:0,cost=buy*piyasa(t.gir),out=(own+buy)*t.oran,gelir=out*t.f*fiyatM(t.gir)*(1-stopaj());
+  para(gelir-cost);o.son={own,buy,out,gelir:Math.round(gelir),cost:Math.round(cost),g:S.gun}}}
 function gunluk(){
+  tesisGunu();
   // fiyatlar ve endeks
   for(const k of [...Object.keys(URUN),"et"]){let m=(S.fiyat[k]||1)*(1+rnd(-.05,.05));m+=(1-m)*.08;S.fiyat[k]=k==="et"?clamp(m,.93,1.08):clamp(m,.75,1.35)}
   S.endeks*=1+rnd(.0005,.004);
@@ -534,7 +555,7 @@ function gunluk(){
   S.fg=S.fg||{};for(const k of [...Object.keys(URUN),"et"]){const a=S.fg[k]||(S.fg[k]=[]);a.push(+(S.fiyat[k]||1).toFixed(3));if(a.length>30)a.shift()}
   // gelirler, giderler
   let gel=0;for(const p of S.projeler){
-    if(p.durum==="uretimde"&&p.net){if(p.dur&&now()<p.dur)continue;gel+=p.net*(1-(p.yari||0))}
+    if(p.durum==="uretimde"&&p.net){if(p.dur&&now()<p.dur)continue;gel+=p.net*(1-(p.yari||0))*tesisCarp(p.tip)}
     if(p.durum==="kirada")gel+=p.kira}
   for(const y of YATIRIM)gel+=(S.yatirim[y.k]||0)*y.g;
   para(gel-gunlukMaas());
@@ -574,7 +595,7 @@ function olay(p){if(Math.random()>.075)return;const bitki=["tarla","sera","bahce
   log(p,m);toast(`${p.ad}: ${m}`,"ev");dirty=1}
 
 /* ================= Satış ve pazarlık ================= */
-function birimFiyat(p){return p.tip==="besi"?p.birim*fiyatM("et"):piyasa(p.urun)*p.fm}
+function birimFiyat(p){return p.tip==="besi"?p.birim*fiyatM("et")*tesisCarp("besi"):piyasa(p.urun)*p.fm}
 const birimAd=p=>p.tip==="besi"?"baş":"kg";
 function musteriGel(p){if(!(p.stok>0)||p.musteri.length>=3)return;const mp=birimFiyat(p);
   const qty=p.tip==="besi"?Math.max(1,Math.round(p.stok*rnd(.3,1))):Math.max(1,Math.round(p.stok*rnd(.3,.9)/10)*10);
@@ -648,6 +669,7 @@ const BASLIK={
   personel:()=>["İnsan kaynakları","Personel","Ana ekran"],
   makine:()=>["Makine parkı","Makineler","Ana ekran"],
   ofis:()=>["Merkez","Çiftlik merkezi","Ana ekran"],
+  tesis:()=>["Sanayi","Fabrikalar","Ana ekran"],
   yatirim:()=>["Kooperatif ve ortaklıklar","Yatırımlar","Ana ekran"],
   siralama:()=>["Türkiye geneli","Sıralama","Ana ekran"],
   hal:()=>["Toptancı hali","Hal fiyatları","Ana ekran"]
@@ -682,6 +704,7 @@ EKRAN.ana=()=>{const kr=S.krediler.slice().sort((a,b)=>a.sonraki-b.sonraki)[0];c
       <button class="tile" data-a="git" data-s="banka">${I.banka}<b>Banka</b><small>${S.krediler.length?S.krediler.length+" aktif kredi":"Kredi al"}</small></button>
       <button class="tile" data-a="git" data-s="makine">${I.makine}<b>Makineler</b><small>${Object.keys(S.makine).length} makine</small></button>
       <button class="tile" data-a="git" data-s="personel">${I.pers}<b>Personel</b><small>${Object.values(S.personel).filter(Boolean).length?Object.values(S.personel).filter(Boolean).length+" kişi":"Mühendis yok"}</small>${Object.values(S.personel).filter(Boolean).length?"":'<span class="dot"></span>'}</button>
+      <button class="tile" data-a="git" data-s="tesis"><svg viewBox="0 0 32 32" fill="none" stroke="#e9b949" stroke-width="2"><path d="M4 27V14l7 4v-4l7 4v-4l7 4V6h3v21z"/><path d="M8 23h3M15 23h3M22 23h3"/></svg><b>Fabrikalar</b><small>${Object.keys(S.tesis||{}).length} tesis</small></button>
       <button class="tile" data-a="git" data-s="arazilerim">${I.arazi}<b>Arazilerim</b><small>${S.arsalar.length} tapu${bos?" · "+bos+" boş":""}</small></button>
     </div>
     <button class="cta" data-a="git" data-s="harita"><div><div class="lbl">Türkiye haritası</div><b>Arazileri keşfet</b></div>${miniHarita()}<span class="go">›</span></button>
@@ -835,7 +858,7 @@ EKRAN.proje=p=>{const x=S.projeler.find(y=>y.id===p.id);if(!x)return`<div class=
   const kv=[];
   if(x.urun){kv.push(["Ürün",ik(x.urun,16)+" "+URUN[x.urun].ad],["Alan",x.alan+" dönüm"]);kv.push(["Piyasa",tl(birimFiyat(x))+"/kg"]);kv.push(["Stok",ton(x.stok||0)])}
   if(x.tip==="besi"){kv.push(["Sürü",x.adet+" baş"],["Piyasa",tl(birimFiyat(x))+"/baş"],["Stok",(x.stok||0)+" baş"])}
-  if(x.net)kv.push(["Günlük net","+"+tl(x.net*(1-(x.yari||0)))],["Hayvan",x.adet+(x.tip==="kanatli"?" bin tavuk":" baş")]);
+  if(x.net)kv.push(["Günlük net","+"+tl(x.net*(1-(x.yari||0))*tesisCarp(x.tip))],["Hayvan",x.adet+(x.tip==="kanatli"?" bin tavuk":" baş")]);
   if(x.tip==="kira")kv.push(["Günlük kira","+"+tl(x.kira)]);if(x.tip==="ihale")kv.push(["Hakediş",tl(x.bedel)],["Maliyet",tl(x.yatirim)]);
   if(x.yari)kv.push(["Ortak payı","%"+Math.round(x.yari*100)]);if(x.yatirim&&x.tip!=="ihale")kv.push(["Yatırım",tl(x.yatirim,1)]);if(x.ciro)kv.push(["Satış geliri",tl(x.ciro,1)]);
   main+=`<div class="kv">${kv.map(k=>`<div><span class="lbl">${k[0]}</span><b class="num" style="font-size:14px">${k[1]}</b></div>`).join("")}</div>`;
@@ -879,6 +902,13 @@ EKRAN.ofis=()=>`<div class="note" style="margin-bottom:12px">Merkezini büyütt�
   return`<div class="lrow" style="${i===S.ofis?"border-color:var(--gold)":""}"><div><b>${o.ad} ${i===S.ofis?'<span class="tag y">ŞU AN</span>':i<S.ofis?'<span class="tag g">✓</span>':""}</b><small>Aynı anda ${o.max} proje${acar.length?" · Açar: "+acar.join(", "):""}${ih?" · "+ih+" yeni ihale türü":""}</small></div>
   <div class="acts">${i===S.ofis+1?`<button class="btn sm gold" data-a="ofisal">Taşın · ${tl(o.c,1)}</button>`:""}</div></div>`}).join("")}</div>`;
 
+EKRAN.tesis=()=>{S.tesis=S.tesis||{};
+  return`<div class="note" style="margin-bottom:12px">Fabrikalar her gün depondaki hammaddeyi işleyip satar. Kendi ürünün yetmezse "Halden al" açıkken eksik kısım piyasa fiyatından alınır. Mandıra, paketleme ve kombina hayvancılık gelirini artırır.</div>
+  <div class="plist">${Object.entries(TESIS).map(([k,t])=>{const o=S.tesis[k],lk=t.lvl>S.ofis;
+    const info=t.gir?`${URUN[t.gir].ad} ${ton(t.kap)}/gün → ${ton(t.kap*t.oran)} ${t.cik} · ${tl(t.f*fiyatM(t.gir))}/kg`:t.d;
+    const son=o&&o.son?`<br><span class="${o.son.gelir-o.son.cost>=0?"pos":"negc"}">Gün ${o.son.g}: ${ton(o.son.own)} kendi ürünün${o.son.buy?" + "+ton(o.son.buy)+" hal":""} işlendi, net ${tl(o.son.gelir-o.son.cost,1)}</span>`:(o&&t.gir?"<br>Henüz üretim yok. Hammadde gelince başlar.":"");
+    return`<div class="lrow"><div class="row" style="flex-wrap:nowrap;align-items:flex-start;gap:12px"><span class="hic">${ik(t.gir||t.carp,22)}</span><div><b>${t.ad} ${o?'<span class="tag g">KURULU</span>':lk?`<span class="tag">${OFIS[t.lvl].ad} gerekir</span>`:""}</b><small>${info}${son}</small></div></div>
+    <div class="acts">${o?(t.gir?`<button class="btn sm ${o.hal?"gold":""}" data-a="tesishal" data-k="${k}">Halden al: ${o.hal?"Açık":"Kapalı"}</button>`:""):`<button class="btn sm gold" data-a="tesiskur" data-k="${k}" ${lk?"disabled":""}>Kur · ${tl(t.c,1)}</button>`}</div></div>`}).join("")}</div>`};
 EKRAN.yatirim=()=>`<div class="note" style="margin-bottom:12px">Her yatırımdan en fazla 3 pay alabilirsin. Getirisi her gün kasana yatar.</div><div class="plist">${YATIRIM.map(y=>{const n=S.yatirim[y.k]||0;
   return`<div class="lrow"><div><b>${y.ad} ${n?`<span class="tag g">${n} pay</span>`:""}</b><small>Pay başı ${tl(y.c)} · günlük +${tl(y.g)} · geri dönüş ${Math.round(y.c/y.g)} gün</small></div><div class="acts">${n<3?`<button class="btn sm gold" data-a="yatal" data-k="${y.k}">Pay al</button>`:'<span class="tag">Tam</span>'}</div></div>`}).join("")}</div>`;
 
@@ -912,6 +942,7 @@ const GOREV=[
   {ad:"10 milyonluk satış",d:"Toplam satış gelirin 10 milyon ₺ olsun.",ok:()=>S.stat.satis>=1e7,o:2000000},
   {ad:"Beş il",d:"Beş farklı ilde faaliyet göster.",ok:()=>S.acik.length>=5,o:3000000},
   {ad:"Kasaba bürosu",d:"Merkezini Kasaba bürosuna taşı.",ok:()=>S.ofis>=2,o:5000000},
+  {ad:"İlk fabrika",d:"Un fabrikası ya da paketleme tesisi kur.",ok:()=>Object.keys(S.tesis||{}).length>=1,o:3000000},
   {ad:"100 milyonluk servet",d:"Servetin 100 milyon ₺'yi geçsin.",ok:()=>servet()>=1e8,o:10000000}
 ];
 function gorevKart(){const i=S.gorev||0,g=GOREV[i];if(!g)return"";const ok=g.ok();
@@ -1009,6 +1040,8 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b
   case"yardim":pencere(`<h3>Nasıl oynanır?</h3><div class="note" style="font-size:13px;line-height:1.6">
     1. Haritadan bir il seç. Konya açık, diğer illeri parayla açarsın.<br>2. İlçe seçip portföyden tapu al. Toprak sınıfı ve su durumu verimi belirler.<br>3. Araziye proje kur: tarla, sera, bahçe, süt çiftliği, besi ya da kanatlı. Bölgenin yöresel ürünü %20 fazla verir.<br>4. Ekin olgunlaşınca hasadı kaldır, tüccarla pazarlık et ya da hale ver. Süt ve yumurta tesisleri her gün gelir getirir.<br>5. Görevler ilk adımlarda yol gösterir. Para biriktikçe ihalelere gir, kredi çek, personel ve makine al, merkezini büyüt.<br>Bir oyun günü ${GUN/1000} saniye. Oyun kapalıyken de en fazla ${OFFLINE_MAX} gün işler.</div><button class="btn gold" data-a="kapatm">Başla</button>`);M={t:"x"};break;
   case"odul":{const g=GOREV[S.gorev||0];if(g&&g.ok()){para(g.o);S.gorev=(S.gorev||0)+1;toast(`Görev tamam: ${g.ad}. +${tl(g.o,1)}`,"ev");ciz(1)}break}
+  case"tesiskur":{const t=TESIS[d.k];if(t.lvl>S.ofis)break;if(odeme(t.c)){S.tesis=S.tesis||{};S.tesis[d.k]={hal:0};toast(`${t.ad} kuruldu.`,"ev");ciz(1)}break}
+  case"tesishal":{S.tesis[d.k].hal=S.tesis[d.k].hal?0:1;ciz(1);break}
   case"cark":cark();break;case"cevir":cevir();break;
   }
   kaydet()});
