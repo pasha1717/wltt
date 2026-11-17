@@ -133,6 +133,13 @@ h2{font-family:var(--display);font-size:16px;margin:0;font-weight:700}
 .crops{display:flex;flex-wrap:wrap;gap:5px}
 
 /* İlçeler */
+.ilmap{padding:8px;margin-bottom:4px}
+.kredi{font-size:9.5px;color:var(--dim);text-align:right;margin-top:2px}
+.ilmap svg{max-height:min(62vh,560px)}
+.ilmap path{fill-opacity:.42;stroke:#0e1511;stroke-width:.6;cursor:pointer;transition:fill-opacity .15s}
+.ilmap path:hover,.ilmap path:focus{fill-opacity:.8}
+.ilmap text{fill:#e9efe6;font-family:var(--body);font-weight:600;pointer-events:none;paint-order:stroke;stroke:#0e1511;stroke-width:.25em;stroke-linejoin:round}
+.ilmap .pin circle{fill:var(--gold);stroke:#2b1f02;stroke-width:.3}.ilmap .pin text{fill:#2b1f02;stroke:none}
 .ilcegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
 .ilce{padding:11px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--c);text-align:left;display:flex;flex-direction:column;gap:3px}
 .ilce b{font-size:14px;font-weight:600}
@@ -253,6 +260,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:22px}
 <div id="toasts"></div>
 
 <script src="iller.js"></script>
+<script src="ilceler.js"></script>
 <script>
 "use strict";
 /* ================= Sabitler ================= */
@@ -705,8 +713,16 @@ EKRAN.harita=p=>{const sel=p.sel||BASLANGIC_IL,il=IL[sel],acik=S.acik.includes(s
     ${acik?`<button class="btn gold wide" data-a="git" data-s="il" data-il="${sel}">İlçeleri gör</button>`:`<button class="btn gold wide" data-a="ilac" data-il="${sel}">Şehri aç · ${tl(ilAcmaBedeli(sel))}</button><div class="note">Şehri açınca o ilin bütün ilçelerinde arazi alabilir, ihalelerine girebilirsin.</div>`}
   </div></div></div>`};
 
+function ilceHarita(p){const H=typeof ILCE_HARITA!=="undefined"&&ILCE_HARITA[p];if(!H)return"";
+  if(!ilceHarita.c)ilceHarita.c={};let M=ilceHarita.c[p];
+  if(!M){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const items=H.map(([ii,d])=>{let sx=0,sy=0,n=0,a=1e9,b=1e9,c=-1e9,e=-1e9;for(const m of d.matchAll(/(-?\d+) (-?\d+)/g)){const x=+m[1],y=+m[2];sx+=x;sy+=y;n++;a=Math.min(a,x);b=Math.min(b,y);c=Math.max(c,x);e=Math.max(e,y)}
+      x0=Math.min(x0,a);y0=Math.min(y0,b);x1=Math.max(x1,c);y1=Math.max(y1,e);return{ii,d,cx:(a+c)/2,cy:(b+e)/2,w:c-a}});M=ilceHarita.c[p]={items,vb:[x0-4,y0-4,x1-x0+8,y1-y0+8]}}
+  const il=IL[p],fs=Math.max(M.vb[2],M.vb[3])/48;
+  return`<div class="mapwrap ilmap"><svg viewBox="${M.vb.join(" ")}" role="img" aria-label="${il.n} ilçe haritası">${M.items.map(o=>{const ad=il.d[o.ii],t=ilceTier(p,ad);return`<path d="${o.d}" data-a="git" data-s="ilce" data-il="${p}" data-ii="${o.ii}" style="fill:${TIER[t].c}"><title>${esc(ad)} · ${TIER[t].ad}</title></path>`}).join("")}
+    ${M.items.filter(o=>o.w>fs*3.2).map(o=>`<text x="${o.cx}" y="${o.cy}" font-size="${fs}" text-anchor="middle">${esc(il.d[o.ii])}</text>`).join("")}
+    ${M.items.map(o=>{const n=S.arsalar.filter(a=>a.il===p&&a.ilce===il.d[o.ii]).length;return n?`<g class="pin"><circle cx="${o.cx}" cy="${o.cy-fs*1.4}" r="${fs*.9}"/><text x="${o.cx}" y="${o.cy-fs*1.08}" font-size="${fs*1.05}" text-anchor="middle">${n}</text></g>`:""}).join("")}</svg><div class="kredi">Harita: geoBoundaries · © OpenStreetMap katkıcıları (ODbL)</div></div>`}
 EKRAN.il=p=>{const il=IL[p.il];
-  return`<div class="row" style="justify-content:space-between;margin-bottom:12px"><div class="maplegend">${TIER.map(t=>`<span><i style="background:${t.c}"></i>${t.ad}</span>`).join("")}</div><span class="sub">Fiyatlar her 15 günde bir yenilenir</span></div>
+  return`${ilceHarita(il.p)}<div class="row" style="justify-content:space-between;margin:12px 0"><div class="maplegend">${TIER.map(t=>`<span><i style="background:${t.c}"></i>${t.ad}</span>`).join("")}</div><span class="sub">Fiyatlar her 15 günde bir yenilenir</span></div>
   <div class="ilcegrid">${il.d.map((ad,ii)=>{const t=ilceTier(il.p,ad),mine=S.arsalar.filter(a=>a.il===il.p&&a.ilce===ad).length;
     return`<button class="ilce" style="--c:${TIER[t].c}" data-a="git" data-s="ilce" data-il="${il.p}" data-ii="${ii}"><b>${esc(ad)}</b><small>${TIER[t].ad} · ~${tl(ilFiyat(il.p)*TIER[t].m*S.endeks,1)}/dönüm</small>${mine?`<span class="mk">${mine} arazin var</span>`:""}</button>`}).join("")}</div>`};
 
