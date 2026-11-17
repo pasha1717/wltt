@@ -23,7 +23,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .top{display:flex;align-items:center;gap:10px;padding-block:10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .back{display:flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);font-weight:600;font-size:13px}
 .ttl{min-width:0;flex:1}
-@media (max-width:560px){.ttl{flex:1 1 55%}.top .kasa{margin-left:auto}}
+
 .eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--green)}
 .ttl h1{margin:0;font-family:var(--display);font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand{font-family:var(--display);font-weight:800;font-size:18px;color:var(--gold);line-height:1;letter-spacing:.02em}
@@ -75,17 +75,22 @@ h2{font-family:var(--display);font-size:16px;margin:0;font-weight:700}
 .tile b{font-size:13px;font-weight:600}
 .tile small{font-size:10.5px;color:var(--gold);line-height:1.2}
 .tile .dot{position:absolute;top:7px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--red)}
-.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.duo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:460px){.duo{grid-template-columns:repeat(2,minmax(0,1fr))}.duo .mini:last-child{grid-column:1/-1}}
 .mini{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px;display:flex;gap:10px;text-align:left}
 .mini .ico{width:38px;height:38px;border-radius:10px;background:var(--panel3);display:grid;place-items:center;flex:0 0 auto}
 .mini b{display:block;font-size:14px}
 .mini small{display:block;font-size:11.5px;color:var(--muted)}
 .mini em{font-style:normal;font-size:12px;color:var(--gold);font-weight:600}
 .plist{display:flex;flex-direction:column;gap:8px}
-.prow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:10px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--c,var(--line));text-align:left;width:100%}
+.prow{display:grid;grid-template-columns:68px minmax(0,1fr) auto;gap:3px 12px;padding:10px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--c,var(--line));text-align:left;width:100%}
 .prow b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prow small{grid-column:1;font-size:11.5px;color:var(--muted)}
-.prow .bar{grid-column:1/-1}
+.prow small{grid-column:2/4;font-size:11.5px;color:var(--muted)}
+.prow .bar{grid-column:2/4}
+.prow .th{grid-row:1/4;width:68px;height:44px;border-radius:8px;overflow:hidden;align-self:center;background:var(--panel3)}
+.prow .th svg{width:100%;height:100%;display:block}
+.th2{display:grid;place-items:center}
+.prow b{grid-column:2}
 .pill{justify-self:end;align-self:start;padding:3px 9px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.06em;border:1px solid currentColor;color:var(--c,var(--muted));white-space:nowrap}
 .pill.hot{background:var(--gold);color:var(--gold-ink);border-color:var(--gold);animation:pulse 1.4s ease-in-out infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 5px rgb(233 185 73 / .18)}}
@@ -152,6 +157,9 @@ h2{font-family:var(--display);font-size:16px;margin:0;font-weight:700}
 .seg{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--panel);border:1px solid var(--line);overflow-x:auto}
 .seg button{flex:1 0 auto;padding:7px 12px;border-radius:999px;font-weight:600;font-size:13px;color:var(--muted);white-space:nowrap;display:flex;flex-direction:column;align-items:center;line-height:1.15}
 .seg button small{font-size:9.5px;font-weight:500}
+.segt{display:flex;align-items:center;gap:5px}
+.ik{flex:0 0 auto;vertical-align:-3px}
+.tag .ik{vertical-align:-3px}
 .seg button.on{background:var(--gold);color:var(--gold-ink)}
 .seg button.lock{opacity:.5}
 .scene{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#9cc7df}
@@ -213,6 +221,26 @@ input[type=range]{width:100%;accent-color:var(--green);height:22px}
 .toast.ev{background:var(--gold);color:var(--gold-ink)}
 .toast.bad{background:var(--red);color:#2a0702}
 @keyframes tin{from{opacity:0;transform:translateY(8px)}}
+
+.spark{display:block;flex:0 0 auto}
+.empty-s{display:grid;place-items:center;border:1px dashed var(--line);border-radius:8px;font-size:9.5px;color:var(--dim);text-align:center;padding:2px}
+.hal{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.hrow{display:grid;grid-template-columns:34px minmax(0,1fr) 90px 96px;gap:10px;align-items:center;padding:9px 12px;border-top:1px solid var(--line)}
+.hrow:first-child{border-top:0}
+.hic{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--panel2)}
+.hn b{display:block;font-weight:600}.hn small{font-size:11px}
+.hp{text-align:right}.hp b{display:block;font-family:var(--display);font-size:14px}.hp small{font-size:11px;color:var(--muted)}
+@media (max-width:460px){.hrow{grid-template-columns:30px minmax(0,1fr) 84px;}.hrow .spark{display:none}}
+.gorev{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:linear-gradient(120deg,#22301f,var(--panel));border:1px solid #3d5434}
+.gorev.done{border-color:var(--gold);box-shadow:0 0 0 3px rgb(233 185 73 / .12)}
+.gorev .gnum{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:12px;background:var(--panel3);color:var(--gold);border:2px solid #4b6340}
+.gorev b{display:block;font-size:15px;margin-top:1px}.gorev small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+@media (max-width:460px){.kasacard .big{font-size:25px}.kasacard .spark{width:96px}}
+.brk{display:none}
+@media (max-width:560px){.brk{display:block;flex-basis:100%;height:0;order:3}.top .ibtn.home{order:2}.top .kasa{order:4;margin-left:0}.top .chip{order:5;margin-left:auto}.ttl{flex:1 1 0}}
+#scr.enter>*{animation:enter .22s ease-out}
+@keyframes enter{from{opacity:0;transform:translateY(6px)}}
+.scene[data-scene]{margin-bottom:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -239,27 +267,27 @@ const BASLANGIC_IL=42;
 
 // Ürünler. kg: dönüm başına verim, f: ₺/kg, mal: dönüm başına gider, gun: kurulumdan ilk hasada gün
 const URUN={
-  bugday:{ad:"Buğday",ic:"🌾",tip:"tarla",kg:450,f:13,mal:3200,gun:4,sulu:0,b:["ic","mar","gd","dog"],il:[42,26,6,21],renk:"#d8b552"},
-  arpa:{ad:"Arpa",ic:"🌾",tip:"tarla",kg:420,f:11,mal:2800,gun:3.5,sulu:0,b:["ic","dog","gd"],il:[42,6,51,40],renk:"#cdb86a"},
-  misir:{ad:"Mısır",ic:"🌽",tip:"tarla",kg:1150,f:12,mal:7200,gun:4.5,sulu:1,b:["akd","kar","ege","mar"],il:[1,80,55,72],renk:"#e1c440"},
-  aycicegi:{ad:"Ayçiçeği",ic:"🌻",tip:"tarla",kg:300,f:25,mal:4300,gun:4,sulu:0,b:["mar"],il:[22,39,59],renk:"#f0c22b"},
-  pamuk:{ad:"Pamuk",ic:"☁️",tip:"tarla",kg:520,f:38,mal:11500,gun:5.5,sulu:1,b:["gd","ege","akd"],il:[63,9,1,21],renk:"#eef0ea"},
-  pancar:{ad:"Şeker pancarı",ic:"🫜",tip:"tarla",kg:7000,f:3.6,mal:15500,gun:5,sulu:1,b:["ic","mar"],il:[42,26,3,38],renk:"#6aa34c"},
-  mercimek:{ad:"Kırmızı mercimek",ic:"🫘",tip:"tarla",kg:150,f:48,mal:3600,gun:3.5,sulu:0,b:["gd"],il:[63,47,2],renk:"#c9773e"},
-  celtik:{ad:"Çeltik",ic:"🍚",tip:"tarla",kg:800,f:24,mal:10500,gun:5,sulu:1,b:["mar","kar"],il:[22,57,17],renk:"#a7c45a"},
-  patates:{ad:"Patates",ic:"🥔",tip:"tarla",kg:4000,f:12,mal:28000,gun:4.5,sulu:1,b:["ic","akd"],il:[51,35,42],renk:"#5f9a46"},
-  domates:{ad:"Domates",ic:"🍅",tip:"sera",kg:9000,f:20,mal:110000,gun:4,tekrar:4,b:["akd"],il:[7,33,48],renk:"#e0503a"},
-  biber:{ad:"Biber",ic:"🫑",tip:"sera",kg:6000,f:32,mal:125000,gun:4,tekrar:4,b:["akd","ege"],il:[7,33,31],renk:"#4fae3c"},
-  cilek:{ad:"Çilek",ic:"🍓",tip:"sera",kg:2400,f:95,mal:150000,gun:4,tekrar:4,b:["akd","mar"],il:[33,9,16],renk:"#e2394d"},
-  zeytin:{ad:"Zeytin",ic:"🫒",tip:"bahce",kg:600,f:65,mal:12000,fidan:45000,gun:8,tekrar:6,b:["ege","mar","akd"],il:[10,9,35,31],renk:"#7d8f3a"},
-  uzum:{ad:"Üzüm",ic:"🍇",tip:"bahce",kg:1600,f:28,mal:16000,fidan:55000,gun:7,tekrar:5,b:["ege","gd"],il:[45,20,35],renk:"#7b4a8f"},
-  incir:{ad:"İncir",ic:"🟣",tip:"bahce",kg:900,f:70,mal:18000,fidan:60000,gun:8,tekrar:6,b:["ege"],il:[9,35],renk:"#6d5a8a"},
-  findik:{ad:"Fındık",ic:"🌰",tip:"bahce",kg:160,f:170,mal:9000,fidan:50000,gun:9,tekrar:6,b:["kar"],il:[28,52,61,55],renk:"#8a6235"},
-  cay:{ad:"Çay",ic:"🍃",tip:"bahce",kg:1500,f:23,mal:12000,fidan:40000,gun:7,tekrar:4,b:["kar"],il:[53,61,8],renk:"#3f8f4a"},
-  kayisi:{ad:"Kayısı",ic:"🍑",tip:"bahce",kg:1200,f:45,mal:16000,fidan:55000,gun:8,tekrar:6,b:["dog","ic"],il:[44,23],renk:"#f0a040"},
-  portakal:{ad:"Portakal",ic:"🍊",tip:"bahce",kg:4200,f:16,mal:22000,fidan:60000,gun:8,tekrar:6,b:["akd"],il:[7,33,1,31],renk:"#f08a24"},
-  fistik:{ad:"Antep fıstığı",ic:"🥜",tip:"bahce",kg:110,f:420,mal:14000,fidan:65000,gun:10,tekrar:7,b:["gd"],il:[27,63,2],renk:"#9dbb5a"},
-  kiraz:{ad:"Kiraz",ic:"🍒",tip:"bahce",kg:900,f:85,mal:21000,fidan:70000,gun:8,tekrar:6,b:["ege","ic","mar"],il:[3,32,42,45],renk:"#b5182f"}
+  bugday:{ad:"Buğday",ic:"🌾",tip:"tarla",kg:460,f:13,mal:3200,gun:4,sulu:0,b:["ic","mar","gd","dog"],il:[42,26,6,21],renk:"#d8b552"},
+  arpa:{ad:"Arpa",ic:"🌾",tip:"tarla",kg:480,f:11,mal:2800,gun:3.5,sulu:0,b:["ic","dog","gd"],il:[42,6,51,40],renk:"#cdb86a"},
+  misir:{ad:"Mısır",ic:"🌽",tip:"tarla",kg:1240,f:12,mal:7200,gun:4.5,sulu:1,b:["akd","kar","ege","mar"],il:[1,80,55,72],renk:"#e1c440"},
+  aycicegi:{ad:"Ayçiçeği",ic:"🌻",tip:"tarla",kg:470,f:25,mal:4300,gun:4,sulu:0,b:["mar"],il:[22,39,59],renk:"#f0c22b"},
+  pamuk:{ad:"Pamuk",ic:"☁️",tip:"tarla",kg:400,f:38,mal:11500,gun:5.5,sulu:1,b:["gd","ege","akd"],il:[63,9,1,21],renk:"#eef0ea"},
+  pancar:{ad:"Şeker pancarı",ic:"🫜",tip:"tarla",kg:5400,f:3.6,mal:15500,gun:5,sulu:1,b:["ic","mar"],il:[42,26,3,38],renk:"#6aa34c"},
+  mercimek:{ad:"Kırmızı mercimek",ic:"🫘",tip:"tarla",kg:120,f:48,mal:3600,gun:3.5,sulu:0,b:["gd"],il:[63,47,2],renk:"#c9773e"},
+  celtik:{ad:"Çeltik",ic:"🍚",tip:"tarla",kg:830,f:24,mal:10500,gun:5,sulu:1,b:["mar","kar"],il:[22,57,17],renk:"#a7c45a"},
+  patates:{ad:"Patates",ic:"🥔",tip:"tarla",kg:2700,f:12,mal:28000,gun:4.5,sulu:1,b:["ic","akd"],il:[51,35,42],renk:"#5f9a46"},
+  domates:{ad:"Domates",ic:"🍅",tip:"sera",kg:6600,f:20,mal:110000,gun:4,tekrar:4,b:["akd"],il:[7,33,48],renk:"#e0503a"},
+  biber:{ad:"Biber",ic:"🫑",tip:"sera",kg:4600,f:32,mal:125000,gun:4,tekrar:4,b:["akd","ege"],il:[7,33,31],renk:"#4fae3c"},
+  cilek:{ad:"Çilek",ic:"🍓",tip:"sera",kg:1800,f:95,mal:150000,gun:4,tekrar:4,b:["akd","mar"],il:[33,9,16],renk:"#e2394d"},
+  zeytin:{ad:"Zeytin",ic:"🫒",tip:"bahce",kg:410,f:65,mal:12000,fidan:45000,gun:8,tekrar:6,b:["ege","mar","akd"],il:[10,9,35,31],renk:"#7d8f3a"},
+  uzum:{ad:"Üzüm",ic:"🍇",tip:"bahce",kg:1040,f:28,mal:16000,fidan:55000,gun:7,tekrar:5,b:["ege","gd"],il:[45,20,35],renk:"#7b4a8f"},
+  incir:{ad:"İncir",ic:"🟣",tip:"bahce",kg:490,f:70,mal:18000,fidan:60000,gun:8,tekrar:6,b:["ege"],il:[9,35],renk:"#6d5a8a"},
+  findik:{ad:"Fındık",ic:"🌰",tip:"bahce",kg:130,f:170,mal:9000,fidan:50000,gun:9,tekrar:6,b:["kar"],il:[28,52,61,55],renk:"#8a6235"},
+  cay:{ad:"Çay",ic:"🍃",tip:"bahce",kg:860,f:23,mal:12000,fidan:40000,gun:7,tekrar:4,b:["kar"],il:[53,61,8],renk:"#3f8f4a"},
+  kayisi:{ad:"Kayısı",ic:"🍑",tip:"bahce",kg:510,f:45,mal:16000,fidan:55000,gun:8,tekrar:6,b:["dog","ic"],il:[44,23],renk:"#f0a040"},
+  portakal:{ad:"Portakal",ic:"🍊",tip:"bahce",kg:2400,f:16,mal:22000,fidan:60000,gun:8,tekrar:6,b:["akd"],il:[7,33,1,31],renk:"#f08a24"},
+  fistik:{ad:"Antep fıstığı",ic:"🥜",tip:"bahce",kg:60,f:420,mal:14000,fidan:65000,gun:10,tekrar:7,b:["gd"],il:[27,63,2],renk:"#9dbb5a"},
+  kiraz:{ad:"Kiraz",ic:"🍒",tip:"bahce",kg:440,f:85,mal:21000,fidan:70000,gun:8,tekrar:6,b:["ege","ic","mar"],il:[3,32,42,45],renk:"#b5182f"}
 };
 const ET={ad:"Besi danası",ic:"🐂"};
 const TIPLER={
@@ -276,7 +304,7 @@ const DONATI={
   iyi:{ad:"İyi tarım sertifikası",d:"Satış fiyatı %8 artar",t:["tarla","sera","bahce"],c:()=>120000},
   gunes:{ad:"Güneş paneli",d:"İşletme gideri %30 düşer, hayvancılıkta net %8 artar",t:["sera","bahce","sut","besi","kanatli"],c:()=>550000},
   otomasyon:{ad:"Yemleme otomasyonu",d:"Hayvancılık geliri %12 artar",t:["sut","besi","kanatli"],c:()=>650000},
-  biyogaz:{ad:"Gübre ve biyogaz ünitesi",d:"Gübreden elektrik: gelir %10 artar",t:["sut","besi"],c:()=>1400000},
+  biyogaz:{ad:"Gübre ve biyogaz ünitesi",d:"Gübreden elektrik üretir, gelir %10 artar",t:["sut","besi"],c:()=>1400000},
   sigorta:{ad:"Tarım sigortası",d:"Dolu, don ve salgın zararını karşılar",t:["tarla","sera","bahce","sut","besi","kanatli"],c:P=>Math.round(P.base*0.03)}
 };
 const ROLLER={
@@ -295,11 +323,11 @@ const MAKINE={
   bicer:{ad:"Biçerdöver",d:"Tarlada hasat kaybı azalır: verim %6 artar",c:6500000}
 };
 const YATIRIM=[
-  {k:"sulama",ad:"Sulama kooperatifi payı",c:600000,g:7000},
-  {k:"depo",ad:"Lisanslı depo hissesi",c:2500000,g:31000},
-  {k:"tohum",ad:"Tohum ıslah merkezi ortaklığı",c:9000000,g:118000},
-  {k:"biyogaz",ad:"Bölgesel biyogaz tesisi",c:30000000,g:410000},
-  {k:"terminal",ad:"Tarım ihracat terminali payı",c:120000000,g:1700000}
+  {k:"sulama",ad:"Sulama kooperatifi payı",c:600000,g:4800},
+  {k:"depo",ad:"Lisanslı depo hissesi",c:2500000,g:20000},
+  {k:"tohum",ad:"Tohum ıslah merkezi ortaklığı",c:9000000,g:72000},
+  {k:"biyogaz",ad:"Bölgesel biyogaz tesisi",c:30000000,g:240000},
+  {k:"terminal",ad:"Tarım ihracat terminali payı",c:120000000,g:960000}
 ];
 const IHALE_T=[
   {ad:"Park ve refüj ağaçlandırma",k:"{il} Belediyesi",m:0,b:[1.2e6,3e6],s:3},
@@ -318,6 +346,41 @@ const TUCCAR_FIRMA=["Hububat","Gıda","Tarım Ürünleri","Hal Komisyonculuğu",
 const KOYLU=["Hasan Amca","Ali Dayı","Hatice Teyze","Mustafa Emmi","Şükrü Amca","Emine Teyze","Veli Dayı"];
 const CARK=[["₺50.000",8,()=>para(5e4)],["₺100.000",7,()=>para(1e5)],["₺250.000",5,()=>para(2.5e5)],["₺500.000",3,()=>para(5e5)],
   ["₺1.000.000",1.5,()=>para(1e6)],["Tohum %20",4,()=>{S.indirim=.2}],["Kredi +25",4,()=>{S.not=Math.min(900,S.not+25)}],["₺2.500.000",.5,()=>para(2.5e6)]];
+
+/* ================= İkonlar ================= */
+const IKD=(()=>{const g=(cx,cy,r,f)=>`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${f}"/>`;const e=(cx,cy,rx,ry,rot,f)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${f}"${rot?` transform="rotate(${rot} ${cx} ${cy})"`:""}/>`;
+  const leaf=(x,y,rot,f="#4f9a3e")=>`<path d="M${x} ${y}c2-3 6-3 8-1c-2 3-6 3-8 1z" fill="${f}" transform="rotate(${rot} ${x} ${y})"/>`;
+  const basak=(c,kil)=>`<path d="M12 23V5" stroke="#9a7a2c" stroke-width="1.3"/>`+[7,10,13,16].map(y=>e(9.7,y,2.5,1.3,-35,c)+e(14.3,y,2.5,1.3,35,c)+(kil?`<path d="M8 ${y-1}l-3-4M16 ${y-1}l3-4" stroke="${c}" stroke-width=".7"/>`:"")).join("")+e(12,4,1.4,2.2,0,c);
+  return{
+  bugday:basak("#e3b54a"),arpa:basak("#d2bd6a",1),
+  misir:`<path d="M12 22c-5-2-7-8-6-12 2 4 4 7 6 12zM12 22c5-2 7-8 6-12-2 4-4 7-6 12z" fill="#5a9a3c"/>`+e(12,10,3.8,7.5,0,"#f2c94c")+[5,8,11,14].map(y=>`<path d="M9 ${y}h6" stroke="#d9a520" stroke-width=".8"/>`).join(""),
+  aycicegi:Array.from({length:12},(_,i)=>e(12,5,1.7,3.6,i*30,"#f5c518").replace(/rotate\((\d+) 12 5\)/,"rotate($1 12 12)")).join("")+g(12,12,4.2,"#6b4423")+g(11,11,.6,"#a0703a")+g(13,13,.6,"#a0703a"),
+  pamuk:`<path d="M12 22v-6" stroke="#7a5a30" stroke-width="1.4"/><path d="M7 16l5 2 5-2-2 3h-6z" fill="#7a5a30"/>`+g(9,12,3.2,"#f7f7f2")+g(15,12,3.2,"#f7f7f2")+g(12,8.5,3.4,"#ffffff")+g(12,13,3,"#ecece4"),
+  pancar:leaf(11,8,-110,"#5a9a3c")+leaf(12,8,-70,"#4f8f36")+leaf(12,8,-90,"#68ad46")+`<path d="M7 9h10c0 5-2 9-5 13-3-4-5-8-5-13z" fill="#efe1c4" stroke="#c9b48a" stroke-width=".8"/>`,
+  mercimek:e(8,14,4,2.6,-15,"#d9643a")+e(15,11,4,2.6,20,"#e0703f")+e(13,17,4,2.6,5,"#c9572f")+e(14,10,1.2,.6,20,"#f5a37a"),
+  celtik:`<path d="M10 23c0-8 2-13 8-17" stroke="#8a9a44" stroke-width="1.3" fill="none"/>`+[[12,12],[13.5,9.5],[15,7.5],[16.5,6],[11.5,15],[14.5,12],[16,9.5],[17.5,8]].map(([x,y])=>e(x,y,1.8,1,40,"#ddd08c")).join(""),
+  patates:e(9,13,5.5,4.2,-20,"#b98a52")+e(16,15,4.4,3.4,15,"#a87a45")+g(8,12,.6,"#7a5530")+g(10.5,14.5,.6,"#7a5530")+g(16,14,.6,"#7a5530"),
+  domates:g(12,13.5,7.5,"#e2453a")+e(9,11,2,1.2,-30,"#f07a6c")+`<path d="M12 6l1.5 2.5L16 7l-1.5 2.6L17 11l-3-.3-2 1.6-2-1.6-3 .3 2.5-1.4L8 7l2.5 1.5z" fill="#4c9a3a"/>`,
+  biber:`<path d="M12 7c4 0 6 2 6 5 0 5-4 10-7 10-2 0-3-2-2-5 1-3 0-5-1-6 0-2 2-4 4-4z" fill="#4fae3c"/><path d="M12 7c0-2 1-4 3-4" stroke="#3b7a2a" stroke-width="1.6" fill="none"/><path d="M14 10c1 2 1 5-1 8" stroke="#7fd06a" stroke-width="1.1" fill="none"/>`,
+  cilek:`<path d="M12 22c-4-2-8-7-7-11 1-3 4-3 7-2 3-1 6-1 7 2 1 4-3 9-7 11z" fill="#e2394d"/>`+[[9,12],[12,11],[15,12],[10.5,15],[13.5,15],[12,18]].map(([x,y])=>e(x,y,.5,.8,0,"#ffd76a")).join("")+`<path d="M7 9l3 1 2-3 2 3 3-1-1 2H8z" fill="#4c9a3a"/>`,
+  zeytin:leaf(4,8,-15,"#7d8f4a")+e(10,14,3.4,4.6,-25,"#6b7a2a")+e(15.5,13,3.4,4.6,20,"#3f4a1a")+e(14.5,11,.8,1.2,20,"#7a8a4a"),
+  uzum:`<path d="M12 6V2" stroke="#6b4a2a" stroke-width="1.3"/>`+leaf(12,4,-20,"#5a9a3c")+[[9,8],[12,8],[15,8],[10.5,11],[13.5,11],[16.5,11],[7.5,11],[9,14],[12,14],[15,14],[10.5,17],[13.5,17],[12,20]].map(([x,y])=>g(x,y,2,"#7b4a8f")).join("")+g(11,7.4,.6,"#b38ac4"),
+  incir:`<path d="M12 5c1 0 2 1 2 2 3 2 5 6 4 10-1 3-4 5-6 5s-5-2-6-5c-1-4 1-8 4-10 0-1 1-2 2-2z" fill="#7a5a8c"/><path d="M12 5V2" stroke="#5a7a2a" stroke-width="1.4"/>`+e(10,13,1.4,2.4,-15,"#9a7aab"),
+  findik:`<path d="M5 9c2-5 12-5 14 0-3-1-4 1-7 1S8 8 5 9z" fill="#6aa04a"/>`+e(12,15,6,6.5,0,"#9a6a3a")+e(12,10.5,4.8,1.8,0,"#c9a06a")+e(10,15,1.2,2.4,-15,"#b88550"),
+  cay:`<path d="M12 22c-1-5-5-6-6-11 4 0 7 3 6 11z" fill="#3f8f4a"/><path d="M12 22c1-6 5-8 7-14-5 1-8 5-7 14z" fill="#4fa85a"/><path d="M12 21c0-4 3-7 5-11M12 21c-1-3-3-5-5-8" stroke="#2a6a33" stroke-width=".7" fill="none"/>`,
+  kayisi:g(12,14,7.5,"#f0a040")+`<path d="M12 7c-2 3-2 11 0 14" stroke="#d9822a" stroke-width="1" fill="none"/>`+e(9,11,1.8,1.2,-30,"#ffc070")+leaf(12,7,-50,"#5a9a3c"),
+  portakal:g(12,14,7.5,"#f08a24")+[[9,12],[14,11],[12,15],[16,15],[9,16]].map(([x,y])=>g(x,y,.5,"#d9701a")).join("")+leaf(12,6.8,-30,"#4c9a3a"),
+  fistik:e(12,13,6.5,8,25,"#e6d3a8")+e(12.5,12.5,3.2,5.5,25,"#8fb04a")+`<path d="M8 6c3 3 6 10 6 16" stroke="#c9b48a" stroke-width=".9" fill="none"/>`,
+  kiraz:`<path d="M8 15c1-6 3-9 6-12M16 16c0-6-1-10-2-13" stroke="#5a7a2a" stroke-width="1.3" fill="none"/>`+leaf(14,3,10,"#5a9a3c")+g(8,17,4.2,"#b5182f")+g(16,17.5,4.2,"#9e1428")+e(6.8,15.8,1,.6,-30,"#e05a6c"),
+  tarla:`<rect x="2" y="9" width="20" height="12" rx="1.5" fill="#7b5a32"/>`+[12,15,18].map(y=>`<path d="M4 ${y}h16" stroke="#5d4224" stroke-width="1.4"/>`).join("")+`<path d="M5 9l1-4 1 4M11 9l1-5 1 5M17 9l1-4 1 4" fill="#7fbf5a"/>`,
+  sera:`<path d="M3 21V12c0-4 4-7 9-7s9 3 9 7v9z" fill="#d6ecee" stroke="#8fb3b8" stroke-width="1.2"/><path d="M8 21V10M12 21V5M16 21V10M3 15h18" stroke="#8fb3b8" stroke-width=".9"/>`,
+  bahce:`<rect x="11" y="13" width="2" height="9" fill="#6b4423"/>`+g(12,10,7,"#4f9a3e")+g(9,9,2.5,"#5fae4a")+g(9,12,1.2,"#e2453a")+g(14.5,8,1.2,"#e2453a")+g(15,12.5,1.2,"#e2453a"),
+  sut:`<path d="M8 6h8v2l2 4v10H6V12l2-4z" fill="#eef2f4" stroke="#9aa8b0" stroke-width="1.1"/><rect x="8" y="3" width="8" height="3" rx="1" fill="#5fc4c9"/><path d="M6 14h12" stroke="#5fc4c9" stroke-width="2"/>`,
+  besi:`<path d="M5 8c-2-1-3-3-2-5 2 1 3 2 4 3M19 8c2-1 3-3 2-5-2 1-3 2-4 3" fill="#e6dccb"/><path d="M6 8c0-2 3-3 6-3s6 1 6 3v6c0 4-3 7-6 7s-6-3-6-7z" fill="#8a5a34"/>`+e(12,17.5,4,2.8,0,"#e3b9a0")+g(10.5,17.5,.7,"#5a3020")+g(13.5,17.5,.7,"#5a3020")+g(9,11,1,"#1a1a1a")+g(15,11,1,"#1a1a1a"),
+  kanatli:e(12,13,6,8,0,"#f4ead6")+e(10,10,1.6,2.4,-20,"#ffffff")+`<path d="M6 13c2 1 3-1 4 0s2 1 3 0 2-1 3 0 2 0 2-1" stroke="#e0cfa8" stroke-width=".8" fill="none"/>`,
+  kilit:`<rect x="5" y="10" width="14" height="11" rx="2" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2" fill="none"/>`
+}})();
+function ik(k,sz=18,cls=""){return`<svg class="ik ${cls}" width="${sz}" height="${sz}" viewBox="0 0 24 24" aria-hidden="true">${IKD[k]||""}</svg>`}
 
 /* ================= Yardımcılar ================= */
 const $=s=>document.querySelector(s);
@@ -408,13 +471,13 @@ function plan(D){
     P.gelir=P.kg*c.f*fiyatM(D.urun)*P.fm;
   }else if(D.tip==="sut"){
     const max=a.donum*5;P.adet=clamp(D.adet,1,max);P.max=max;const ic=[75000,115000,170000][D.irk],sc=[0,450000,2600000][D.sagim],sm=[1,1.12,1.28][D.sagim];
-    P.base=P.adet*(ic+22000)+sc;P.gun=3*gunM;P.net=P.adet*(ic+22000)*.021*sm*hayvanFit("sut",a.il)*hayM;P.litre=P.adet*[12,22,32][D.irk];
+    P.base=P.adet*(ic+22000)+sc;P.gun=3*gunM;P.net=P.adet*(ic+22000)*.015*sm*hayvanFit("sut",a.il)*hayM;P.litre=P.adet*[12,22,32][D.irk];
   }else if(D.tip==="besi"){
     const max=a.donum*8;P.adet=clamp(D.adet,1,max);P.max=max;const dc=[42000,65000,90000][D.irk],ye=[7000,8500,10000][D.irk];
-    P.base=P.adet*(dc+ye+14000);P.yenile=P.adet*(dc+ye);P.gun=[8,7,6][D.irk]*gunM;P.birim=[66000,104000,146000][D.irk]*hayvanFit("besi",a.il)*hayM;P.gelir=P.adet*P.birim;
+    P.base=P.adet*(dc+ye+14000);P.yenile=P.adet*(dc+ye);P.gun=[8,7,6][D.irk]*gunM;P.birim=(dc+ye)*(1+.0145*[8,7,6][D.irk]*hayvanFit("besi",a.il)*hayM);P.gelir=P.adet*P.birim;
   }else if(D.tip==="kanatli"){
     const max=a.donum*2;P.adet=clamp(D.adet,1,max);P.max=max;const kc=[70000,130000][D.kumes];
-    P.base=P.adet*(95000+kc);P.gun=2.5*gunM;P.net=P.adet*(95000+kc)*.024*(D.kumes?1.12:1)*hayM;
+    P.base=P.adet*(95000+kc);P.gun=2.5*gunM;P.net=P.adet*(95000+kc)*.016*(D.kumes?1.12:1)*hayM;
   }
   if(S.indirim)P.indirim=Math.round(P.base*S.indirim);
   for(const k in DONATI){const d=DONATI[k];if(!d.t.includes(D.tip)||!D.don[k])continue;if(k==="kuyu"&&a.su!=="kuru")continue;const c=d.c(P);P.don+=c;P.kalem.push([d.ad,c])}
@@ -444,9 +507,10 @@ function kontrol(){const t=now();
 }
 function gunluk(){
   // fiyatlar ve endeks
-  for(const k of [...Object.keys(URUN),"et"]){let m=(S.fiyat[k]||1)*(1+rnd(-.05,.05));m+=(1-m)*.08;S.fiyat[k]=clamp(m,.75,1.35)}
+  for(const k of [...Object.keys(URUN),"et"]){let m=(S.fiyat[k]||1)*(1+rnd(-.05,.05));m+=(1-m)*.08;S.fiyat[k]=k==="et"?clamp(m,.93,1.08):clamp(m,.75,1.35)}
   S.endeks*=1+rnd(.0005,.004);
   for(const r of S.rakip)r.v*=1+rnd(.003,.013);
+  S.fg=S.fg||{};for(const k of [...Object.keys(URUN),"et"]){const a=S.fg[k]||(S.fg[k]=[]);a.push(+(S.fiyat[k]||1).toFixed(3));if(a.length>30)a.shift()}
   // gelirler, giderler
   let gel=0;for(const p of S.projeler){
     if(p.durum==="uretimde"&&p.net){if(p.dur&&now()<p.dur)continue;gel+=p.net*(1-(p.yari||0))}
@@ -457,6 +521,7 @@ function gunluk(){
     if(S.kasa<0){S.not=Math.max(300,S.not-45);toast(`${k.banka} taksiti ödendi ama kasa eksiye düştü. Kredi notun düştü.`,"bad")}else{S.not=Math.min(900,S.not+6);toast(`${k.banka} taksiti ödendi: ${tl(k.taksit)}`)}}}
   S.krediler=S.krediler.filter(k=>k.kalan>0);
   if(S.kasa<0)S.not=Math.max(300,S.not-8);
+  S.kg=S.kg||[];S.kg.push(Math.round(servet()));if(S.kg.length>30)S.kg.shift();
   // olaylar
   for(const p of S.projeler)olay(p);
   // tüccarlar
@@ -506,14 +571,14 @@ function hasatKaldir(p,oto){if(p.durum!=="hasat")return;const kg=Math.round(p.kg
 /* ================= İhale ================= */
 function ihaleUret(){const ops=IHALE_T.filter(x=>x.m<=S.ofis+(Math.random()<.2?1:0));const T=pick(ops);const il=IL[pick(S.acik)];
   const bedel=Math.round(rnd(T.b[0],T.b[1])/10000)*10000;
-  S.ihaleler.push({id:uid(),ad:T.ad,kurum:T.k.replace("{il}",il.n),il:il.p,bedel,oran:rnd(.6,.78),sure:T.s,bitis:now()+rnd(1.2,3),m:T.m,teklif:0})}
+  S.ihaleler.push({id:uid(),ad:T.ad,kurum:T.k.replace("{il}",il.n),il:il.p,bedel,oran:rnd(.55,.72),sure:T.s,bitis:now()+rnd(1.2,3),m:T.m,teklif:0})}
 function ihaleSonuc(ih){
-  const rak=[...RAKIP].sort(()=>Math.random()-.5).slice(0,3+Math.floor(Math.random()*3)).map(a=>({ad:a,t:Math.round(ih.bedel*rnd(.74,1.02)/1000)*1000}));
+  const rak=[...RAKIP].sort(()=>Math.random()-.5).slice(0,3+Math.floor(Math.random()*3)).map(a=>({ad:a,t:Math.round(ih.bedel*rnd(.76,1)/1000)*1000}));
   ih.rakip=rak;const minR=Math.min(...rak.map(r=>r.t));
   if(!ih.teklif){ih.sonuc="yok";return}
   para(ih.teminat);
   if(ih.teklif<ih.bedel*.66){ih.sonuc="red";toast(`${ih.ad}: teklifin aşırı düşük bulundu, ihale dışı kaldın.`,"bad");dirty=1;return}
-  if(ih.teklif<minR){ih.sonuc="kazandi";const mal=Math.round(ih.bedel*ih.oran*rnd(.95,1.12));S.kasa-=mal;
+  if(ih.teklif<minR){ih.sonuc="kazandi";S.stat.ihaleK=(S.stat.ihaleK||0)+1;const mal=Math.round(ih.bedel*ih.oran*rnd(.95,1.12));S.kasa-=mal;
     const p={id:uid(),tip:"ihale",ad:ih.ad,il:ih.il,ilce:ih.kurum,durum:"kurulum",bas:now(),sure:ih.sure*(1-pers("mudur")),bedel:ih.teklif,yatirim:mal,log:[],musteri:[]};
     log(p,`İhale kazanıldı: ${tl(ih.teklif)}. İşe başlandı, maliyet ${tl(mal)} ödendi.`);S.projeler.unshift(p);toast(`İhaleyi kazandın: ${ih.ad}`,"ev")}
   else{ih.sonuc="kaybetti";toast(`${ih.ad}: ${rak.find(r=>r.t===minR).ad} daha düşük teklifle kazandı.`)}
@@ -548,7 +613,7 @@ function ust(){const c=cur();let h="";
   else{const t=BASLIK[c.s]?.(c.p)||["",""];h+=`<button class="back" data-a="geri">‹ ${esc(t[2]||"Geri")}</button><div class="ttl"><div class="eyebrow">${esc(t[0])}</div><h1>${esc(t[1])}</h1></div>`}
   if(c.s==="ana")h+=`<div style="flex:1"></div>`;
   h+=`<div class="kasa"><span>KASA</span><b class="num" data-live="kasa"></b></div><div class="chip"><span data-live="gun"></span><span class="dayp"><i data-live="gunp"></i></span></div>`;
-  if(c.s!=="ana")h+=`<button class="ibtn" data-a="eve" aria-label="Ana ekran">${I.ev.replace('viewBox','width="18" height="18" viewBox')}</button>`;
+  if(c.s!=="ana")h+=`<span class="brk"></span><button class="ibtn home" data-a="eve" aria-label="Ana ekran">${I.ev.replace('viewBox','width="18" height="18" viewBox')}</button>`;
   return h}
 const BASLIK={
   harita:()=>["Türkiye · 81 il","Şehir seç","Ana ekran"],
@@ -563,7 +628,8 @@ const BASLIK={
   makine:()=>["Makine parkı","Makineler","Ana ekran"],
   ofis:()=>["Merkez","Çiftlik merkezi","Ana ekran"],
   yatirim:()=>["Kooperatif ve ortaklıklar","Yatırımlar","Ana ekran"],
-  siralama:()=>["Türkiye geneli","Sıralama","Ana ekran"]
+  siralama:()=>["Türkiye geneli","Sıralama","Ana ekran"],
+  hal:()=>["Toptancı hali","Hal fiyatları","Ana ekran"]
 };
 
 const DURUM={kurulum:["KURULUM","var(--gold)"],hasat:["HASAT ZAMANI","var(--gold)"],satista:["SATIŞTA","var(--teal)"],uretimde:["ÜRETİMDE","var(--green)"],kirada:["KİRADA","var(--blue)"],bitti:["TAMAMLANDI","var(--dim)"]};
@@ -577,7 +643,8 @@ function projeAlt(p){const t=now();
   if(p.durum==="uretimde")return p.net?`${p.ilce} · +${tl(p.net*(1-(p.yari||0)),1)}/gün`:`${p.ilce} · ${ton(p.stok||0)} stokta · ${p.musteri.length} tüccar`;
   if(p.durum==="kirada")return`${p.ilce} · +${tl(p.kira,1)}/gün kira`;return`${p.ilce} · ${p.tip==="ihale"?"teslim edildi":"arazi boş"}`}
 function projeSatir(p){const [l,c]=durumEt(p);const showBar=p.durum==="kurulum"||(p.durum==="uretimde"&&p.tekrar);
-  return`<button class="prow" style="--c:${c}" data-a="git" data-s="proje" data-id="${p.id}"><b>${esc(p.ad)}</b><span class="pill ${p.durum==="hasat"?"hot":""}" style="--c:${c}">${l}</span><small>${projeAlt(p)}</small>${showBar?`<div class="bar" style="--c:${c}"><i data-prog="${p.id}"></i></div>`:""}</button>`}
+  const th=p.D?`<span class="th">${projeSahne(p)}</span>`:`<span class="th th2">${ik(p.tip==="kira"?"tarla":"sera",22)}</span>`;
+  return`<button class="prow" style="--c:${c}" data-a="git" data-s="proje" data-id="${p.id}">${th}<b>${esc(p.ad)}</b><span class="pill ${p.durum==="hasat"?"hot":""}" style="--c:${c}">${l}</span><small>${projeAlt(p)}</small>${showBar?`<div class="bar" style="--c:${c}"><i data-prog="${p.id}"></i></div>`:""}</button>`}
 
 const EKRAN={};
 EKRAN.ana=()=>{const kr=S.krediler.slice().sort((a,b)=>a.sonraki-b.sonraki)[0];const acik=S.ihaleler.filter(i=>!i.sonuc);
@@ -586,7 +653,7 @@ EKRAN.ana=()=>{const kr=S.krediler.slice().sort((a,b)=>a.sonraki-b.sonraki)[0];c
   const bos=S.arsalar.filter(a=>!S.projeler.some(p=>p.arsa===a.id&&p.durum!=="bitti")).length;
   return`<div class="cols"><div class="col">
     <div class="firm"><h2>${esc(S.firma)}</h2><div class="sub">Yönetim paneli · Kredi notu <b>${S.not} (${notAd(S.not)})</b></div></div>
-    <div class="kasacard"><div class="lbl">Kasa</div><div class="big num" data-live="kasa2"></div>
+    <div class="kasacard"><div class="between"><div><div class="lbl">Kasa</div><div class="big num" data-live="kasa2"></div></div>${spark(S.kg||[],150,46,"var(--green)","Son 30 gün servet")}</div>
       <div class="trio"><div><span class="lbl">Borç</span><b class="negc num">${tl(borc(),1)}</b></div><div><span class="lbl">Günlük gelir</span><b class="pos num">+${tl(gunlukGelir(),1)}</b></div><div><span class="lbl">Günlük maaş</span><b class="negc num">-${tl(gunlukMaas(),1)}</b></div></div></div>
     ${kr?`<button class="taksit" data-a="git" data-s="banka"><span><b>${kr.banka} taksiti</b> · ${tl(kr.taksit)} · <span data-kr="${kr.id}"></span></span><span>›</span></button>`:""}
     <div class="tiles">
@@ -596,15 +663,17 @@ EKRAN.ana=()=>{const kr=S.krediler.slice().sort((a,b)=>a.sonraki-b.sonraki)[0];c
       <button class="tile" data-a="git" data-s="personel">${I.pers}<b>Personel</b><small>${Object.values(S.personel).filter(Boolean).length?Object.values(S.personel).filter(Boolean).length+" kişi":"Mühendis yok"}</small>${Object.values(S.personel).filter(Boolean).length?"":'<span class="dot"></span>'}</button>
       <button class="tile" data-a="git" data-s="arazilerim">${I.arazi}<b>Arazilerim</b><small>${S.arsalar.length} tapu${bos?" · "+bos+" boş":""}</small></button>
     </div>
-    <button class="cta" data-a="git" data-s="harita"><div><div class="lbl">Türkiye haritası</div><b>Arazileri keşfet →</b></div>${miniHarita()}<span class="go">›</span></button>
+    <button class="cta" data-a="git" data-s="harita"><div><div class="lbl">Türkiye haritası</div><b>Arazileri keşfet</b></div>${miniHarita()}<span class="go">›</span></button>
   </div><div class="col">
     <div class="duo">
       <button class="mini" data-a="git" data-s="ihaleler"><span class="ico">${I.ihale}</span><span><b>İhaleler</b><small>${acik.length} açık · ${acik.filter(i=>i.teklif).length} teklifin var</small><em>Teklif ver ›</em></span></button>
+      <button class="mini" data-a="git" data-s="hal"><span class="ico">${ik("bugday",22)}</span><span><b>Hal fiyatları</b><small>${halOzet()}</small><em>Fiyatlara bak ›</em></span></button>
       <button class="mini" data-a="git" data-s="yatirim"><span class="ico">${I.yat}</span><span><b>Yatırımlar</b><small>${yat.length} aktif</small><em>+${tl(yatG,1)}/gün</em></span></button>
     </div>
     ${S.teklifler.map(o=>`<div class="lrow offer"><div><b>Yarıcılık teklifi: ${esc(o.kim)}</b><small>${IL[o.il].n} ${esc(o.ilce)} · ${o.donum} dönüm · ${["I","II","III","IV"][o.cls]}. sınıf · ürünün %${Math.round(o.pay*100)}'i onun. Arazi bedeli yok.</small></div><div class="acts"><button class="btn sm" data-a="yariPaz" data-id="${o.id}">Pazarlık</button><button class="btn sm gold" data-a="yariKabul" data-id="${o.id}">Anlaş</button></div></div>`).join("")}
+    ${gorevKart()}
     <div class="between"><h2>Devam eden projeler</h2><span class="sub">${aktifProje()}/${OFIS[S.ofis].max} proje</span></div>
-    <div class="plist">${pr.length?pr.map(projeSatir).join(""):`<div class="empty">Henüz projen yok. Haritadan bir il ve ilçe seç, arazi al, ilk tarlanı ek. Başlangıç ilin Konya: buğday ve şeker pancarı burada iyi verir.</div>`}</div>
+    <div class="plist">${pr.length?pr.map(projeSatir).join(""):`<div class="empty">Henüz projen yok. Haritadan bir il ve ilçe seç, arazi al, ilk tarlanı ek. Başlangıç ilin Konya; buğday ve şeker pancarı burada iyi verir.</div>`}</div>
   </div></div>`};
 
 function miniHarita(){if(!miniHarita.c)miniHarita.c=`<svg class="tr" viewBox="15 135 1020 460" aria-hidden="true">${ILLER.map(i=>`<path d="${i.path}" fill="#3d2c05"/>`).join("")}</svg>`;return miniHarita.c}
@@ -616,11 +685,11 @@ EKRAN.harita=p=>{const sel=p.sel||BASLANGIC_IL,il=IL[sel],acik=S.acik.includes(s
     <div class="ilchips" id="ilchips">${ILLER.map(i=>`<button data-a="ilsec" data-il="${i.p}" class="${i.p===sel?"sel":S.acik.includes(i.p)?"open":""}"><small>${String(i.p).padStart(2,"0")}</small>${i.n}</button>`).join("")}</div></div>
   <div class="col"><div class="panel col">
     <div class="row"><span class="plate"><i></i><span>${String(sel).padStart(2,"0")}</span></span><div><h2 style="font-size:20px">${il.n}</h2><div class="row" style="gap:5px;margin-top:3px"><span class="tag">${BOLGE[il.r]}</span>${acik?'<span class="tag g">AÇIK ✓</span>':'<span class="tag">KİLİTLİ</span>'}</div></div></div>
-    <div class="kv"><div><span class="lbl">İlçe</span><b>${il.d.length}</b></div><div><span class="lbl">Arazim</span><b>${ar}</b></div><div><span class="lbl">Ort. dönüm</span><b class="num" style="color:var(--gold)">${tl(ilFiyat(sel)*S.endeks,1)}</b></div><div><span class="lbl">Arazi / ilçe</span><b>4–6</b></div></div>
-    <div><div class="lbl" style="margin-bottom:6px;color:var(--green)">Bu ilde iyi yetişen</div><div class="crops">${urunler.length?urunler.map(([k,u])=>`<span class="tag ${fit(k,sel)>1?"y":""}">${u.ic} ${u.ad}${fit(k,sel)>1?" ★":""}</span>`).join(""):'<span class="sub">Bitkisel üretim zayıf. Hayvancılık daha kârlı olabilir.</span>'}</div>
+    <div class="kv"><div><span class="lbl">İlçe</span><b>${il.d.length}</b></div><div><span class="lbl">Arazim</span><b>${ar}</b></div><div><span class="lbl">Ort. dönüm</span><b class="num" style="color:var(--gold)">${tl(ilFiyat(sel)*S.endeks,1)}</b></div><div><span class="lbl">Arazi / ilçe</span><b>4-6</b></div></div>
+    <div><div class="lbl" style="margin-bottom:6px;color:var(--green)">Bu ilde iyi yetişen</div><div class="crops">${urunler.length?urunler.map(([k,u])=>`<span class="tag ${fit(k,sel)>1?"y":""}">${ik(k,15)} ${u.ad}${fit(k,sel)>1?" ★":""}</span>`).join(""):'<span class="sub">Bitkisel üretim zayıf. Hayvancılık daha kârlı olabilir.</span>'}</div>
     ${hayvanFit("besi",sel)>1||hayvanFit("sut",sel)>1?`<div class="sub" style="margin-top:6px">Hayvancılık için de uygun bölge.</div>`:""}</div>
     <div class="sub">İlçeler: ${il.d.slice(0,8).join(" · ")}${il.d.length>8?" · +"+(il.d.length-8):""}</div>
-    ${acik?`<button class="btn gold wide" data-a="git" data-s="il" data-il="${sel}">İlçeleri gör →</button>`:`<button class="btn gold wide" data-a="ilac" data-il="${sel}">Şehri aç · ${tl(ilAcmaBedeli(sel))}</button><div class="note">Şehri açınca o ilin bütün ilçelerinde arazi alabilir, ihalelerine girebilirsin.</div>`}
+    ${acik?`<button class="btn gold wide" data-a="git" data-s="il" data-il="${sel}">İlçeleri gör</button>`:`<button class="btn gold wide" data-a="ilac" data-il="${sel}">Şehri aç · ${tl(ilAcmaBedeli(sel))}</button><div class="note">Şehri açınca o ilin bütün ilçelerinde arazi alabilir, ihalelerine girebilirsin.</div>`}
   </div></div></div>`};
 
 EKRAN.il=p=>{const il=IL[p.il];
@@ -654,27 +723,56 @@ EKRAN.ilce=p=>{const il=IL[p.il],ad=il.d[p.ii],t=ilceTier(il.p,ad),list=araziler
 const VARS={tarla:"bugday",sera:"domates",bahce:"zeytin"};
 function tasarimVarsayilan(a){const best=t=>Object.keys(URUN).filter(k=>URUN[k].tip===t).sort((x,y)=>fit(y,a.il)-fit(x,a.il))[0];
   return{arsa:a.id,tip:"tarla",urun:best("tarla"),alan:a.donum,kalite:1,sulama:a.su==="kuru"?0:1,seraTip:0,isi:0,adet:Math.max(1,Math.round(a.donum*1.5)),irk:1,sagim:0,kumes:0,don:{},adim:1}}
-function sceneSVG(D,P){const c=URUN[D.urun];let s=`<svg viewBox="0 0 400 170" role="img" aria-label="Proje önizleme"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fb4d6"/><stop offset="1" stop-color="#cfe3ea"/></linearGradient></defs><rect width="400" height="170" fill="url(#sky)"/><circle cx="340" cy="34" r="16" fill="#f6dd8a"/><path d="M0 92 Q80 70 170 88 T400 80 V170 H0z" fill="#7da35f"/>`;
-  if(D.tip==="tarla"||D.tip==="bahce"){const rows=Math.min(9,3+Math.round(P.alan/12));
-    for(let r=0;r<rows;r++){const y=100+r*(66/rows);s+=`<path d="M${10+r*4} ${y}H${390-r*4}" stroke="#6b4a26" stroke-width="${3+r*.4}"/>`;
-      const n=D.tip==="bahce"?7+r:18+r*2;for(let i=0;i<n;i++){const x=14+r*4+i*(372-r*8)/n;
-        s+=D.tip==="bahce"?`<rect x="${x+3}" y="${y-10-r}" width="2" height="${8+r}" fill="#5b3b1c"/><circle cx="${x+4}" cy="${y-13-r*1.4}" r="${5+r*.8}" fill="#3f7a3a"/><circle cx="${x+6}" cy="${y-12-r}" r="1.8" fill="${c.renk}"/>`:`<path d="M${x} ${y}l2 -${6+r} 2 ${6+r}" fill="${c.renk}"/>`}}}
-  else if(D.tip==="sera"){const n=Math.min(8,Math.max(1,Math.round(P.alan/2)));const w=360/n;for(let i=0;i<n;i++){const x=20+i*w;s+=`<path d="M${x+3} 150 V112 Q${x+w/2} 84 ${x+w-3} 112 V150z" fill="${["#e8f2f2","#cfe8ee","#d8eef0"][D.seraTip]}" stroke="#9fb9bf" opacity=".92"/>`;for(let k=0;k<3;k++)s+=`<circle cx="${x+w*(.3+k*.2)}" cy="138" r="3" fill="${c.renk}"/>`}}
-  else{const n=Math.min(40,P.adet||1),col=D.tip==="kanatli"?"#f4efe4":D.tip==="sut"?"#f2f2f2":"#8a5a34";
-    s+=`<rect x="40" y="88" width="150" height="56" fill="#9c4f35"/><path d="M32 90 L115 58 L198 90z" fill="#6b3324"/><rect x="100" y="112" width="30" height="32" fill="#f1e5c8"/>`;
-    if(D.tip==="kanatli")s+=`<rect x="210" y="96" width="160" height="48" fill="#d9c9a0"/><path d="M204 98 L290 74 L376 98z" fill="#a08a5a"/>`;
-    for(let i=0;i<n;i++){const x=215+(i%10)*17,y=118+Math.floor(i/10)*12;s+=D.tip==="kanatli"?`<circle cx="${x}" cy="${y+22}" r="3" fill="${col}"/>`:`<ellipse cx="${x}" cy="${y+18}" rx="7" ry="4.5" fill="${col}" stroke="#333" stroke-width=".6"/>${D.tip==="sut"?`<circle cx="${x+2}" cy="${y+17}" r="1.6" fill="#222"/>`:""}`}}
+// Proje sahnesi. st: {f: 0..1 ilerleme, faz: "plan"|"kurulum"|"hazir"|"hasat"|"uretim"|"bos"}
+function sceneSVG(D,P,st){st=st||{f:1,faz:"plan"};const c=URUN[D.urun]||{renk:"#7fbf5a"},f=clamp(st.f,0,1),faz=st.faz,R=rng(hsh(D.arsa||"x"));
+  const lerp=(a,b,t)=>{const pa=a.match(/\w\w/g).map(h=>parseInt(h,16)),pb=b.match(/\w\w/g).map(h=>parseInt(h,16));return"#"+pa.map((v,i)=>Math.round(v+(pb[i]-v)*t).toString(16).padStart(2,"0")).join("")};
+  let s=`<svg viewBox="0 0 400 170" role="img" aria-label="Proje görünümü"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#78aed2"/><stop offset="1" stop-color="#d4e6ea"/></linearGradient><linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86ab64"/><stop offset="1" stop-color="#5f8a45"/></linearGradient></defs>`;
+  s+=`<rect width="400" height="170" fill="url(#sky)"/><circle cx="340" cy="32" r="15" fill="#f6dd8a"/><circle cx="340" cy="32" r="24" fill="#f6dd8a" opacity=".18"/>`;
+  s+=`<path d="M0 70 Q60 52 130 66 T260 60 T400 64 V100 H0z" fill="#9bb98a" opacity=".7"/><path d="M0 90 Q80 72 170 86 T400 80 V170 H0z" fill="url(#hill)"/>`;
+  for(let i=0;i<3;i++){const x=20+R()*360;s+=`<g opacity=".85"><ellipse cx="${x}" cy="${22+R()*20}" rx="${18+R()*10}" ry="6" fill="#fff"/><ellipse cx="${x+12}" cy="${18+R()*14}" rx="12" ry="6" fill="#fff"/></g>`}
+  const ins=faz==="kurulum"&&f<.35; // iş makinesi görünür
+  if(D.tip==="tarla"){const rows=Math.min(10,4+Math.round((P.alan||10)/12));
+    const g=faz==="plan"||faz==="hazir"?1:faz==="kurulum"?f:0;const hasat=faz==="hasat"||faz==="bos";
+    for(let r=0;r<rows;r++){const y=98+r*(68/rows),sw=3+r*.45;s+=`<path d="M${8+r*5} ${y}H${392-r*5}" stroke="#6b4a26" stroke-width="${sw}" stroke-linecap="round"/>`;
+      if(g>.08&&!hasat){const n=16+r*2,h=(2+r*.9)*(.3+g*.9),col=g<.6?lerp("#7fc25a","#5f9f3e",g):lerp("#5f9f3e",c.renk.length===7?c.renk:"#d8b552",(g-.6)/.4);
+        for(let i=0;i<n;i++){const x=12+r*5+i*(376-r*10)/n;s+=`<path d="M${x} ${y-1}l${1.6+r*.15} -${h} ${1.6+r*.15} ${h}z" fill="${col}"/>`}}
+      if(hasat&&r%2===0){for(let i=0;i<5;i++)s+=`<rect x="${30+i*72+r*3}" y="${y-5-r*.5}" width="${10+r}" height="${6+r*.6}" rx="2" fill="#d9c27a" stroke="#a88f45" stroke-width=".6"/>`}}
+    if(ins)s+=traktorSVG(60+f*800,110)}
+  else if(D.tip==="bahce"){const rows=4;const g=faz==="plan"?1:faz==="kurulum"?f:1;
+    for(let r=0;r<rows;r++){const y=104+r*16;s+=`<path d="M10 ${y+2}H390" stroke="#6f8f4a" stroke-width="2"/>`;const n=7+r*2;
+      for(let i=0;i<n;i++){const x=20+i*(360/n)+(r%2)*10,sz=(3+r*1.6)*(.35+g*.65);s+=`<rect x="${x-1}" y="${y-sz*1.2}" width="2" height="${sz*1.3}" fill="#5b3b1c"/><circle cx="${x}" cy="${y-sz*1.6}" r="${sz}" fill="${lerp("#7fbf5a","#3f7a3a",g)}"/>`;
+        const meyve=faz==="plan"||faz==="hazir"||(faz==="uretim"&&f>.55);if(meyve&&g>.9)for(let k=0;k<2;k++)s+=`<circle cx="${x-sz*.5+k*sz}" cy="${y-sz*1.5+k*2}" r="${1+r*.35}" fill="${c.renk}"/>`}}}
+  else if(D.tip==="sera"){const n=Math.min(8,Math.max(1,Math.round((P.alan||2)/2)));const w=360/n,built=faz==="kurulum"?Math.ceil(n*f):n;
+    for(let i=0;i<n;i++){const x=20+i*w;if(i>=built){s+=`<path d="M${x+3} 150 V112 Q${x+w/2} 84 ${x+w-3} 112 V150" fill="none" stroke="#8a9a9e" stroke-dasharray="3 3"/>`;continue}
+      s+=`<path d="M${x+3} 150 V112 Q${x+w/2} 84 ${x+w-3} 112 V150z" fill="${["#e8f2f2","#cfe8ee","#d8eef0"][D.seraTip||0]}" stroke="#9fb9bf" opacity=".93"/><path d="M${x+w/2} 150V92" stroke="#b5c9cc"/>`;
+      const plants=faz!=="kurulum";if(plants)for(let k=0;k<4;k++){const px=x+w*(.18+k*.21);s+=`<rect x="${px-.6}" y="128" width="1.2" height="20" fill="#4f8a3a"/><circle cx="${px}" cy="130" r="4" fill="#5fa04a"/>${faz==="uretim"&&f<.4?"":`<circle cx="${px+2}" cy="136" r="2.6" fill="${c.renk}"/>`}`}}
+    if(ins)s+=traktorSVG(40+f*700,130)}
+  else{const n=Math.min(40,P.adet||1),col=D.tip==="kanatli"?"#f4efe4":D.tip==="sut"?"#f2f2f2":"#8a5a34";const built=faz==="kurulum"?f:1;
+    const bh=56*Math.min(1,built*1.4);s+=`<rect x="40" y="${144-bh}" width="150" height="${bh}" fill="#9c4f35"/>`;
+    if(built>.7)s+=`<path d="M32 90 L115 58 L198 90z" fill="#6b3324"/><rect x="100" y="112" width="30" height="32" fill="#f1e5c8"/><rect x="58" y="102" width="18" height="14" fill="#f6e3a8"/><rect x="154" y="102" width="18" height="14" fill="#f6e3a8"/>`;
+    else s+=`<path d="M40 ${144-bh}V60M190 ${144-bh}V60M40 70H190M40 100H190" stroke="#b9a27a" stroke-width="2"/>`;
+    s+=`<path d="M205 150 V104 H385 V150" fill="none" stroke="#c9b48a" stroke-width="2"/><path d="M205 120 H385" stroke="#c9b48a"/>`;
+    if(D.tip==="kanatli"&&built>.7)s+=`<rect x="215" y="96" width="160" height="44" fill="#d9c9a0"/><path d="M209 98 L295 74 L381 98z" fill="#a08a5a"/>`;
+    const goster=faz!=="kurulum"||f>.8;if(goster)for(let i=0;i<n;i++){const x=218+(i%10)*16.5,y=118+Math.floor(i/10)*8;
+      s+=D.tip==="kanatli"?`<circle cx="${x}" cy="${y+26}" r="2.6" fill="${col}" stroke="#c9b48a" stroke-width=".4"/>`:`<ellipse cx="${x}" cy="${y+12}" rx="6.5" ry="4" fill="${col}" stroke="#333" stroke-width=".6"/><rect x="${x-4}" y="${y+15}" width="1.4" height="3" fill="#333"/><rect x="${x+3}" y="${y+15}" width="1.4" height="3" fill="#333"/>${D.tip==="sut"?`<circle cx="${x+1.5}" cy="${y+11}" r="1.6" fill="#222"/>`:""}`}
+    if(ins)s+=traktorSVG(30+f*600,140)}
   return s+`</svg>`}
+function traktorSVG(x,y){x=Math.min(x,330);return`<g transform="translate(${x} ${y})"><rect x="0" y="-14" width="26" height="12" rx="2" fill="#d9442b"/><rect x="14" y="-26" width="12" height="13" fill="#d9442b"/><rect x="16" y="-24" width="8" height="8" fill="#bfe1ee"/><circle cx="20" cy="0" r="8" fill="#222"/><circle cx="20" cy="0" r="3" fill="#e9b949"/><circle cx="3" cy="2" r="5" fill="#222"/><circle cx="3" cy="2" r="2" fill="#e9b949"/></g>`}
+function projeSahne(p){if(!p.D)return"";const P={alan:p.alan,adet:p.adet};let faz="uretim",f=1;
+  if(p.durum==="kurulum"){faz="kurulum";f=(now()-p.bas)/p.sure}else if(p.durum==="hasat")faz="hazir";else if(p.durum==="satista")faz=p.tip==="besi"?"uretim":"hasat";
+  else if(p.durum==="bitti")faz=p.tip==="besi"?"uretim":"bos";else if(p.durum==="uretimde"&&p.tekrar)f=(now()-p.dongu)/p.tekrar;
+  return sceneSVG(p.D,P,{f,faz})}
+
 function sl(id,label,val,min,max,step,show){return`<div class="sl"><div class="between"><span>${label}</span><b>${show}</b></div><input type="range" id="${id}" data-i="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}
 function opt(key,i,label,sub,on,weak){return`<button class="${on?"on":""} ${weak?"weak":""}" data-a="dset" data-k="${key}" data-v="${i}">${label}${sub?` <small>${sub}</small>`:""}</button>`}
 EKRAN.tasarla=p=>{const D=p.D,a=S.arsalar.find(x=>x.id===D.arsa),P=plan(D);
   if(D.adim===2){const list=Object.entries(DONATI).filter(([k,d])=>d.t.includes(D.tip)&&!(k==="kuyu"&&a.su!=="kuru"));
-    return`<div class="cols"><div class="col"><div class="note">Donatılar maliyeti artırır ama verimi, fiyatı ve güvenliği yükseltir. Seçtiğin her şey toplam yatırıma anında eklenir.</div>${list.map(([k,d])=>`<button class="don ${D.don[k]?"on":""}" data-a="don" data-k="${k}"><span class="box">${D.don[k]?"✓":""}</span><span><b>${d.ad}</b><small>${d.d}</small></span><span class="num">${tl(d.c(P),1)}</span></button>`).join("")}</div>
+    return`<div class="cols"><div class="col"><div class="note">Donatılar yatırımı büyütür. Karşılığında verim ya da satış fiyatı artar, sigorta da afet zararını karşılar.</div>${list.map(([k,d])=>`<button class="don ${D.don[k]?"on":""}" data-a="don" data-k="${k}"><span class="box">${D.don[k]?"✓":""}</span><span><b>${d.ad}</b><small>${d.d}</small></span><span class="num">${tl(d.c(P),1)}</span></button>`).join("")}</div>
     <div class="col">${ozet(D,P)}<button class="btn gold wide" data-a="kur" ${P.err?"disabled":""}>Projeyi başlat · ${tl(P.toplam,1)}</button></div></div>`}
-  const segs=Object.entries(TIPLER).map(([k,t])=>{const lk=t.lvl>S.ofis;return`<button class="${D.tip===k?"on":""} ${lk?"lock":""}" data-a="dtip" data-k="${k}">${lk?"🔒 ":""}${t.ad}${lk?`<small>${OFIS[t.lvl].ad}</small>`:""}</button>`}).join("");
+  const segs=Object.entries(TIPLER).map(([k,t])=>{const lk=t.lvl>S.ofis;return`<button class="${D.tip===k?"on":""} ${lk?"lock":""}" data-a="dtip" data-k="${k}"><span class="segt">${lk?ik("kilit",12):ik(k,16)} ${t.ad}</span>${lk?`<small>${OFIS[t.lvl].ad}</small>`:""}</button>`}).join("");
   let ctl="";
   if(["tarla","sera","bahce"].includes(D.tip)){
-    ctl+=`<div class="sl"><span>Ürün</span><div class="opts">${Object.entries(URUN).filter(([,u])=>u.tip===D.tip).map(([k,u])=>{const f=fit(k,a.il);return opt("urun",k,u.ic+" "+u.ad,f>1?"★":f<1?"zayıf":"",D.urun===k,f<1)}).join("")}</div></div>`;
+    ctl+=`<div class="sl"><span>Ürün</span><div class="opts">${Object.entries(URUN).filter(([,u])=>u.tip===D.tip).map(([k,u])=>{const f=fit(k,a.il);return opt("urun",k,ik(k,18)+" "+u.ad,f>1?"★":f<1?"zayıf":"",D.urun===k,f<1)}).join("")}</div></div>`;
     ctl+=sl("alan",D.tip==="sera"?"Sera alanı":"Ekim alanı",P.alan,1,a.donum,1,P.alan+" dönüm");
     if(D.tip==="sera"){ctl+=`<div class="sl"><span>Sera tipi</span><div class="opts">${["Plastik","Cam","Topraksız (hidroponik)"].map((x,i)=>opt("seraTip",i,x,"",D.seraTip===i)).join("")}</div></div>`;
       ctl+=`<div class="sl"><span>Isıtma</span><div class="opts">${["Yok","Jeotermal"].map((x,i)=>opt("isi",i,x,i?"+%25 verim":"",D.isi===i)).join("")}</div></div>`}
@@ -684,7 +782,7 @@ EKRAN.tasarla=p=>{const D=p.D,a=S.arsalar.find(x=>x.id===D.arsa),P=plan(D);
   else if(D.tip==="besi"){ctl+=sl("adet","Dana sayısı",P.adet,1,P.max,1,P.adet+" baş")+`<div class="sl"><span>Irk</span><div class="opts">${["Yerli","Montofon melezi","Simental"].map((x,i)=>opt("irk",i,x,["8 gün","7 gün","6 gün"][i],D.irk===i)).join("")}</div></div>`}
   else if(D.tip==="kanatli"){ctl+=sl("adet","Kümes kapasitesi",P.adet,1,P.max,1,P.adet+" bin tavuk")+`<div class="sl"><span>Sistem</span><div class="opts">${["Kafes","Serbest gezen"].map((x,i)=>opt("kumes",i,x,i?"+%12 fiyat":"",D.kumes===i)).join("")}</div></div>`}
   return`<div class="cols"><div class="col"><div class="seg">${segs}</div><div class="scene">${sceneSVG(D,P)}</div>${ozet(D,P)}</div>
-    <div class="col"><div class="panel">${ctl}</div>${P.err?`<div class="err">${P.err}</div>`:""}<div class="note">${a.donum} dönüm · ${["I","II","III","IV"][a.cls]}. sınıf toprak · ${SU[a.su]} · ${IL[a.il].n} (${BOLGE[IL[a.il].r]})</div><button class="btn gold wide" data-a="adim2">Donatıları seç →</button></div></div>`};
+    <div class="col"><div class="panel">${ctl}</div>${P.err?`<div class="err">${P.err}</div>`:""}<div class="note">${a.donum} dönüm · ${["I","II","III","IV"][a.cls]}. sınıf toprak · ${SU[a.su]} · ${IL[a.il].n} (${BOLGE[IL[a.il].r]})</div><button class="btn gold wide" data-a="adim2">Donatıları seç</button></div></div>`};
 function ozet(D,P){const lines=[];
   if(P.urun){const u=URUN[P.urun];lines.push(["Bölge uyumu",P.fit>1?"Yöresel ürün (+%20)":P.fit<1?"Uygun değil (-%40)":"Uygun"]);
     lines.push([P.tekrar?"Hasat başına ürün":"Beklenen hasat",`${ton(P.kg)} × ${tl(u.f*fiyatM(P.urun)*P.fm)}`]);
@@ -699,10 +797,10 @@ function ozet(D,P){const lines=[];
     <div class="total"><span class="lbl">Toplam yatırım</span><b class="num">${tl(P.toplam)}</b></div></div>`}
 
 EKRAN.proje=p=>{const x=S.projeler.find(y=>y.id===p.id);if(!x)return`<div class="empty">Proje bulunamadı.</div>`;const [l,c]=durumEt(x);const a=S.arsalar.find(y=>y.id===x.arsa);
-  let main=`<div class="panel col"><div class="between"><span class="pill ${x.durum==="hasat"?"hot":""}" style="--c:${c}">${l}</span><span class="sub">${x.tip==="ihale"?"Kamu işi":TIPLER[x.tip]?.ad||"Kira"}</span></div>`;
+  let main=(x.D?`<div class="scene" data-scene="${x.id}">${projeSahne(x)}</div>`:"")+`<div class="panel col"><div class="between"><span class="pill ${x.durum==="hasat"?"hot":""}" style="--c:${c}">${l}</span><span class="sub">${x.tip==="ihale"?"Kamu işi":TIPLER[x.tip]?.ad||"Kira"}</span></div>`;
   if(x.durum==="kurulum"||(x.durum==="uretimde"&&x.tekrar))main+=`<div><div class="between sub"><span>${x.durum==="kurulum"?(x.tip==="ihale"?"İşin ilerleyişi":"Kurulum / büyüme"):"Sonraki hasat"}</span><span data-left="${x.id}"></span></div><div class="bar" style="--c:${c};margin-top:6px;height:8px"><i data-prog="${x.id}"></i></div></div>`;
   const kv=[];
-  if(x.urun){kv.push(["Ürün",URUN[x.urun].ic+" "+URUN[x.urun].ad],["Alan",x.alan+" dönüm"]);kv.push(["Piyasa",tl(birimFiyat(x))+"/kg"]);kv.push(["Stok",ton(x.stok||0)])}
+  if(x.urun){kv.push(["Ürün",ik(x.urun,16)+" "+URUN[x.urun].ad],["Alan",x.alan+" dönüm"]);kv.push(["Piyasa",tl(birimFiyat(x))+"/kg"]);kv.push(["Stok",ton(x.stok||0)])}
   if(x.tip==="besi"){kv.push(["Sürü",x.adet+" baş"],["Piyasa",tl(birimFiyat(x))+"/baş"],["Stok",(x.stok||0)+" baş"])}
   if(x.net)kv.push(["Günlük net","+"+tl(x.net*(1-(x.yari||0)))],["Hayvan",x.adet+(x.tip==="kanatli"?" bin tavuk":" baş")]);
   if(x.tip==="kira")kv.push(["Günlük kira","+"+tl(x.kira)]);if(x.tip==="ihale")kv.push(["Hakediş",tl(x.bedel)],["Maliyet",tl(x.yatirim)]);
@@ -754,6 +852,38 @@ EKRAN.yatirim=()=>`<div class="note" style="margin-bottom:12px">Her yatırımdan
 EKRAN.siralama=()=>{const all=[...S.rakip.map(r=>({ad:r.ad,v:r.v})),{ad:S.firma,v:servet(),me:1}].sort((a,b)=>b.v-a.v);
   return`<div class="note" style="margin-bottom:12px">Servet: kasa + arazi değeri + projeler + yatırımlar − borç.</div><div class="plist">${all.map((r,i)=>`<div class="rank ${r.me?"me":""}"><i>${i+1}</i><b>${esc(r.ad)}${r.me?" (sen)":""}</b><b class="num" style="color:var(--gold)">${tl(r.v,1)}</b></div>`).join("")}</div>`};
 
+
+/* ================= Grafik, görev, hal ================= */
+function spark(arr,w,h,col,label){if(!arr||arr.length<2)return`<div class="spark empty-s" style="width:${w}px;height:${h}px"><span>Grafik ilk günlerde oluşur</span></div>`;
+  const mn=Math.min(...arr),mx=Math.max(...arr),r=mx-mn||1,pts=arr.map((v,i)=>[i*(w-4)/(arr.length-1)+2,h-4-(v-mn)/r*(h-10)]);
+  const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(""),last=pts.at(-1);
+  return`<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${label}"><path d="${d}L${last[0]} ${h}L2 ${h}z" fill="${col}" opacity=".14"/><path d="${d}" fill="none" stroke="${col}" stroke-width="1.8" stroke-linejoin="round"/><circle cx="${last[0]}" cy="${last[1]}" r="3" fill="${col}"/></svg>`}
+function degisim(k){const a=(S.fg||{})[k];if(!a||a.length<2)return 0;return a.at(-1)/a.at(-2)-1}
+function halOzet(){const ks=Object.keys(URUN);let best=ks[0];for(const k of ks)if(degisim(k)>degisim(best))best=k;const d=degisim(best);return d>0?`${URUN[best].ad} %${(d*100).toFixed(1).replace(".",",")} arttı`:"Bugün fiyatlar sakin"}
+EKRAN.hal=()=>{const sat=k=>S.projeler.filter(p=>p.urun===k&&p.stok>0).reduce((a,p)=>a+p.stok,0);
+  const rows=[...Object.keys(URUN).map(k=>({k,ad:URUN[k].ad,ic:ik(k,22),f:URUN[k].f*fiyatM(k),b:"kg",stok:sat(k)})),{k:"et",ad:"Besi danası (endeks)",ic:ik("besi",22),f:100*fiyatM("et"),b:"puan",stok:0}];
+  return`<div class="note" style="margin-bottom:12px">Fiyatlar her gün değişir. Stoğun varsa fiyat yükselene kadar bekleyebilirsin, ama tüccarlar sabırsızdır.</div>
+  <div class="hal">${rows.map(r=>{const d=degisim(r.k);return`<div class="hrow"><span class="hic">${r.ic}</span><span class="hn"><b>${r.ad}</b>${r.stok?`<small class="pos">${ton(r.stok)} stokta</small>`:""}</span>${spark((S.fg||{})[r.k],90,30,d>=0?"var(--green)":"var(--red)",r.ad+" fiyat seyri")}<span class="hp num"><b>${r.b==="kg"?tl(r.f)+"/kg":nf(r.f)}</b><small class="${d>0?"pos":d<0?"negc":""}">${d>0?"▲":d<0?"▼":"·"} %${Math.abs(d*100).toFixed(1).replace(".",",")}</small></span></div>`}).join("")}</div>`};
+
+const GOREV=[
+  {ad:"İlk araziyi al",d:"Haritadan bir ilçe seç ve tapu al.",ok:()=>S.arsalar.length>=1,o:250000},
+  {ad:"İlk projeyi başlat",d:"Arazinde tarla ya da kümes kur.",ok:()=>S.projeler.some(p=>p.D),o:150000},
+  {ad:"İlk hasadı kaldır",d:"Ekin olgunlaşınca hasadı kaldır.",ok:()=>S.stat.hasat>=1,o:200000},
+  {ad:"Tüccarla anlaş",d:"Bir tüccarla pazarlık edip satış yap.",ok:()=>(S.stat.pazarlik||0)>=1,o:250000},
+  {ad:"Personel al",d:"Ziraat mühendisi ya da başka bir çalışan işe al.",ok:()=>Object.values(S.personel).some(Boolean),o:300000},
+  {ad:"İkinci ili aç",d:"Haritadan yeni bir şehir aç.",ok:()=>S.acik.length>=2,o:500000},
+  {ad:"İhaleye teklif ver",d:"Kamu ihalelerinden birine zarf at.",ok:()=>(S.stat.teklif||0)>=1,o:300000},
+  {ad:"Köy ofisine taşın",d:"Merkezini büyüt, sera ve süt çiftliği açılsın.",ok:()=>S.ofis>=1,o:750000},
+  {ad:"Sera ya da süt çiftliği kur",d:"Yeni açılan türlerden birini dene.",ok:()=>S.projeler.some(p=>p.tip==="sera"||p.tip==="sut"),o:1000000},
+  {ad:"Bir ihale kazan",d:"En düşük geçerli teklifi ver.",ok:()=>(S.stat.ihaleK||0)>=1,o:1500000},
+  {ad:"10 milyonluk satış",d:"Toplam satış gelirin 10 milyon ₺ olsun.",ok:()=>S.stat.satis>=1e7,o:2000000},
+  {ad:"Beş il",d:"Beş farklı ilde faaliyet göster.",ok:()=>S.acik.length>=5,o:3000000},
+  {ad:"Kasaba bürosu",d:"Merkezini Kasaba bürosuna taşı.",ok:()=>S.ofis>=2,o:5000000},
+  {ad:"100 milyonluk servet",d:"Servetin 100 milyon ₺'yi geçsin.",ok:()=>servet()>=1e8,o:10000000}
+];
+function gorevKart(){const i=S.gorev||0,g=GOREV[i];if(!g)return"";const ok=g.ok();
+  return`<div class="gorev ${ok?"done":""}"><div class="gnum">${i+1}/${GOREV.length}</div><div><span class="lbl">Görev</span><b>${g.ad}</b><small>${g.d} Ödül: ${tl(g.o,1)}</small></div>${ok?`<button class="btn sm gold" data-a="odul">Ödülü al</button>`:""}</div>`}
+
 /* ================= Pencereler ================= */
 function pencere(h){M=h;const m=$("#modal");if(!h){m.hidden=true;m.innerHTML="";return}m.hidden=false;m.innerHTML=`<div class="mbox" role="dialog" aria-modal="true">${h}</div>`}
 function pazarlikPenceresi(pid,mid,mesaj){const p=S.projeler.find(x=>x.id===pid),m=p&&p.musteri.find(x=>x.id===mid);if(!m){pencere(null);return}
@@ -769,7 +899,7 @@ function pazarlikPenceresi(pid,mid,mesaj){const p=S.projeler.find(x=>x.id===pid)
     <div class="row"><button class="btn" data-a="pzred">Gönder</button><button class="btn" data-a="pzkarsi">Karşı teklif ver</button><button class="btn gold" data-a="pzkabul">Kabul et</button></div>`);
   M={t:"pz",pid,mid}}
 function pazarlikKarsi(){const p=S.projeler.find(x=>x.id===M.pid),m=p.musteri.find(x=>x.id===M.mid);const v=+$("#pz").value;pazarlikPenceresi.v=v;
-  if(v<=m.max){sat(p,m.qty,v,m.ad);p.musteri=p.musteri.filter(x=>x.id!==m.id);toast(`Anlaştınız: ${tl(v)}/${birimAd(p)}`,"ev");pencere(null);ciz(1);return}
+  if(v<=m.max){S.stat.pazarlik=(S.stat.pazarlik||0)+1;sat(p,m.qty,v,m.ad);p.musteri=p.musteri.filter(x=>x.id!==m.id);toast(`Anlaştınız: ${tl(v)}/${birimAd(p)}`,"ev");pencere(null);ciz(1);return}
   const acgoz=v>m.max*1.15;m.sabir-=acgoz?2:1;if(m.sabir<=0){p.musteri=p.musteri.filter(x=>x.id!==m.id);log(p,`${m.ad} pazarlıkta anlaşamayıp gitti.`);pencere(`<h3>${esc(m.ad)} gitti</h3><div class="bubble">"Bu fiyata alırsam ben zarar ederim. Kolay gelsin."</div><button class="btn gold" data-a="kapatm">Tamam</button>`);dirty=1;return}
   if(acgoz){pazarlikPenceresi(p.id,m.id,`Dalga mı geçiyorsun? Bu fiyatı kimse vermez. Teklifim hâlâ <b>${tl(m.teklif)}</b>.`);dirty=1;return}
   m.teklif=Math.min(m.max*.99,m.teklif+(v-m.teklif)*rnd(.25,.45));
@@ -814,7 +944,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b
   case"hasat":{const p=S.projeler.find(x=>x.id===d.id);hasatKaldir(p);ciz(1);break}
   case"hal":{const p=S.projeler.find(x=>x.id===d.id);const f=birimFiyat(p)*(S.makine.kamyon?.9:.85);const n=sat(p,p.stok,f,"Hal");toast(`Hale verildi: +${tl(n,1)}`);ciz(1);break}
   case"pazarlik":pazarlikPenceresi.v=0;pazarlikPenceresi(d.id,d.m);break;
-  case"pzkabul":{const p=S.projeler.find(x=>x.id===M.pid),m=p.musteri.find(x=>x.id===M.mid);sat(p,m.qty,m.teklif,m.ad);p.musteri=p.musteri.filter(x=>x.id!==m.id);pencere(null);ciz(1);break}
+  case"pzkabul":{const p=S.projeler.find(x=>x.id===M.pid),m=p.musteri.find(x=>x.id===M.mid);S.stat.pazarlik=(S.stat.pazarlik||0)+1;sat(p,m.qty,m.teklif,m.ad);p.musteri=p.musteri.filter(x=>x.id!==m.id);pencere(null);ciz(1);break}
   case"pzkarsi":pazarlikKarsi();break;
   case"pzred":{const p=S.projeler.find(x=>x.id===M.pid);p.musteri=p.musteri.filter(x=>x.id!==M.mid);pencere(null);ciz(1);break}
   case"kapatm":pencere(null);ciz(1);break;
@@ -826,10 +956,10 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b
     pencere(`<h3>Araziyi sat</h3><div class="bubble">${IL[ar.il].n} ${esc(ar.ilce)}, ${ar.donum} dönüm. Emlakçı ${tl(v)} teklif ediyor (piyasanın %95'i).</div><div class="row"><button class="btn" data-a="kapatm">Vazgeç</button><button class="btn gold" data-a="arsasat2" data-id="${ar.id}">Sat · ${tl(v,1)}</button></div>`);M={t:"x"};break}
   case"arsasat2":{const i=S.arsalar.findIndex(x=>x.id===d.id);const v=Math.round(arsaDeger(S.arsalar[i])*.95);S.arsalar.splice(i,1);para(v);S.projeler=S.projeler.filter(p=>p.arsa!==d.id||p.durum!=="bitti");pencere(null);toast(`Arazi satıldı: +${tl(v,1)}`);ciz(1);break}
   case"teklif":{const ih=S.ihaleler.find(x=>x.id===d.id);const v=ih.teklif||Math.round(ih.bedel*.9/1000)*1000;
-    pencere(`<h3>${esc(ih.ad)}</h3><div class="sub">${esc(ih.kurum)} · ${ih.sure} günlük iş</div><div class="sumline"><span>Tahmini bedel</span><b class="num">${tl(ih.bedel)}</b></div><div class="sumline"><span>Tahmini maliyet</span><b class="num">%60 – %80 arası</b></div>
-      ${sl("ihv","Teklifin",v,Math.round(ih.bedel*.6/1000)*1000,Math.round(ih.bedel*1.1/1000)*1000,1000,tl(v))}<div class="note">Teminat: ${tl(ih.bedel*.03)}. Rakipler genelde bedelin %74–%102'si arasında teklif verir. Kazanırsan maliyet işe başlarken kasadan çıkar, hakediş iş bitince ödenir.</div>
+    pencere(`<h3>${esc(ih.ad)}</h3><div class="sub">${esc(ih.kurum)} · ${ih.sure} günlük iş</div><div class="sumline"><span>Tahmini bedel</span><b class="num">${tl(ih.bedel)}</b></div><div class="sumline"><span>Tahmini maliyet</span><b class="num">Genelde %55-%75</b></div>
+      ${sl("ihv","Teklifin",v,Math.round(ih.bedel*.6/1000)*1000,Math.round(ih.bedel*1.1/1000)*1000,1000,tl(v))}<div class="note">Teminat: ${tl(ih.bedel*.03)}. Rakipler genelde bedelin %76 ile %100'ü arasında teklif verir. Kazanırsan maliyet işe başlarken kasadan çıkar, hakediş iş bitince ödenir.</div>
       <div class="row"><button class="btn" data-a="kapatm">Vazgeç</button><button class="btn gold" data-a="teklif2" data-id="${ih.id}">Teklifi ver</button></div>`);M={t:"ih",id:ih.id};break}
-  case"teklif2":{const ih=S.ihaleler.find(x=>x.id===d.id);const v=+$("#ihv").value;if(!ih.teklif){const tm=Math.round(ih.bedel*.03);if(!odeme(tm))break;ih.teminat=tm}ih.teklif=v;pencere(null);toast("Teklifin zarfa kondu.");ciz(1);break}
+  case"teklif2":{const ih=S.ihaleler.find(x=>x.id===d.id);const v=+$("#ihv").value;if(!ih.teklif){const tm=Math.round(ih.bedel*.03);if(!odeme(tm))break;ih.teminat=tm}ih.teklif=v;S.stat.teklif=(S.stat.teklif||0)+1;pencere(null);toast("Teklifin zarfa kondu.");ciz(1);break}
   case"vade":EKRAN.banka.v=+d.v;document.querySelectorAll("#vade button").forEach(x=>x.classList.toggle("on",x===b));krediHesap();break;
   case"kredial":{const P=+$("#kmik").value,n=EKRAN.banka.v||6;if(P>krediLimit())break;const tak=Math.round(P*(1+.022*n)/n);
     S.krediler.push({id:uid(),banka:"Bereket Bank",anapara:P,taksit:tak,kalan:n,sonraki:now()+10});para(P);toast(`Kredi hesabına geçti: ${tl(P)}`,"ev");ciz(1);break}
@@ -844,7 +974,8 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b
   case"yariPaz":{const o=S.teklifler.find(x=>x.id===d.id);if(!o)break;if(o.pazarlik>=2){toast(`${o.kim}: "Daha fazla inemem evladım."`);break}o.pazarlik++;
     if(Math.random()<.55){o.pay=Math.max(.25,o.pay-.05);toast(`${o.kim}: "Peki, %${Math.round(o.pay*100)} olsun."`,"ev")}else{S.teklifler=S.teklifler.filter(x=>x!==o);toast(`${o.kim} kırıldı, teklifini geri çekti.`,"bad")}ciz(1);break}
   case"yardim":pencere(`<h3>Nasıl oynanır?</h3><div class="note" style="font-size:13px;line-height:1.6">
-    1. <b>Haritadan</b> bir il seç. Konya açık, diğerlerini parayla açarsın.<br>2. <b>İlçe</b> seç, arazi portföyünden tapu al. Toprak sınıfı ve su durumu verimi belirler.<br>3. <b>Proje tasarla</b>: tarla, sera, bahçe, süt, besi ya da kanatlı. Bölgenin yöresel ürünü %20 fazla verir.<br>4. Kurulum bitince hasat kaldır, <b>tüccarla pazarlık</b> yap ya da hale ver. Hayvancılık her gün gelir getirir.<br>5. <b>İhalelere</b> gir, kredi çek, personel ve makine al, merkezini büyüt.<br>Bir oyun günü yaklaşık 45 saniye. Oyun kapalıyken de en fazla ${OFFLINE_MAX} gün işler.</div><button class="btn gold" data-a="kapatm">Başla</button>`);M={t:"x"};break;
+    1. Haritadan bir il seç. Konya açık, diğer illeri parayla açarsın.<br>2. İlçe seçip portföyden tapu al. Toprak sınıfı ve su durumu verimi belirler.<br>3. Araziye proje kur: tarla, sera, bahçe, süt çiftliği, besi ya da kanatlı. Bölgenin yöresel ürünü %20 fazla verir.<br>4. Ekin olgunlaşınca hasadı kaldır, tüccarla pazarlık et ya da hale ver. Süt ve yumurta tesisleri her gün gelir getirir.<br>5. Görevler ilk adımlarda yol gösterir. Para biriktikçe ihalelere gir, kredi çek, personel ve makine al, merkezini büyüt.<br>Bir oyun günü yaklaşık 45 saniye. Oyun kapalıyken de en fazla ${OFFLINE_MAX} gün işler.</div><button class="btn gold" data-a="kapatm">Başla</button>`);M={t:"x"};break;
+  case"odul":{const g=GOREV[S.gorev||0];if(g&&g.ok()){para(g.o);S.gorev=(S.gorev||0)+1;toast(`Görev tamam: ${g.ad}. +${tl(g.o,1)}`,"ev");ciz(1)}break}
   case"cark":cark();break;case"cevir":cevir();break;
   }
   kaydet()});
@@ -872,9 +1003,12 @@ function projeKur(D,yeniden){const a=S.arsalar.find(x=>x.id===D.arsa);
 let lastSig="";
 function ciz(force){const c=cur();if(!EKRAN[c.s]){stack=[{s:"ana"}]}
   $("#top").innerHTML=ust();const scr=$("#scr"),st=scr.scrollTop,ch=document.getElementById("ilchips"),cl=ch?ch.scrollLeft:0;
+  const key=stack.length+cur().s+(cur().p&&(cur().p.id||cur().p.il||""));if(key!==ciz.k){scr.classList.remove("enter");void scr.offsetWidth;scr.classList.add("enter");ciz.k=key;setTimeout(()=>scr.classList.remove("enter"),300)}
   scr.innerHTML=EKRAN[cur().s](cur().p||{});scr.scrollTop=st;const ch2=document.getElementById("ilchips");if(ch2)ch2.scrollLeft=cl;
   dirty=0;canli();if(cur().s==="banka")krediHesap()}
+let sahneT=0;
 function canli(){const t=now();
+  if(Date.now()-sahneT>1000){sahneT=Date.now();document.querySelectorAll("[data-scene]").forEach(e=>{const p=S.projeler.find(x=>x.id===e.dataset.scene);if(p)e.innerHTML=projeSahne(p)})}
   const k=tl(S.kasa);document.querySelectorAll('[data-live="kasa"],[data-live="kasa2"]').forEach(e=>{e.textContent=k;e.classList.toggle("neg",S.kasa<0)});
   const g=document.querySelector('[data-live="gun"]');if(g)g.textContent=`Gün ${Math.floor(t)+1} · ${GUNLER[Math.floor(t)%7]}`;
   const gp=document.querySelector('[data-live="gunp"]');if(gp)gp.style.width=((t%1)*100)+"%";
