@@ -46,25 +46,27 @@ def kaynagi_coz(girdi):
     if m:
         liste = KANAL_LISTESI[m[1]].format(m[2].lstrip("@"))
     elif vod_mu(girdi):
-        return girdi
+        return [girdi]
     else:
         m = re.search(r"(twitch\.tv|kick\.com|youtube\.com)/@?([\w.-]+)", girdi)
         if not m:
             sys.exit(f"Tanınmayan girdi: {girdi}")
         plat = {"twitch.tv": "twitch", "kick.com": "kick", "youtube.com": "youtube"}[m[1]]
         liste = KANAL_LISTESI[plat].format(m[2])
-    r = subprocess.run(ytdlp_temel() + ["--flat-playlist", "-I", "1", "--print", "url", liste],
+    r = subprocess.run(ytdlp_temel() + ["--flat-playlist", "-I", "1:3", "--print", "url", liste],
                        capture_output=True, text=True)
     out = r.stdout.strip().splitlines()
     if not out:
         sys.exit(f"Son yayın bulunamadı: {liste}\n{r.stderr.strip()[-500:] or '(kanalda kayıtlı yayın yok)'}")
-    return out[-1].split("#")[0]
+    return [u.split("#")[0] for u in out]
 
 
 def bilgi_al(url, is_dizini):
     f = is_dizini / "bilgi.json"
     if f.exists():
-        return json.loads(f.read_text())
+        b = json.loads(f.read_text())
+        if b.get("canli") is False:  # süren yayının durumu değişebilir: yeniden sor
+            return b
     r = subprocess.run(ytdlp_temel() + ["-J", url], capture_output=True, text=True)
     if r.returncode:
         hata = r.stderr.strip().splitlines()[-1] if r.stderr.strip() else "bilinmeyen hata"
@@ -73,7 +75,7 @@ def bilgi_al(url, is_dizini):
     j = json.loads(r.stdout)
     b = {"url": url, "baslik": j.get("title") or "", "sure": j.get("duration") or 0,
          "kanal": j.get("uploader") or j.get("channel") or j.get("uploader_id") or "",
-         "platform": j.get("extractor_key", "")}
+         "platform": j.get("extractor_key", ""), "canli": j.get("live_status") == "is_live" or bool(j.get("is_live"))}
     f.write_text(json.dumps(b, ensure_ascii=False, indent=1))
     return b
 
@@ -164,7 +166,7 @@ def adaylari_bul(db, gulme, n, pencere, ofset):
     (2) ortamına göre sesin belirgin yükseldiği yerler. İkisinin birleşimi."""
     T = len(db)
     if T < pencere:
-        return [{"bas": ofset, "son": ofset + T, "puan": 0.0, "gulme": 0.0, "gulmeler": []}]
+        return [{"bas": ofset, "son": ofset + T, "puan": 0.0, "gulme": 0.0, "gulmeler": [], "kaynak": "ses"}]
     esik = gulme_esigi(gulme)
     adaylar = []
     if gulme is not None:
@@ -283,7 +285,7 @@ def sec(metinler, b, adet, is_dizini, llm, mod):
             else:
                 bas, son = m["bas"], min(m["son"], m["bas"] + 55)
             ilk = " ".join(c["metin"] for c in m["cumleler"] if bas <= c["t"] <= son)[:45]
-            secim.append({"id": m["id"], "bas": bas, "son": son,
+            secim.append({"id": m["id"], "bas": bas, "son": son, "kanca": False,
                           "baslik": ilk or f"{b['kanal']} yayınından", "aciklama": "", "etiketler": []})
     aday = {m["id"]: m for m in metinler}
     temiz = []
@@ -435,7 +437,7 @@ def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi, kanca=True, 
     uretilen = []
     for i, s in enumerate(secim, 1):
         anahtar = f"{int(s['bas'])}-{int(s['son'])}"
-        son_dosya = cikti / f"kesit_{i:02d}_{anahtar}.mp4"
+        son_dosya = cikti / f"kesit_{i:02d}_{anahtar}{'' if kanca else 'k'}{'' if yakinlas else 'z'}.mp4"
         uretilen.append((son_dosya, s))
         if son_dosya.exists():
             continue
@@ -456,7 +458,7 @@ def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi, kanca=True, 
                                                word_timestamps=True, vad_filter=True)
         kel = [{"k": w.word.strip(), "b": w.start, "s": w.end} for x in seg for w in (x.words or [])]
         ass = is_dizini / f"altyazi_{anahtar}.ass"
-        altyazi_yaz(kel, 0, sure, m["dil"], ass, mod, s.get("baslik", "") if kanca else "")
+        altyazi_yaz(kel, 0, sure, m["dil"], ass, mod, s.get("baslik", "") if kanca and s.get("kanca", True) else "")
         # gülme anında kısa yakınlaşma (altyazıdan önce: yazılar büyümez)
         zum = "+".join(f"between(t,{g - s['bas'] - 0.2:.2f},{g - s['bas'] + 1.3:.2f})"
                        for g in s.get("gulmeler", [])[:3]) if yakinlas else ""
@@ -501,7 +503,8 @@ def main():
 
     if a.cerez:
         CEREZ.extend(["--cookies-from-browser", a.cerez])
-    url = kaynagi_coz(a.kaynak)
+    adresler = kaynagi_coz(a.kaynak)
+    url = adresler[0]
     kimlik = re.sub(r"[^\w-]", "_", url.rstrip("/").split("/")[-1].split("=")[-1])[:40]
     if a.aralik:
         kimlik += "_" + a.aralik
@@ -513,6 +516,13 @@ def main():
 
     print("1/6 Kaynak:", url)
     b = bilgi_al(url, is_dizini)
+    if b.get("canli") and not aralik:
+        # Süren yayının kaydı gerçek zamanlı iner (4 saatlik yayın = 4 saat). Kanal verildiyse biten son yayına geç.
+        if len(adresler) > 1 and not vod_mu(a.kaynak):
+            print("    Bu yayın hâlâ sürüyor; biten son yayına geçiliyor.")
+            sys.argv = [sys.argv[0], adresler[1]] + sys.argv[2:]
+            return main()
+        sys.exit("Yayın hâlâ sürüyor: kaydı gerçek zamanlı iner. Bitince tekrar çalıştır ya da --aralik ver.")
     print(f"    {b['kanal']} | {b['baslik'][:70]} | {int(b['sure'] or 0) // 60} dk")
     print("2/6 Ses indiriliyor")
     ses = ses_indir(b, is_dizini, aralik)

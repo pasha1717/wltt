@@ -54,8 +54,10 @@ def main():
     klasor = Path(a.klasor)
     bilgiler = aciklamalari_oku(klasor)
     yt = youtube(a.istemci, a.token)
-    for video in sorted(klasor.glob("kesit_*.mp4")):
-        baslik, aciklama = bilgiler.get(video.name, (video.stem, ""))
+    for ad, (baslik, aciklama) in bilgiler.items():  # yalnız son çalıştırmada üretilenler
+        video = klasor / ad
+        if not video.exists():
+            continue
         baslik = (baslik if "#shorts" in baslik.lower() else baslik + " #shorts")[:100]
         govde = {"snippet": {"title": baslik, "description": aciklama[:4900], "categoryId": "20"},
                  "status": {"privacyStatus": a.gizlilik, "selfDeclaredMadeForKids": False}}
