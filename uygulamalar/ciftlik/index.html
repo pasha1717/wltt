@@ -423,7 +423,17 @@ const ton=kg=>kg>=1000?(kg/1000).toFixed(kg>=1e5?0:1).replace(".",",")+" ton":nf
 const gunTxt=g=>g<1?Math.max(1,Math.round(g*24))+" saat":(Math.round(g*10)/10).toString().replace(".",",")+" gün";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const now=()=>S.t/GUN;
-function toast(m,c){const d=document.createElement("div");d.className="toast "+(c||"");d.textContent=m;$("#toasts").appendChild(d);
+/* ================= Ses ve titreşim ================= */
+let AC=null,acildi=false,sonSes=0;
+const sesAcik=()=>S&&S.ses!==0;
+function ses(tur){if(!acildi||!sesAcik()||document.hidden)return;const t0=performance.now();if(t0-sonSes<110)return;sonSes=t0;
+  try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const T=AC.currentTime;
+    const n=(f,t,d,tp="sine",v=.1)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=tp;o.frequency.value=f;g.gain.setValueAtTime(0,T+t);g.gain.linearRampToValueAtTime(v,T+t+.012);g.gain.exponentialRampToValueAtTime(.0001,T+t+d);o.connect(g).connect(AC.destination);o.start(T+t);o.stop(T+t+d+.03)};
+    ({tik:()=>n(1100,0,.04,"triangle",.035),para:()=>{n(1320,0,.08,"square",.04);n(1760,.07,.18,"square",.04)},hasat:()=>[523,659,784].forEach((f,i)=>n(f,i*.08,.22,"triangle",.09)),
+      kazan:()=>[523,659,784,1047].forEach((f,i)=>n(f,i*.1,i===3?.55:.18,"triangle",.1)),hata:()=>{n(180,0,.2,"sawtooth",.05);n(140,.12,.22,"sawtooth",.05)},olay:()=>{n(880,0,.4,"sine",.07);n(1318,.02,.3,"sine",.03)}})[tur]?.()}catch(e){}
+  titres({para:18,hasat:[20,40,20],kazan:[30,40,30,40,70],hata:90}[tur])}
+function titres(p){if(!p||!sesAcik())return;try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+function toast(m,c){if(c==="ev")ses("olay");else if(c==="bad")ses("hata");const d=document.createElement("div");d.className="toast "+(c||"");d.textContent=m;$("#toasts").appendChild(d);
   setTimeout(()=>d.remove(),c?4500:2800);const T=$("#toasts");while(T.children.length>3)T.firstChild.remove()}
 
 /* ================= Durum ================= */
@@ -603,11 +613,11 @@ function musteriGel(p){if(!(p.stok>0)||p.musteri.length>=3)return;const mp=birim
   p.musteri.push({id:uid(),ad,firma:fir,qty:Math.min(qty,p.stok),teklif:mp*rnd(.8,.93),max:mp*rnd(.97,1.12)*(1+pers("satis")/2)*(p.don&&p.don.depo?1.04:1),sabir:3,bitis:now()+rnd(1.5,2.5),c:`hsl(${hsh(ad)%360} 60% 65%)`});
   log(p,`${ad} (${fir}) geldi, ${p.tip==="besi"?p.musteri.at(-1).qty+" baş":ton(p.musteri.at(-1).qty)} istiyor.`);dirty=1}
 function sat(p,qty,fiyat,kim){qty=Math.min(qty,p.stok);if(qty<=0)return 0;const brut=qty*fiyat,net=brut*(1-stopaj())*(1-(p.yari||0));
-  p.stok-=qty;para(net);p.ciro=(p.ciro||0)+net;S.stat.satis+=net;log(p,`${kim}: ${p.tip==="besi"?qty+" baş":ton(qty)} × ${tl(fiyat)} = ${tl(brut)} (stopaj${p.yari?" ve ortak payı":""} sonrası ${tl(net)})`);
+  p.stok-=qty;para(net);p.ciro=(p.ciro||0)+net;ses("para");S.stat.satis+=net;log(p,`${kim}: ${p.tip==="besi"?qty+" baş":ton(qty)} × ${tl(fiyat)} = ${tl(brut)} (stopaj${p.yari?" ve ortak payı":""} sonrası ${tl(net)})`);
   p.musteri.forEach(m=>m.qty=Math.min(m.qty,p.stok));p.musteri=p.musteri.filter(m=>m.qty>0);
   if(p.stok<=0&&p.durum==="satista"){p.durum="bitti";p.bitti=now();log(p,"Ürünün tamamı satıldı. Arazi yeni sezona hazır.");toast(`${p.ad}: tamamı satıldı.`,"ev")}
   dirty=1;return net}
-function hasatKaldir(p,oto){if(p.durum!=="hasat")return;const kg=Math.round(p.kg*(p.mult||1)*rnd(.93,1.07));p.stok=kg;p.durum="satista";S.stat.hasat++;
+function hasatKaldir(p,oto){if(p.durum!=="hasat")return;const kg=Math.round(p.kg*(p.mult||1)*rnd(.93,1.07));p.stok=kg;p.durum="satista";S.stat.hasat++;ses("hasat");
   log(p,`Hasat kaldırıldı: ${ton(kg)}${oto?" (çiftlik müdürü)":""}.`);musteriGel(p);dirty=1}
 
 /* ================= İhale ================= */
@@ -622,7 +632,7 @@ function ihaleSonuc(ih){
   if(ih.teklif<ih.bedel*.66){ih.sonuc="red";toast(`${ih.ad}: teklifin aşırı düşük bulundu, ihale dışı kaldın.`,"bad");dirty=1;return}
   if(ih.teklif<minR){ih.sonuc="kazandi";S.stat.ihaleK=(S.stat.ihaleK||0)+1;const mal=Math.round(ih.bedel*ih.oran*rnd(.95,1.12));S.kasa-=mal;
     const p={id:uid(),tip:"ihale",ad:ih.ad,il:ih.il,ilce:ih.kurum,durum:"kurulum",bas:now(),sure:ih.sure*(1-pers("mudur")),bedel:ih.teklif,yatirim:mal,log:[],musteri:[]};
-    log(p,`İhale kazanıldı: ${tl(ih.teklif)}. İşe başlandı, maliyet ${tl(mal)} ödendi.`);S.projeler.unshift(p);toast(`İhaleyi kazandın: ${ih.ad}`,"ev")}
+    log(p,`İhale kazanıldı: ${tl(ih.teklif)}. İşe başlandı, maliyet ${tl(mal)} ödendi.`);S.projeler.unshift(p);toast(`İhaleyi kazandın: ${ih.ad}`,"ev");ses("kazan")}
   else{ih.sonuc="kaybetti";toast(`${ih.ad}: ${rak.find(r=>r.t===minR).ad} daha düşük teklifle kazandı.`)}
   dirty=1}
 
@@ -651,7 +661,7 @@ const I={ // sade çizgi ikonlar
 };
 
 function ust(){const c=cur();let h="";
-  if(c.s==="ana")h+=`<div class="brand">TOPRAK AĞASI<small>TARIM SİMÜLASYONU</small></div><button class="ibtn" data-a="yardim" aria-label="Nasıl oynanır">?</button><button class="pillbtn" data-a="git" data-s="siralama">Sıralama</button><button class="pillbtn gold" data-a="cark">Şans çarkı</button>`;
+  if(c.s==="ana")h+=`<div class="brand">TOPRAK AĞASI<small>TARIM SİMÜLASYONU</small></div><button class="ibtn" data-a="yardim" aria-label="Nasıl oynanır">?</button><button class="ibtn" data-a="ses" aria-label="${sesAcik()?"Sesi kapat":"Sesi aç"}" title="${sesAcik()?"Sesi kapat":"Sesi aç"}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" stroke="none"/>${sesAcik()?'<path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/>':'<path d="M16 9l5 6M21 9l-5 6"/>'}</svg></button><button class="pillbtn" data-a="git" data-s="siralama">Sıralama</button><button class="pillbtn gold" data-a="cark">Şans çarkı</button>`;
   else{const t=BASLIK[c.s]?.(c.p)||["",""];h+=`<button class="back" data-a="geri">‹ ${esc(t[2]||"Geri")}</button><div class="ttl"><div class="eyebrow">${esc(t[0])}</div><h1>${esc(t[1])}</h1></div>`}
   if(c.s==="ana")h+=`<div style="flex:1"></div>`;
   h+=`<div class="kasa"><span>KASA</span><b class="num" data-live="kasa"></b></div><div class="chip"><span data-live="gun"></span><span class="dayp"><i data-live="gunp"></i></span></div>`;
@@ -982,7 +992,7 @@ function cevir(){const today=new Date().toISOString().slice(0,10);if(S.cark===to
 
 /* ================= Etkileşim ================= */
 function odeme(c){if(S.kasa<c){toast(`Kasada yeterli para yok. Gereken ${tl(c)}.`,"bad");return false}S.kasa-=c;return true}
-document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b||b.disabled)return;const a=b.dataset.a,d=b.dataset,c=cur();
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b||b.disabled)return;acildi=true;if(b.dataset.a!=="ses")ses("tik");const a=b.dataset.a,d=b.dataset,c=cur();
   switch(a){
   case"geri":geri();break;case"eve":eve();break;
   case"git":git(d.s,{il:+d.il||undefined,ii:d.ii!==undefined?+d.ii:undefined,id:d.id,sel:d.s==="harita"?BASLANGIC_IL:undefined});break;
@@ -1039,9 +1049,10 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b
     if(Math.random()<.55){o.pay=Math.max(.25,o.pay-.05);toast(`${o.kim}: "Peki, %${Math.round(o.pay*100)} olsun."`,"ev")}else{S.teklifler=S.teklifler.filter(x=>x!==o);toast(`${o.kim} kırıldı, teklifini geri çekti.`,"bad")}ciz(1);break}
   case"yardim":pencere(`<h3>Nasıl oynanır?</h3><div class="note" style="font-size:13px;line-height:1.6">
     1. Haritadan bir il seç. Konya açık, diğer illeri parayla açarsın.<br>2. İlçe seçip portföyden tapu al. Toprak sınıfı ve su durumu verimi belirler.<br>3. Araziye proje kur: tarla, sera, bahçe, süt çiftliği, besi ya da kanatlı. Bölgenin yöresel ürünü %20 fazla verir.<br>4. Ekin olgunlaşınca hasadı kaldır, tüccarla pazarlık et ya da hale ver. Süt ve yumurta tesisleri her gün gelir getirir.<br>5. Görevler ilk adımlarda yol gösterir. Para biriktikçe ihalelere gir, kredi çek, personel ve makine al, merkezini büyüt.<br>Bir oyun günü ${GUN/1000} saniye. Oyun kapalıyken de en fazla ${OFFLINE_MAX} gün işler.</div><button class="btn gold" data-a="kapatm">Başla</button>`);M={t:"x"};break;
-  case"odul":{const g=GOREV[S.gorev||0];if(g&&g.ok()){para(g.o);S.gorev=(S.gorev||0)+1;toast(`Görev tamam: ${g.ad}. +${tl(g.o,1)}`,"ev");ciz(1)}break}
+  case"odul":{const g=GOREV[S.gorev||0];if(g&&g.ok()){para(g.o);S.gorev=(S.gorev||0)+1;toast(`Görev tamam: ${g.ad}. +${tl(g.o,1)}`,"ev");sonSes=0;ses("kazan");ciz(1)}break}
   case"tesiskur":{const t=TESIS[d.k];if(t.lvl>S.ofis)break;if(odeme(t.c)){S.tesis=S.tesis||{};S.tesis[d.k]={hal:0};toast(`${t.ad} kuruldu.`,"ev");ciz(1)}break}
   case"tesishal":{S.tesis[d.k].hal=S.tesis[d.k].hal?0:1;ciz(1);break}
+  case"ses":S.ses=sesAcik()?0:1;acildi=true;if(sesAcik())ses("olay");ciz(1);break;
   case"cark":cark();break;case"cevir":cevir();break;
   }
   kaydet()});
