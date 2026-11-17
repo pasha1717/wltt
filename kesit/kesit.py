@@ -394,13 +394,29 @@ def ass_zaman(t):
     return f"{int(t // 3600)}:{int(t % 3600 // 60):02d}:{t % 60:05.2f}"
 
 
+# Küfür kökleri (Türkçe + İngilizce). Kelime küçük harfe çevrilip baştan eşleştirilir.
+KUFUR = re.compile(r"^(sik(?!ke)|siktir|amk|amq|aq$|amına|amina|amını|amcık|amcik|orospu|oç$|piç|pic$|yarra|yarak|"
+                   r"göt(?!ür|ü?r)|kahpe|pezevenk|gavat|ibne|yavşak|puşt|fuck|shit|bitch|cunt|motherf)")
+
+
+def kufur_mu(kelime):
+    k = re.sub(r"[^\w]", "", kelime.replace("İ", "i").replace("I", "ı").lower())
+    return bool(k) and bool(KUFUR.match(k))
+
+
+def maskele(kelime):
+    return kelime[0] + re.sub(r"\w", "*", kelime[1:])
+
+
 def temiz_baslik(s):
     """Emoji vb. DejaVu'da kutu çıkan karakterleri at."""
     return re.sub(r"[^\w\s.,!?'\"%&()+\-:;/#…]", "", s or "").strip()
 
 
-def altyazi_yaz(kelimeler, bas, son, dil, dosya, mod, baslik=""):
+def altyazi_yaz(kelimeler, bas, son, dil, dosya, mod, baslik="", sansur=True):
     kel = [w for w in kelimeler if w["b"] >= bas - 0.1 and w["s"] <= son + 0.1 and w["k"]]
+    if sansur:
+        kel = [{**w, "k": maskele(w["k"])} if kufur_mu(w["k"]) else w for w in kel]
     alt = 560 if mod != "bulanik" else 420
     satirlar = ["[Script Info]", "ScriptType: v4.00+", "PlayResX: 1080", "PlayResY: 1920", "",
                 "[V4+ Styles]",
@@ -432,12 +448,13 @@ def altyazi_yaz(kelimeler, bas, son, dil, dosya, mod, baslik=""):
     dosya.write_text("\n".join(satirlar) + "\n", encoding="utf-8")
 
 
-def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi, kanca=True, yakinlas=True):
+def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi, kanca=True, yakinlas=True, sansur=True, bip=False):
     dil_haritasi = {m["id"]: m for m in metinler}
     uretilen = []
     for i, s in enumerate(secim, 1):
         anahtar = f"{int(s['bas'])}-{int(s['son'])}"
-        son_dosya = cikti / f"kesit_{i:02d}_{anahtar}{'' if kanca else 'k'}{'' if yakinlas else 'z'}.mp4"
+        ek = ("" if kanca else "k") + ("" if yakinlas else "z") + ("" if sansur else "u") + ("b" if bip else "")
+        son_dosya = cikti / f"kesit_{i:02d}_{anahtar}{ek}.mp4"
         uretilen.append((son_dosya, s))
         if son_dosya.exists():
             continue
@@ -458,7 +475,14 @@ def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi, kanca=True, 
                                                word_timestamps=True, vad_filter=True)
         kel = [{"k": w.word.strip(), "b": w.start, "s": w.end} for x in seg for w in (x.words or [])]
         ass = is_dizini / f"altyazi_{anahtar}.ass"
-        altyazi_yaz(kel, 0, sure, m["dil"], ass, mod, s.get("baslik", "") if kanca and s.get("kanca", True) else "")
+        altyazi_yaz(kel, 0, sure, m["dil"], ass, mod, s.get("baslik", "") if kanca and s.get("kanca", True) else "", sansur)
+        # küfürlü kelimelerin üstüne bip sesi
+        bipler = "+".join(f"between(t,{w['b'] - 0.05:.2f},{w['s'] + 0.05:.2f})" for w in kel if kufur_mu(w["k"])) if bip else ""
+        ses_filtre, ses_map = "", "0:a:0?"
+        if bipler:
+            ses_filtre = (f";[0:a]volume=0:enable='{bipler}'[a0];sine=frequency=1000:sample_rate=48000,volume=2.5,"
+                          f"volume=0:enable='not({bipler})'[bp];[a0][bp]amix=inputs=2:duration=first:normalize=0[a]")
+            ses_map = "[a]"
         # gülme anında kısa yakınlaşma (altyazıdan önce: yazılar büyümez)
         zum = "+".join(f"between(t,{g - s['bas'] - 0.2:.2f},{g - s['bas'] + 1.3:.2f})"
                        for g in s.get("gulmeler", [])[:3]) if yakinlas else ""
@@ -466,10 +490,24 @@ def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi, kanca=True, 
             filtre += (f";[v]scale=w='trunc(1080*(1+0.12*min(1,{zum}))/2)*2':h='trunc(1920*(1+0.12*min(1,{zum}))/2)*2'"
                        ":eval=frame,crop=1080:1920[vz]")
         calistir(["ffmpeg", "-v", "error", "-y", "-ss", bas_pay, "-t", sure, "-i", ham,
-                  "-filter_complex", f"{filtre};[{'vz' if zum else 'v'}]fps=30,ass={ass.name}[o]", "-map", "[o]", "-map", "0:a:0?",
+                  "-filter_complex", f"{filtre};[{'vz' if zum else 'v'}]fps=30,ass={ass.name}[o]{ses_filtre}", "-map", "[o]", "-map", ses_map,
                   "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
                   "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", son_dosya.resolve()], cwd=is_dizini)
     return uretilen
+
+
+def derleme_yap(uretilen, cikti):
+    """Kesitleri arka arkaya tek videoda birleştirir (hepsi aynı ayarla kodlandığı için yeniden kodlamadan)."""
+    var = [f for f, _ in uretilen if f.exists()]
+    if len(var) < 2:
+        return None
+    liste = cikti / "derleme.txt"
+    liste.write_text("".join(f"file '{f.name}'\n" for f in var))
+    hedef = cikti / "derleme.mp4"
+    calistir(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", liste.name, "-c", "copy",
+              "-movflags", "+faststart", hedef.name], cwd=cikti)
+    liste.unlink()
+    return hedef
 
 
 def aciklama_yaz(b, uretilen, cikti):
@@ -496,6 +534,11 @@ def main():
     ap.add_argument("--gulme-yok", action="store_true", help="gülme algılamayı kapat, yalnız ses düzeyi")
     ap.add_argument("--kanca-yok", action="store_true", help="ilk 3 sn başlık kutusunu koyma")
     ap.add_argument("--zum-yok", action="store_true", help="gülme anında yakınlaşma yapma")
+    ap.add_argument("--sansursuz", action="store_true", help="altyazıda küfürleri maskeleme")
+    ap.add_argument("--bip", action="store_true", help="küfürlerin üstüne bip sesi koy")
+    ap.add_argument("--derleme", action="store_true", help="kesitleri ayrıca tek videoda birleştir (derleme.mp4)")
+    ap.add_argument("--yeni", action="store_true", help="bu yayın daha önce işlendiyse atla (günlük tarama için)")
+    ap.add_argument("--temizle", action="store_true", help="bitince ara dosyaları (ses, ham parçalar) sil")
     ap.add_argument("--llm-yok", action="store_true", help="Claude kullanma, yalnız gürültü puanıyla seç")
     ap.add_argument("--is", dest="is_dir", default=str(KOK / "is"), help="ara dosyalar")
     ap.add_argument("--cikti", default=str(KOK / "cikti"), help="kesitlerin yazılacağı yer")
@@ -514,6 +557,9 @@ def main():
     is_dizini.mkdir(parents=True, exist_ok=True)
     cikti.mkdir(parents=True, exist_ok=True)
 
+    if a.yeni and (cikti / "bitti.json").exists():
+        print("Zaten işlendi:", url)
+        return
     print("1/6 Kaynak:", url)
     b = bilgi_al(url, is_dizini)
     if b.get("canli") and not aralik:
@@ -536,8 +582,14 @@ def main():
     print("5/6 En iyi anlar seçiliyor")
     secim = sec(metinler, b, a.adet, is_dizini, not a.llm_yok, a.mod)
     print("6/6 Kesitler hazırlanıyor")
-    uretilen = kesitleri_uret(b, secim, metinler, is_dizini, cikti, a.model, not a.kanca_yok, not a.zum_yok)
+    uretilen = kesitleri_uret(b, secim, metinler, is_dizini, cikti, a.model, not a.kanca_yok, not a.zum_yok,
+                              not a.sansursuz, a.bip)
     aciklama_yaz(b, uretilen, cikti)
+    if a.derleme and derleme_yap(uretilen, cikti):
+        print("    derleme.mp4 hazır")
+    (cikti / "bitti.json").write_text(json.dumps([f.name for f, _ in uretilen], ensure_ascii=False))
+    if a.temizle:
+        shutil.rmtree(is_dizini, ignore_errors=True)
     print(f"\nBitti: {len(uretilen)} kesit -> {cikti}")
 
 

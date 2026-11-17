@@ -1,0 +1,4 @@
+# Her satır bir kanal + isteğe bağlı kesit.py seçenekleri
+kick:wtcn --adet 5 --dil tr
+# twitch:kanaladi --adet 3
+# youtube:kanaladi --mod genel
