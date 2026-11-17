@@ -23,7 +23,7 @@ CEREZ = []  # --cerez ile doldurulur (YouTube "bot değilim" doğrulaması için
 
 
 def ytdlp_temel():
-    cmd = [sys.executable, "-m", "yt_dlp", "-q", "--no-warnings", "--no-playlist"] + CEREZ
+    cmd = [sys.executable, "-m", "yt_dlp", "-q", "--no-warnings", "--no-playlist", "-N", "8"] + CEREZ
     if not shutil.which("deno") and shutil.which("node"):
         cmd += ["--js-runtimes", "node:" + shutil.which("node")]
     return cmd
@@ -113,28 +113,93 @@ def gurultu_haritasi(ses, is_dizini):
     return a
 
 
-def adaylari_bul(db, n, pencere, ofset):
-    """Ortamına göre belirgin şekilde yükselen (bağırma, gülme, tepki) 'pencere' sn'lik bölümler."""
+YAMNET = KOK / "modeller" / "yamnet.tflite"
+YAMNET_URL = ("https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/"
+              "audio_classification/android/lite-model_yamnet_classification_tflite_1.tflite")
+GULME_SINIFLARI = [13, 15, 16, 17, 18]  # Laughter, Giggle, Snicker, Belly laugh, Chuckle
+
+
+def gulme_haritasi(ses, is_dizini):
+    """Saniye başına gülme olasılığı (YAMNet). Kurulamazsa None: yalnız ses düzeyi kullanılır."""
+    f = is_dizini / "gulme.npy"
+    if f.exists():
+        return np.load(f)
+    try:
+        from ai_edge_litert.interpreter import Interpreter
+        if not YAMNET.exists():
+            import urllib.request
+            YAMNET.parent.mkdir(exist_ok=True)
+            urllib.request.urlretrieve(YAMNET_URL, YAMNET)
+        it = Interpreter(str(YAMNET))
+        it.allocate_tensors()
+        gir, cik = it.get_input_details()[0]["index"], it.get_output_details()[0]["index"]
+    except Exception as e:
+        print("  Gülme algılama kullanılamıyor (yalnız ses düzeyi):", e)
+        return None
+    p = subprocess.Popen(["ffmpeg", "-v", "error", "-i", str(ses), "-ac", "1", "-ar", "16000", "-f", "f32le", "-"],
+                         stdout=subprocess.PIPE)
+    sonuc = []
+    while True:
+        buf = p.stdout.read(16000 * 4)
+        if len(buf) < 15600 * 4:
+            break
+        it.set_tensor(gir, np.frombuffer(buf, dtype=np.float32)[:15600].copy())
+        it.invoke()
+        sonuc.append(float(it.get_tensor(cik).reshape(-1)[GULME_SINIFLARI].max()))
+    p.wait()
+    a = np.array(sonuc, dtype=np.float32)
+    np.save(f, a)
+    return a
+
+
+GULME_TABAN = 0.15  # bunun altı gürültü sayılır; yayın içi sıralama ayrıca yüzdelikle yapılır
+
+
+def gulme_esigi(g):
+    return max(GULME_TABAN, float(np.percentile(g, 99))) if g is not None and len(g) else 1.0
+
+
+def adaylari_bul(db, gulme, n, pencere, ofset):
+    """Aday bölümler: (1) gülme tepeleri, şaka gülmeden önce geldiği için tepe-45..tepe+15 sn;
+    (2) ortamına göre sesin belirgin yükseldiği yerler. İkisinin birleşimi."""
     T = len(db)
     if T < pencere:
-        return [{"bas": ofset, "son": ofset + T, "puan": 0.0}]
+        return [{"bas": ofset, "son": ofset + T, "puan": 0.0, "gulme": 0.0, "gulmeler": []}]
+    esik = gulme_esigi(gulme)
+    adaylar = []
+    if gulme is not None:
+        g = gulme[:T]
+        for t in np.argsort(-g):
+            if g[t] < esik or len(adaylar) >= math.ceil(n * 0.6):
+                break
+            if all(abs(t - (x["tepe"])) >= 40 for x in adaylar):
+                bas = int(min(max(t - 45, 0), T - pencere))
+                adaylar.append({"bas": bas, "son": bas + pencere, "tepe": int(t), "kaynak": "gulme"})
     k = min(301, T if T % 2 else T - 1)
     pad = np.pad(db, k // 2, mode="edge")
-    taban = np.array([np.median(pad[i:i + k]) for i in range(0, T, 5)])
-    taban = np.repeat(taban, 5)[:T]
+    taban = np.repeat(np.array([np.median(pad[i:i + k]) for i in range(0, T, 5)]), 5)[:T]
     fazla = np.clip(db - taban, 0, None)
-    adaylar = []
-    for s in range(0, T - pencere + 1, 5):
-        tepe = np.sort(fazla[s:s + pencere])[-10:].mean()
-        adaylar.append((float(tepe), s))
-    adaylar.sort(reverse=True)
-    secilen = []
-    for puan, s in adaylar:
-        if all(abs(s - x["bas"] + ofset) >= pencere for x in secilen):
-            secilen.append({"bas": s + ofset, "son": s + pencere + ofset, "puan": round(puan, 2)})
-        if len(secilen) >= n:
+    yuksek = sorted(((float(np.sort(fazla[s:s + pencere])[-10:].mean()), s) for s in range(0, T - pencere + 1, 5)),
+                    reverse=True)
+    for _, s in yuksek:
+        if len(adaylar) >= n:
             break
-    return sorted(secilen, key=lambda x: x["bas"])
+        if all(abs(s - x["bas"]) >= 30 for x in adaylar):
+            adaylar.append({"bas": s, "son": s + pencere, "tepe": None, "kaynak": "ses"})
+    sonuc = []
+    for x in adaylar:
+        bas, son = x["bas"], x["son"]
+        gul = [] if gulme is None else [int(t) for t in range(bas, min(son, len(gulme))) if gulme[t] >= esik]
+        sonuc.append({"bas": bas + ofset, "son": son + ofset, "kaynak": x["kaynak"],
+                      "puan": round(float(np.sort(fazla[bas:son])[-10:].mean()), 2),
+                      "gulme": round(float(gulme[bas:son].max()), 2) if gulme is not None else 0.0,
+                      "gulmeler": [t + ofset for t in gul]})
+    return sorted(sonuc, key=lambda x: x["bas"])
+
+
+def aday_ozeti(adaylar, *ek):
+    import hashlib
+    return hashlib.md5(json.dumps([[a["bas"], a["son"]] for a in adaylar] + list(ek)).encode()).hexdigest()[:8]
 
 
 # ---------- 3. Yalnız adayları yazıya dök ----------
@@ -155,7 +220,7 @@ def sesi_oku(dosya, bas, sure):
 
 
 def yaziya_dok(ses, adaylar, is_dizini, model_adi, dil, ofset):
-    f = is_dizini / f"metinler_{len(adaylar)}.json"
+    f = is_dizini / f"metinler_{aday_ozeti(adaylar, dil, model_adi)}.json"
     if f.exists():
         return json.loads(f.read_text())
     model = whisper(model_adi)
@@ -175,35 +240,50 @@ def yaziya_dok(ses, adaylar, is_dizini, model_adi, dil, ofset):
 
 
 # ---------- 4. En iyi anları seç (Claude, yoksa gürültü puanı) ----------
-def sec(metinler, b, adet, is_dizini, llm):
-    f = is_dizini / f"secim_{adet}_{len(metinler)}.json"
+def sec(metinler, b, adet, is_dizini, llm, mod):
+    f = is_dizini / f"secim_{aday_ozeti(metinler, adet, mod, llm)}.json"
     if f.exists():
         return json.loads(f.read_text())
     secim = None
     if llm and shutil.which("claude"):
-        ozet = [{"id": m["id"], "bas": m["bas"], "son": m["son"], "gurultu": m["puan"],
+        ozet = [{"id": m["id"], "bas": m["bas"], "son": m["son"], "ses_yukselmesi": m["puan"],
+                 "gulme_anlari": m.get("gulmeler", []),
                  "konusma": [f'{c["t"]}: {c["metin"]}' for c in m["cumleler"]]} for m in metinler]
+        if mod == "komik":
+            hedef = (f"Shorts/Reels için en komik en fazla {adet} anı seç. Önce gerçekten komik olanlar: espri, "
+                     "beklenmedik tepki, rezil olma, absürt diyalog, kahkaha. 'gulme_anlari' sesten algılanmış gülme "
+                     "saniyeleridir; şakanın kurulumu genelde gülmeden 10-40 sn önce başlar. Kesit kurulumla başlasın, "
+                     "gülmeden 1-3 sn sonra bitsin. Komik olmayan aday varsa seçme; daha az seçmek serbest.\n")
+        else:
+            hedef = (f"Shorts/Reels için en çok izlenecek en fazla {adet} anı seç: komik, şaşırtıcı, gergin ya da "
+                     "tek başına anlaşılan anlar.\n")
         istem = (
             f"Bir canlı yayından ({b['kanal']}, \"{b['baslik']}\") aday bölümler aşağıda. Saniyeler yayının başından itibaren.\n"
-            f"Shorts/Reels için en çok izlenecek {adet} anı seç: komik, şaşırtıcı, gergin ya da tek başına anlaşılan anlar.\n"
-            "Her seçim 20-58 sn olsun, adayın bas-son aralığında kalsın, bir cümlenin ortasında başlayıp bitmesin.\n"
-            "Başlık kısa ve merak uyandırıcı olsun, yayının dilinde yaz. Yalnızca JSON dizi döndür, başka hiçbir şey yazma:\n"
+            + hedef +
+            "Her seçim 15-58 sn olsun, adayın bas-son aralığında kalsın, bir cümlenin ortasında başlayıp bitmesin.\n"
+            "Başlık kısa ve merak uyandırıcı olsun (en fazla 45 karakter, emoji yok), yayının dilinde yaz.\n"
+            "Yalnızca JSON dizi döndür, başka hiçbir şey yazma:\n"
             '[{"id":1,"bas":123.0,"son":160.0,"baslik":"...","aciklama":"1-2 cümle","etiketler":["...","..."]}]\n\n'
             + json.dumps(ozet, ensure_ascii=False))
         try:
             r = subprocess.run(["claude", "-p"], input=istem, capture_output=True, text=True, timeout=600)
             m = re.search(r"\[.*\]", r.stdout, re.S)
             secim = json.loads(m[0]) if m else None
-            if not secim:
+            if secim is None:
                 print("  Claude yanıtı okunamadı:", (r.stdout or r.stderr)[:300])
         except Exception as e:
             print("  Claude kullanılamadı:", e)
-    if not secim:
-        print("  Gürültü puanına göre seçiliyor (Claude yok).")
+    if secim is None:
+        print("  Gülme ve ses puanına göre seçiliyor (Claude yok).")
         secim = []
-        for m in sorted(metinler, key=lambda x: -x["puan"])[:adet]:
-            ilk = " ".join(c["metin"] for c in m["cumleler"])[:60]
-            secim.append({"id": m["id"], "bas": m["bas"], "son": min(m["son"], m["bas"] + 55),
+        for m in sorted(metinler, key=lambda x: (-x.get("gulme", 0), -x["puan"]))[:adet]:
+            if m.get("gulmeler"):  # son gülmeden 2 sn sonra bit, 35 sn geriden başla
+                son = min(m["son"], m["gulmeler"][-1] + 2)
+                bas = max(m["bas"], son - 35)
+            else:
+                bas, son = m["bas"], min(m["son"], m["bas"] + 55)
+            ilk = " ".join(c["metin"] for c in m["cumleler"] if bas <= c["t"] <= son)[:45]
+            secim.append({"id": m["id"], "bas": bas, "son": son,
                           "baslik": ilk or f"{b['kanal']} yayınından", "aciklama": "", "etiketler": []})
     aday = {m["id"]: m for m in metinler}
     temiz = []
@@ -215,7 +295,8 @@ def sec(metinler, b, adet, is_dizini, llm):
         except (KeyError, TypeError, ValueError):
             continue
         if son - bas >= 10:
-            temiz.append({"baslik": "", "aciklama": "", "etiketler": [], **s, "id": a["id"], "bas": bas, "son": son})
+            temiz.append({"baslik": "", "aciklama": "", "etiketler": [], **s, "id": a["id"], "bas": bas, "son": son,
+                          "gulmeler": [t for t in a.get("gulmeler", []) if bas <= t <= son]})
     temiz = temiz[:adet]
     f.write_text(json.dumps(temiz, ensure_ascii=False, indent=1))
     return temiz
@@ -311,7 +392,12 @@ def ass_zaman(t):
     return f"{int(t // 3600)}:{int(t % 3600 // 60):02d}:{t % 60:05.2f}"
 
 
-def altyazi_yaz(kelimeler, bas, son, dil, dosya, mod):
+def temiz_baslik(s):
+    """Emoji vb. DejaVu'da kutu çıkan karakterleri at."""
+    return re.sub(r"[^\w\s.,!?'\"%&()+\-:;/#…]", "", s or "").strip()
+
+
+def altyazi_yaz(kelimeler, bas, son, dil, dosya, mod, baslik=""):
     kel = [w for w in kelimeler if w["b"] >= bas - 0.1 and w["s"] <= son + 0.1 and w["k"]]
     alt = 560 if mod != "bulanik" else 420
     satirlar = ["[Script Info]", "ScriptType: v4.00+", "PlayResX: 1080", "PlayResY: 1920", "",
@@ -319,7 +405,12 @@ def altyazi_yaz(kelimeler, bas, son, dil, dosya, mod):
                 "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, "
                 "Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
                 f"Style: A,DejaVu Sans,80,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,2,2,60,60,{alt},1",
+                "Style: B,DejaVu Sans,62,&H00101010,&H00101010,&H00FFFFFF,&H00FFFFFF,-1,0,0,0,100,100,0,0,3,18,0,8,90,90,0,1",
                 "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
+    baslik = temiz_baslik(baslik)
+    if baslik:  # kanca: ilk 3 sn üstte başlık kutusu (bölünmüşte kamera ile oyunun birleştiği yerde)
+        y = {"bolunmus": 680, "yuz": 170, "bulanik": 260}[mod]
+        satirlar.append(f"Dialogue: 1,{ass_zaman(0)},{ass_zaman(min(3.0, son - bas))},B,,0,0,{y},,{tr_buyuk(baslik, dil)}")
     gruplar, g = [], []
     for w in kel:
         if g and (len(g) >= 3 or w["b"] - g[-1]["s"] > 0.8 or sum(len(x["k"]) for x in g) > 16):
@@ -339,7 +430,7 @@ def altyazi_yaz(kelimeler, bas, son, dil, dosya, mod):
     dosya.write_text("\n".join(satirlar) + "\n", encoding="utf-8")
 
 
-def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi):
+def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi, kanca=True, yakinlas=True):
     dil_haritasi = {m["id"]: m for m in metinler}
     uretilen = []
     for i, s in enumerate(secim, 1):
@@ -365,9 +456,15 @@ def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi):
                                                word_timestamps=True, vad_filter=True)
         kel = [{"k": w.word.strip(), "b": w.start, "s": w.end} for x in seg for w in (x.words or [])]
         ass = is_dizini / f"altyazi_{anahtar}.ass"
-        altyazi_yaz(kel, 0, sure, m["dil"], ass, mod)
+        altyazi_yaz(kel, 0, sure, m["dil"], ass, mod, s.get("baslik", "") if kanca else "")
+        # gülme anında kısa yakınlaşma (altyazıdan önce: yazılar büyümez)
+        zum = "+".join(f"between(t,{g - s['bas'] - 0.2:.2f},{g - s['bas'] + 1.3:.2f})"
+                       for g in s.get("gulmeler", [])[:3]) if yakinlas else ""
+        if zum:
+            filtre += (f";[v]scale=w='trunc(1080*(1+0.12*min(1,{zum}))/2)*2':h='trunc(1920*(1+0.12*min(1,{zum}))/2)*2'"
+                       ":eval=frame,crop=1080:1920[vz]")
         calistir(["ffmpeg", "-v", "error", "-y", "-ss", bas_pay, "-t", sure, "-i", ham,
-                  "-filter_complex", f"{filtre};[v]fps=30,ass={ass.name}[o]", "-map", "[o]", "-map", "0:a:0?",
+                  "-filter_complex", f"{filtre};[{'vz' if zum else 'v'}]fps=30,ass={ass.name}[o]", "-map", "[o]", "-map", "0:a:0?",
                   "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
                   "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", son_dosya.resolve()], cwd=is_dizini)
     return uretilen
@@ -392,6 +489,11 @@ def main():
     ap.add_argument("--dil", default=None, help="konuşma dili (tr, en...); boşsa otomatik")
     ap.add_argument("--model", default="small", help="whisper modeli: tiny/base/small/medium (varsayılan small)")
     ap.add_argument("--cerez", help="tarayıcı çerezlerini kullan (chrome/firefox/edge); YouTube bot doğrulaması için")
+    ap.add_argument("--mod", default="komik", choices=["komik", "genel"],
+                    help="komik: en komik anlar (varsayılan); genel: komik, şaşırtıcı, gergin")
+    ap.add_argument("--gulme-yok", action="store_true", help="gülme algılamayı kapat, yalnız ses düzeyi")
+    ap.add_argument("--kanca-yok", action="store_true", help="ilk 3 sn başlık kutusunu koyma")
+    ap.add_argument("--zum-yok", action="store_true", help="gülme anında yakınlaşma yapma")
     ap.add_argument("--llm-yok", action="store_true", help="Claude kullanma, yalnız gürültü puanıyla seç")
     ap.add_argument("--is", dest="is_dir", default=str(KOK / "is"), help="ara dosyalar")
     ap.add_argument("--cikti", default=str(KOK / "cikti"), help="kesitlerin yazılacağı yer")
@@ -415,14 +517,16 @@ def main():
     print("2/6 Ses indiriliyor")
     ses = ses_indir(b, is_dizini, aralik)
     print("3/6 Hareketli anlar aranıyor")
-    adaylar = adaylari_bul(gurultu_haritasi(ses, is_dizini), a.aday, 60, ofset)
-    print(f"    {len(adaylar)} aday")
+    gulme = None if a.gulme_yok else gulme_haritasi(ses, is_dizini)
+    adaylar = adaylari_bul(gurultu_haritasi(ses, is_dizini), gulme, a.aday, 60, ofset)
+    print(f"    {len(adaylar)} aday ({sum(x['kaynak'] == 'gulme' for x in adaylar)} gülme, "
+          f"{sum(x['kaynak'] == 'ses' for x in adaylar)} ses yükselmesi)")
     print("4/6 Adaylar yazıya dökülüyor")
     metinler = yaziya_dok(ses, adaylar, is_dizini, a.model, a.dil, ofset)
     print("5/6 En iyi anlar seçiliyor")
-    secim = sec(metinler, b, a.adet, is_dizini, not a.llm_yok)
+    secim = sec(metinler, b, a.adet, is_dizini, not a.llm_yok, a.mod)
     print("6/6 Kesitler hazırlanıyor")
-    uretilen = kesitleri_uret(b, secim, metinler, is_dizini, cikti, a.model)
+    uretilen = kesitleri_uret(b, secim, metinler, is_dizini, cikti, a.model, not a.kanca_yok, not a.zum_yok)
     aciklama_yaz(b, uretilen, cikti)
     print(f"\nBitti: {len(uretilen)} kesit -> {cikti}")
 

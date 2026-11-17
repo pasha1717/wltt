@@ -3,6 +3,7 @@ curl_cffi
 faster-whisper
 opencv-python-headless
 numpy
+ai-edge-litert   # gülme algılama (isteğe bağlı)
 # yalnız YouTube'a yükleme (yukle.py) için:
 google-api-python-client
 google-auth-oauthlib

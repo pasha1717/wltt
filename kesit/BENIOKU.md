@@ -19,14 +19,18 @@ python3 kesit.py <adres> --aralik 3600-7200     # yalnız 1. ve 2. saat arası
 
 ## Nasıl çalışır
 1. Yayının yalnız sesi indirilir (tüm videoyu indirmez).
-2. Sesin ortama göre yükseldiği yerler (bağırma, gülme, tepki) bulunur; en güçlü 15 aday seçilir.
+2. Komik an adayları iki yoldan bulunur:
+   - **Gülme algılama** (YAMNet ses modeli): kahkaha, kıkırdama. Şaka gülmeden önce geldiği için aday, gülmeden 45 sn önce başlar.
+   - **Ses yükselmesi**: bağırma, tepki.
 3. Yalnız adaylar Whisper ile yazıya dökülür.
-4. Claude metinleri okuyup en iyi anları seçer, başlık yazar. Claude yoksa ya da limit dolmuşsa ses puanıyla seçer (`--llm-yok`).
+4. Claude metinleri ve gülme anlarını okuyup en komik anları seçer (`--mod komik`, varsayılan), başlık yazar. Komik bulmadığını seçmez. Claude yoksa ya da limit dolmuşsa gülme ve ses puanıyla seçer (`--llm-yok`). Komik dışı anlar için `--mod genel`.
 5. Seçilen kesitler 1080p indirilir, dikeye çevrilir:
    - yüz büyükse (sohbet yayını) yüze ortalı kırpma,
    - kamera köşedeyse üstte kamera, altta oyun,
    - yüz yoksa bulanık arka planlı tam görüntü.
-6. Kelime kelime yanan altyazı gömülür.
+6. Kelime kelime yanan altyazı (kesitin kendi sesinden, senkronlu), ilk 3 sn kanca başlığı ve gülme anında kısa yakınlaşma eklenir (`--kanca-yok`, `--zum-yok` ile kapatılır).
+
+Gülme algılama kurulamazsa (ör. `ai-edge-litert` o sistemde yoksa) araç uyarı verip yalnız ses düzeyiyle devam eder. Oyun sesi yüksek yayınlarda gülme sinyali zayıf kalabilir; Claude seçimi bunu telafi eder.
 
 Yarıda kalırsa aynı komutu tekrar çalıştır; biten aşamalar atlanır (`is/` klasörü).
 
