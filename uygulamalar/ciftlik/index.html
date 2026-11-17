@@ -438,7 +438,15 @@ function fit(u,p){const c=URUN[u],r=IL[p].r;if(c.il.includes(p))return 1.2;if(c.
 function hayvanFit(t,p){const r=IL[p].r;const m={besi:{"dogu-anadolu":1.15,"ic-anadolu":1.1},sut:{"marmara":1.1,"ege":1.1,"karadeniz":1.05,"dogu-anadolu":1.05}}[t];return m&&m[r]||.95}
 const pers=r=>S.personel[r]?KALITE[S.personel[r]-1].e:0;
 const fiyatM=k=>S.fiyat[k]||1;
-const piyasa=(u)=>URUN[u].f*fiyatM(u);
+const MEVSIM=["İlkbahar","Yaz","Sonbahar","Kış"],YIL=40;
+const mevsim=(t=now())=>Math.floor(((t%YIL)+YIL)%YIL/10);
+// Ekim mevsimine göre verim: [ilkbahar, yaz, sonbahar, kış]
+const EK={bugday:[.8,.5,1,.7],arpa:[.85,.5,1,.7],misir:[1,.8,.5,.35],aycicegi:[1,.75,.45,.3],pamuk:[1,.7,.4,.3],pancar:[1,.7,.5,.35],mercimek:[.8,.45,1,.65],celtik:[1,.75,.4,.3],patates:[1,.85,.6,.4]};
+const HASATB={zeytin:2,uzum:2,incir:1,findik:1,cay:1,kayisi:1,portakal:3,fistik:2,kiraz:1,domates:1,biber:1,cilek:0};
+function hasatMev(u){const e=EK[u];if(e)return(e.indexOf(Math.max(...e))+1)%4;return HASATB[u]??1}
+function sezonF(u,m=mevsim()){return[.88,1,1.12,1][(m-hasatMev(u)+4)%4]}
+const bahceMev=(u,m=mevsim())=>[1.6,.95,.5,.95][(m-hasatMev(u)+4)%4];
+const piyasa=(u)=>URUN[u].f*fiyatM(u)*sezonF(u);
 function stopaj(){return .08*(1-pers("muhasebe")*2.5)}
 function gunlukMaas(){let t=0;for(const r in S.personel)if(S.personel[r])t+=KALITE[S.personel[r]-1].maas*ROLLER[r].m;return Math.round(t)}
 function gunlukGelir(){let t=0;for(const p of S.projeler){if(p.durum==="uretimde"&&p.net)t+=p.net*(1-(p.yari||0));if(p.durum==="kirada")t+=p.kira}
@@ -466,10 +474,10 @@ function plan(D){
     }else{
       const sy=[c.sulu?.4:.78,1,1.1,1.22][D.sulama],sc=[0,350,900,1500][D.sulama],qy=[.9,1,1.2][D.kalite],qc=[.8,1,1.45][D.kalite];
       if(kuru&&D.sulama>0)P.err="Arazide su yok. Sulu tarım için sondaj kuyusu ekle ya da kuru tarım seç.";
-      if(D.tip==="tarla"){P.base=P.alan*(c.mal*qc+sc);P.gun=c.gun*gunM;P.kg=P.alan*c.kg*P.fit*soil*qy*sy*verimM*(S.makine.bicer?1.06:1)}
+      if(D.tip==="tarla"){P.base=P.alan*(c.mal*qc+sc);P.gun=c.gun*gunM;P.mevM=EK[D.urun][mevsim()];P.kg=P.alan*c.kg*P.fit*soil*qy*sy*verimM*(S.makine.bicer?1.06:1)*P.mevM}
       else{P.base=P.alan*(c.fidan*qc+sc*3);P.gun=c.gun*gunM;P.tekrar=c.tekrar;P.kg=P.alan*c.kg*P.fit*soil*qy*sy*verimM;P.op=P.alan*c.mal*(D.don.gunes?.7:1)}
     }
-    P.gelir=P.kg*c.f*fiyatM(D.urun)*P.fm;
+    P.gelir=P.kg*piyasa(D.urun)*P.fm;
   }else if(D.tip==="sut"){
     const max=a.donum*5;P.adet=clamp(D.adet,1,max);P.max=max;const ic=[75000,115000,170000][D.irk],sc=[0,450000,2600000][D.sagim],sm=[1,1.12,1.28][D.sagim];
     P.base=P.adet*(ic+22000)+sc;P.gun=3*gunM;P.net=P.adet*(ic+22000)*.015*sm*hayvanFit("sut",a.il)*hayM;P.litre=P.adet*[12,22,32][D.irk];
@@ -487,7 +495,7 @@ function plan(D){
 
 /* ================= Zaman akışı ================= */
 function ilerle(ms){const step=GUN/6;while(ms>0){const st=Math.min(ms,step);S.t+=st;ms-=st;
-  while(S.gun<Math.floor(now())){S.gun++;gunluk()}kontrol()}}
+  while(S.gun<Math.floor(now())){S.gun++;gunluk();if(S.gun%10===0)mevsimBildir()}kontrol()}}
 function kontrol(){const t=now();
   for(const p of S.projeler){
     if(p.durum==="kurulum"&&t>=p.bas+p.sure){
@@ -498,7 +506,7 @@ function kontrol(){const t=now();
       else if(p.tip==="ihale"){p.durum="bitti";para(p.bedel);S.stat.ihale++;log(p,`İş teslim edildi. Hakediş ödendi: ${tl(p.bedel)}`);toast(`${p.ad} tamamlandı: +${tl(p.bedel,1)}`,"ev")}
       dirty=1}
     if(p.durum==="uretimde"&&(p.tip==="sera"||p.tip==="bahce")&&t>=p.dongu+p.tekrar){
-      p.dongu+=p.tekrar;const kg=Math.round(p.kg*(p.mult||1)*rnd(.92,1.08));p.stok+=kg;S.kasa-=p.op;p.mult=1;S.stat.hasat++;
+      p.dongu+=p.tekrar;const mm=p.tip==="bahce"?bahceMev(p.urun,mevsim(p.dongu)):(p.tip==="sera"&&!(p.D&&p.D.isi)&&mevsim(p.dongu)===3?.6:1);const kg=Math.round(p.kg*(p.mult||1)*mm*rnd(.92,1.08));p.stok+=kg;S.kasa-=p.op;p.mult=1;S.stat.hasat++;
       log(p,`Hasat: ${ton(kg)} ambara girdi. İşletme gideri ${tl(p.op)}.`);if(!p.musteri.length)musteriGel(p);dirty=1}
     if(p.musteri)p.musteri=p.musteri.filter(m=>{if(t>m.bitis){log(p,`${m.ad} beklemekten sıkılıp gitti.`);dirty=1;return false}return true});
   }
@@ -506,6 +514,10 @@ function kontrol(){const t=now();
   S.ihaleler=S.ihaleler.filter(i=>!i.sonuc||t<i.bitis+1.5);
   S.teklifler=S.teklifler.filter(o=>t<o.bitis);
 }
+function mevsimBildir(){const m=mevsim(S.gun+.01);const ek=Object.keys(EK).filter(k=>EK[k][m]>=1).map(k=>URUN[k].ad.toLowerCase());
+  const ha=Object.keys(URUN).filter(k=>hasatMev(k)===m).slice(0,4).map(k=>URUN[k].ad.toLowerCase());
+  const ek2=ek.length?` Ekim zamanı: ${ek.join(", ")}.`:m===3?" Açık tarlada verim düşük; sera ve hayvancılık sürer.":"";
+  toast(`${MEVSIM[m]} geldi.${ek2}${ha.length?` Hasadı gelen ${ha.join(", ")} bu mevsim ucuzlar.`:""}`,"ev");dirty=1}
 function gunluk(){
   // fiyatlar ve endeks
   for(const k of [...Object.keys(URUN),"et"]){let m=(S.fiyat[k]||1)*(1+rnd(-.05,.05));m+=(1-m)*.08;S.fiyat[k]=k==="et"?clamp(m,.93,1.08):clamp(m,.75,1.35)}
@@ -725,11 +737,12 @@ const VARS={tarla:"bugday",sera:"domates",bahce:"zeytin"};
 function tasarimVarsayilan(a){const best=t=>Object.keys(URUN).filter(k=>URUN[k].tip===t).sort((x,y)=>fit(y,a.il)-fit(x,a.il))[0];
   return{arsa:a.id,tip:"tarla",urun:best("tarla"),alan:a.donum,kalite:1,sulama:a.su==="kuru"?0:1,seraTip:0,isi:0,adet:Math.max(1,Math.round(a.donum*1.5)),irk:1,sagim:0,kumes:0,don:{},adim:1}}
 // Proje sahnesi. st: {f: 0..1 ilerleme, faz: "plan"|"kurulum"|"hazir"|"hasat"|"uretim"|"bos"}
-function sceneSVG(D,P,st){st=st||{f:1,faz:"plan"};const c=URUN[D.urun]||{renk:"#7fbf5a"},f=clamp(st.f,0,1),faz=st.faz,R=rng(hsh(D.arsa||"x"));
+const SEZ=[{h1:"#86ab64",h2:"#5f8a45",b:"#9bb98a",s1:"#78aed2",t:"#3f7a3a"},{h1:"#a7b45a",h2:"#7c953e",b:"#bcc28c",s1:"#6aa8d8",t:"#4a7a30"},{h1:"#b99e58",h2:"#8c7840",b:"#c9b68c",s1:"#8fb0c4",t:"#c0782a"},{h1:"#eef3f4",h2:"#cfdcdf",b:"#e3eaec",s1:"#9fb2bd",t:"#6f8a72"}];
+function sceneSVG(D,P,st){st=st||{f:1,faz:"plan"};const SZ=SEZ[mevsim()];const c=URUN[D.urun]||{renk:"#7fbf5a"},f=clamp(st.f,0,1),faz=st.faz,R=rng(hsh(D.arsa||"x"));
   const lerp=(a,b,t)=>{const pa=a.match(/\w\w/g).map(h=>parseInt(h,16)),pb=b.match(/\w\w/g).map(h=>parseInt(h,16));return"#"+pa.map((v,i)=>Math.round(v+(pb[i]-v)*t).toString(16).padStart(2,"0")).join("")};
-  let s=`<svg viewBox="0 0 400 170" role="img" aria-label="Proje görünümü"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#78aed2"/><stop offset="1" stop-color="#d4e6ea"/></linearGradient><linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86ab64"/><stop offset="1" stop-color="#5f8a45"/></linearGradient></defs>`;
+  let s=`<svg viewBox="0 0 400 170" role="img" aria-label="Proje görünümü"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${SZ.s1}"/><stop offset="1" stop-color="#d4e6ea"/></linearGradient><linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${SZ.h1}"/><stop offset="1" stop-color="${SZ.h2}"/></linearGradient></defs>`;
   s+=`<rect width="400" height="170" fill="url(#sky)"/><circle cx="340" cy="32" r="15" fill="#f6dd8a"/><circle cx="340" cy="32" r="24" fill="#f6dd8a" opacity=".18"/>`;
-  s+=`<path d="M0 70 Q60 52 130 66 T260 60 T400 64 V100 H0z" fill="#9bb98a" opacity=".7"/><path d="M0 90 Q80 72 170 86 T400 80 V170 H0z" fill="url(#hill)"/>`;
+  s+=`<path d="M0 70 Q60 52 130 66 T260 60 T400 64 V100 H0z" fill="${SZ.b}" opacity=".7"/><path d="M0 90 Q80 72 170 86 T400 80 V170 H0z" fill="url(#hill)"/>`;
   for(let i=0;i<3;i++){const x=20+R()*360;s+=`<g opacity=".85"><ellipse cx="${x}" cy="${22+R()*20}" rx="${18+R()*10}" ry="6" fill="#fff"/><ellipse cx="${x+12}" cy="${18+R()*14}" rx="12" ry="6" fill="#fff"/></g>`}
   const ins=faz==="kurulum"&&f<.35; // iş makinesi görünür
   if(D.tip==="tarla"){const rows=Math.min(10,4+Math.round((P.alan||10)/12));
@@ -741,7 +754,7 @@ function sceneSVG(D,P,st){st=st||{f:1,faz:"plan"};const c=URUN[D.urun]||{renk:"#
     if(ins)s+=traktorSVG(60+f*800,110)}
   else if(D.tip==="bahce"){const rows=4;const g=faz==="plan"?1:faz==="kurulum"?f:1;
     for(let r=0;r<rows;r++){const y=104+r*16;s+=`<path d="M10 ${y+2}H390" stroke="#6f8f4a" stroke-width="2"/>`;const n=7+r*2;
-      for(let i=0;i<n;i++){const x=20+i*(360/n)+(r%2)*10,sz=(3+r*1.6)*(.35+g*.65);s+=`<rect x="${x-1}" y="${y-sz*1.2}" width="2" height="${sz*1.3}" fill="#5b3b1c"/><circle cx="${x}" cy="${y-sz*1.6}" r="${sz}" fill="${lerp("#7fbf5a","#3f7a3a",g)}"/>`;
+      for(let i=0;i<n;i++){const x=20+i*(360/n)+(r%2)*10,sz=(3+r*1.6)*(.35+g*.65);s+=`<rect x="${x-1}" y="${y-sz*1.2}" width="2" height="${sz*1.3}" fill="#5b3b1c"/><circle cx="${x}" cy="${y-sz*1.6}" r="${sz}" fill="${lerp("#7fbf5a",SZ.t,g)}"/>`;
         const meyve=faz==="plan"||faz==="hazir"||(faz==="uretim"&&f>.55);if(meyve&&g>.9)for(let k=0;k<2;k++)s+=`<circle cx="${x-sz*.5+k*sz}" cy="${y-sz*1.5+k*2}" r="${1+r*.35}" fill="${c.renk}"/>`}}}
   else if(D.tip==="sera"){const n=Math.min(8,Math.max(1,Math.round((P.alan||2)/2)));const w=360/n,built=faz==="kurulum"?Math.ceil(n*f):n;
     for(let i=0;i<n;i++){const x=20+i*w;if(i>=built){s+=`<path d="M${x+3} 150 V112 Q${x+w/2} 84 ${x+w-3} 112 V150" fill="none" stroke="#8a9a9e" stroke-dasharray="3 3"/>`;continue}
@@ -773,7 +786,7 @@ EKRAN.tasarla=p=>{const D=p.D,a=S.arsalar.find(x=>x.id===D.arsa),P=plan(D);
   const segs=Object.entries(TIPLER).map(([k,t])=>{const lk=t.lvl>S.ofis;return`<button class="${D.tip===k?"on":""} ${lk?"lock":""}" data-a="dtip" data-k="${k}"><span class="segt">${lk?ik("kilit",12):ik(k,16)} ${t.ad}</span>${lk?`<small>${OFIS[t.lvl].ad}</small>`:""}</button>`}).join("");
   let ctl="";
   if(["tarla","sera","bahce"].includes(D.tip)){
-    ctl+=`<div class="sl"><span>Ürün</span><div class="opts">${Object.entries(URUN).filter(([,u])=>u.tip===D.tip).map(([k,u])=>{const f=fit(k,a.il);return opt("urun",k,ik(k,18)+" "+u.ad,f>1?"★":f<1?"zayıf":"",D.urun===k,f<1)}).join("")}</div></div>`;
+    ctl+=`<div class="sl"><span>Ürün</span><div class="opts">${Object.entries(URUN).filter(([,u])=>u.tip===D.tip).map(([k,u])=>{const f=fit(k,a.il);const me=EK[k]?EK[k][mevsim()]:1;return opt("urun",k,ik(k,18)+" "+u.ad,[f>1?"★":f<1?"zayıf":"",me<.7?"mevsim dışı":me>=1&&EK[k]?"tam mevsimi":""].filter(Boolean).join(" · "),D.urun===k,f<1||me<.7)}).join("")}</div></div>`;
     ctl+=sl("alan",D.tip==="sera"?"Sera alanı":"Ekim alanı",P.alan,1,a.donum,1,P.alan+" dönüm");
     if(D.tip==="sera"){ctl+=`<div class="sl"><span>Sera tipi</span><div class="opts">${["Plastik","Cam","Topraksız (hidroponik)"].map((x,i)=>opt("seraTip",i,x,"",D.seraTip===i)).join("")}</div></div>`;
       ctl+=`<div class="sl"><span>Isıtma</span><div class="opts">${["Yok","Jeotermal"].map((x,i)=>opt("isi",i,x,i?"+%25 verim":"",D.isi===i)).join("")}</div></div>`}
@@ -786,7 +799,10 @@ EKRAN.tasarla=p=>{const D=p.D,a=S.arsalar.find(x=>x.id===D.arsa),P=plan(D);
     <div class="col"><div class="panel">${ctl}</div>${P.err?`<div class="err">${P.err}</div>`:""}<div class="note">${a.donum} dönüm · ${["I","II","III","IV"][a.cls]}. sınıf toprak · ${SU[a.su]} · ${IL[a.il].n} (${BOLGE[IL[a.il].r]})</div><button class="btn gold wide" data-a="adim2">Donatıları seç</button></div></div>`};
 function ozet(D,P){const lines=[];
   if(P.urun){const u=URUN[P.urun];lines.push(["Bölge uyumu",P.fit>1?"Yöresel ürün (+%20)":P.fit<1?"Uygun değil (-%40)":"Uygun"]);
-    lines.push([P.tekrar?"Hasat başına ürün":"Beklenen hasat",`${ton(P.kg)} × ${tl(u.f*fiyatM(P.urun)*P.fm)}`]);
+    if(P.mevM)lines.push(["Ekim mevsimi",P.mevM>=1?MEVSIM[mevsim()]+", tam zamanı":`${MEVSIM[mevsim()]}, verim -%${Math.round((1-P.mevM)*100)}`]);
+    else if(D.tip==="bahce")lines.push(["Hasat mevsimi",`${MEVSIM[hasatMev(P.urun)]} (o mevsim bol, kışın az)`]);
+    else if(D.tip==="sera"&&!D.isi)lines.push(["Kış",`Isıtmasız serada kışın verim -%40`]);
+    lines.push([P.tekrar?"Hasat başına ürün":"Beklenen hasat",`${ton(P.kg)} × ${tl(piyasa(P.urun)*P.fm)}`]);
     lines.push([P.tekrar?"Hasat başına ciro":"Tahmini ciro",tl(P.gelir)]);lines.push(["Stopaj sonrası",tl(P.gelir*(1-stopaj()))]);if(P.op)lines.push(["Hasat başına gider",tl(P.op)]);
     lines.push(["İlk hasat",gunTxt(P.gun)+(P.tekrar?` · sonra ${P.tekrar} günde bir`:"")])}
   else if(D.tip==="besi"){lines.push(["Besi süresi",gunTxt(P.gun)]);lines.push(["Satış değeri",`${P.adet} × ${tl(P.birim*fiyatM("et"))}`]);lines.push(["Tahmini ciro",tl(P.gelir*fiyatM("et"))]);lines.push(["Stopaj sonrası",tl(P.gelir*fiyatM("et")*(1-stopaj()))]);lines.push(["Yeni dönem maliyeti",tl(P.yenile)])}
@@ -862,9 +878,9 @@ function spark(arr,w,h,col,label){if(!arr||arr.length<2)return`<div class="spark
 function degisim(k){const a=(S.fg||{})[k];if(!a||a.length<2)return 0;return a.at(-1)/a.at(-2)-1}
 function halOzet(){const ks=Object.keys(URUN);let best=ks[0];for(const k of ks)if(degisim(k)>degisim(best))best=k;const d=degisim(best);return d>0?`${URUN[best].ad} %${(d*100).toFixed(1).replace(".",",")} arttı`:"Bugün fiyatlar sakin"}
 EKRAN.hal=()=>{const sat=k=>S.projeler.filter(p=>p.urun===k&&p.stok>0).reduce((a,p)=>a+p.stok,0);
-  const rows=[...Object.keys(URUN).map(k=>({k,ad:URUN[k].ad,ic:ik(k,22),f:URUN[k].f*fiyatM(k),b:"kg",stok:sat(k)})),{k:"et",ad:"Besi danası (endeks)",ic:ik("besi",22),f:100*fiyatM("et"),b:"puan",stok:0}];
-  return`<div class="note" style="margin-bottom:12px">Fiyatlar her gün değişir. Stoğun varsa fiyat yükselene kadar bekleyebilirsin, ama tüccarlar sabırsızdır.</div>
-  <div class="hal">${rows.map(r=>{const d=degisim(r.k);return`<div class="hrow"><span class="hic">${r.ic}</span><span class="hn"><b>${r.ad}</b>${r.stok?`<small class="pos">${ton(r.stok)} stokta</small>`:""}</span>${spark((S.fg||{})[r.k],90,30,d>=0?"var(--green)":"var(--red)",r.ad+" fiyat seyri")}<span class="hp num"><b>${r.b==="kg"?tl(r.f)+"/kg":nf(r.f)}</b><small class="${d>0?"pos":d<0?"negc":""}">${d>0?"▲":d<0?"▼":"·"} %${Math.abs(d*100).toFixed(1).replace(".",",")}</small></span></div>`}).join("")}</div>`};
+  const rows=[...Object.keys(URUN).map(k=>({k,ad:URUN[k].ad,ic:ik(k,22),f:piyasa(k),b:"kg",stok:sat(k),hm:hasatMev(k)})),{k:"et",ad:"Besi danası (endeks)",ic:ik("besi",22),f:100*fiyatM("et"),b:"puan",stok:0}];
+  return`<div class="note" style="margin-bottom:12px">Fiyatlar her gün değişir. Ürünün hasat mevsiminde fiyat %12 düşer, karşı mevsimde %12 yükselir. Stoğun varsa bekleyebilirsin, ama tüccarlar sabırsızdır.</div>
+  <div class="hal">${rows.map(r=>{const d=degisim(r.k);return`<div class="hrow"><span class="hic">${r.ic}</span><span class="hn"><b>${r.ad}</b>${r.hm!==undefined?`<small class="sub">Hasat: ${MEVSIM[r.hm]}${r.hm===mevsim()?" (fiyat düşük)":(r.hm+2)%4===mevsim()?" (fiyat yüksek)":""}</small>`:""}${r.stok?`<small class="pos">${ton(r.stok)} stokta</small>`:""}</span>${spark((S.fg||{})[r.k],90,30,d>=0?"var(--green)":"var(--red)",r.ad+" fiyat seyri")}<span class="hp num"><b>${r.b==="kg"?tl(r.f)+"/kg":nf(r.f)}</b><small class="${d>0?"pos":d<0?"negc":""}">${d>0?"▲":d<0?"▼":"·"} %${Math.abs(d*100).toFixed(1).replace(".",",")}</small></span></div>`}).join("")}</div>`};
 
 const GOREV=[
   {ad:"İlk araziyi al",d:"Haritadan bir ilçe seç ve tapu al.",ok:()=>S.arsalar.length>=1,o:250000},
@@ -1011,7 +1027,7 @@ let sahneT=0;
 function canli(){const t=now();
   if(Date.now()-sahneT>1000){sahneT=Date.now();document.querySelectorAll("[data-scene]").forEach(e=>{const p=S.projeler.find(x=>x.id===e.dataset.scene);if(p)e.innerHTML=projeSahne(p)})}
   const k=tl(S.kasa);document.querySelectorAll('[data-live="kasa"],[data-live="kasa2"]').forEach(e=>{e.textContent=k;e.classList.toggle("neg",S.kasa<0)});
-  const g=document.querySelector('[data-live="gun"]');if(g)g.textContent=`Gün ${Math.floor(t)+1} · ${GUNLER[Math.floor(t)%7]}`;
+  const g=document.querySelector('[data-live="gun"]');if(g)g.textContent=`${Math.floor(t/YIL)+1}. yıl ${MEVSIM[mevsim(t)]} · Gün ${Math.floor(t)+1}`;
   const gp=document.querySelector('[data-live="gunp"]');if(gp)gp.style.width=((t%1)*100)+"%";
   document.querySelectorAll("[data-prog]").forEach(e=>{const p=S.projeler.find(x=>x.id===e.dataset.prog);if(!p)return;
     const f=p.durum==="kurulum"?(t-p.bas)/p.sure:p.tekrar?(t-p.dongu)/p.tekrar:1;e.style.width=clamp(f*100,0,100)+"%"});
