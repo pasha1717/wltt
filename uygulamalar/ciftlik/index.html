@@ -441,7 +441,11 @@ function yeni(){return{v:1,firma:"Ağa Tarım",kasa:10000000,t:GUN*0.25,gun:0,re
   ihaleler:[],yatirim:{},personel:{},makine:{},ofis:0,krediler:[],not:640,fiyat:{},endeks:1,indirim:0,cark:"",teklifler:[],
   rakip:RAKIP.map((a,i)=>({ad:a,v:Math.round(8e6+i*4.5e6+Math.random()*3e6)})),stat:{satis:0,ihale:0,hasat:0},id:1}}
 let S;
-try{const r=localStorage.getItem(SAVE_KEY);S=r?Object.assign(yeni(),JSON.parse(r)):yeni()}catch(e){S=yeni()}
+try{const r=localStorage.getItem(SAVE_KEY);const ham=r?JSON.parse(r):null;
+  // Eski sürümlerde gün 45 sn idi; zamanı yeni gün uzunluğuna çevir.
+  if(ham&&!ham.gunMs&&ham.t&&ham.gun===Math.floor(ham.t/45000)&&GUN!==45000)ham.t=ham.t*GUN/45000;
+  S=ham?Object.assign(yeni(),ham):yeni()}catch(e){S=yeni()}
+S.gunMs=GUN;
 function kaydet(){S.real=Date.now();try{localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
 const uid=()=>"x"+(S.id++);
 function para(n){S.kasa+=n}
@@ -550,11 +554,11 @@ function mevsimBildir(){const m=mevsim(S.gun+.01);const ek=Object.keys(EK).filte
   const ha=Object.keys(URUN).filter(k=>hasatMev(k)===m).slice(0,4).map(k=>URUN[k].ad.toLowerCase());
   const ek2=ek.length?` Ekim zamanı: ${ek.join(", ")}.`:m===3?" Açık tarlada verim düşük; sera ve hayvancılık sürer.":"";
   toast(`${MEVSIM[m]} geldi.${ek2}${ha.length?` Hasadı gelen ${ha.join(", ")} bu mevsim ucuzlar.`:""}`,"ev");dirty=1}
-function stokCek(u,kg){let al=0;for(const p of S.projeler){if(al>=kg)break;if(p.urun!==u||!(p.stok>0))continue;const q=Math.min(p.stok,kg-al);p.stok-=q;al+=q;
+function stokCek(u,kg){let al=0;stokCek.pay=0;for(const p of S.projeler){if(al>=kg)break;if(p.urun!==u||!(p.stok>0))continue;const q=Math.min(p.stok,kg-al);p.stok-=q;al+=q;stokCek.pay+=q*(p.yari||0);
     p.musteri.forEach(m=>m.qty=Math.min(m.qty,p.stok));p.musteri=p.musteri.filter(m=>m.qty>0);
     if(p.stok<=0&&p.durum==="satista"){p.durum="bitti";p.bitti=now();log(p,"Ürünün tamamı fabrikaya gitti. Arazi yeni sezona hazır.")}}return al}
 function tesisGunu(){S.tesis=S.tesis||{};for(const k in TESIS){const t=TESIS[k],o=S.tesis[k];if(!o||!t.gir)continue;
-  const own=stokCek(t.gir,t.kap),buy=o.hal?t.kap-own:0,cost=buy*piyasa(t.gir),out=(own+buy)*t.oran,gelir=out*t.f*fiyatM(t.gir)*(1-stopaj());
+  const own=stokCek(t.gir,t.kap),buy=o.hal?t.kap-own:0,cost=buy*piyasa(t.gir),out=(own+buy)*t.oran,gelir=out*t.f*fiyatM(t.gir)*(1-stopaj())*(1-(own+buy?stokCek.pay/(own+buy):0));
   para(gelir-cost);o.son={own,buy,out,gelir:Math.round(gelir),cost:Math.round(cost),g:S.gun}}}
 function gunluk(){
   tesisGunu();

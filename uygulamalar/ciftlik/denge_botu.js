@@ -1,6 +1,6 @@
 const {chromium}=require('playwright');const strat=process.argv[2]||'karma',GUNS=+process.argv[3]||200;
 (async()=>{const b=await chromium.launch();const pg=await b.newPage();const errs=[];pg.on('pageerror',e=>errs.push(e.message));
-await pg.goto('file:///home/user/wltt/uygulamalar/ciftlik/index.html');await pg.waitForTimeout(300);
+await pg.goto('file://'+require('path').join(__dirname,'index.html'));await pg.waitForTimeout(300);
 const r=await pg.evaluate(([strat,GUNS])=>{clearInterval(1);for(let i=1;i<50;i++)clearInterval(i);pencere(null);toast=()=>{};
  const log=[],mil={};const rec=(k)=>{if(!mil[k])mil[k]=Math.round(now())};
  function enIyiPlan(a){let best=null;
