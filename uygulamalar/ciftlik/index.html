@@ -223,6 +223,7 @@ input[type=range]{width:100%;accent-color:var(--green);height:22px}
 @keyframes tin{from{opacity:0;transform:translateY(8px)}}
 
 .spark{display:block;flex:0 0 auto}
+.sparkw{display:flex;flex-direction:column;align-items:flex-end;gap:2px}.sparkw span{font-size:9.5px;color:var(--dim);letter-spacing:.06em}
 .empty-s{display:grid;place-items:center;border:1px dashed var(--line);border-radius:8px;font-size:9.5px;color:var(--dim);text-align:center;padding:2px}
 .hal{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
 .hrow{display:grid;grid-template-columns:34px minmax(0,1fr) 90px 96px;gap:10px;align-items:center;padding:9px 12px;border-top:1px solid var(--line)}
@@ -267,27 +268,27 @@ const BASLANGIC_IL=42;
 
 // Ürünler. kg: dönüm başına verim, f: ₺/kg, mal: dönüm başına gider, gun: kurulumdan ilk hasada gün
 const URUN={
-  bugday:{ad:"Buğday",ic:"🌾",tip:"tarla",kg:460,f:13,mal:3200,gun:4,sulu:0,b:["ic","mar","gd","dog"],il:[42,26,6,21],renk:"#d8b552"},
-  arpa:{ad:"Arpa",ic:"🌾",tip:"tarla",kg:480,f:11,mal:2800,gun:3.5,sulu:0,b:["ic","dog","gd"],il:[42,6,51,40],renk:"#cdb86a"},
-  misir:{ad:"Mısır",ic:"🌽",tip:"tarla",kg:1240,f:12,mal:7200,gun:4.5,sulu:1,b:["akd","kar","ege","mar"],il:[1,80,55,72],renk:"#e1c440"},
-  aycicegi:{ad:"Ayçiçeği",ic:"🌻",tip:"tarla",kg:470,f:25,mal:4300,gun:4,sulu:0,b:["mar"],il:[22,39,59],renk:"#f0c22b"},
-  pamuk:{ad:"Pamuk",ic:"☁️",tip:"tarla",kg:400,f:38,mal:11500,gun:5.5,sulu:1,b:["gd","ege","akd"],il:[63,9,1,21],renk:"#eef0ea"},
-  pancar:{ad:"Şeker pancarı",ic:"🫜",tip:"tarla",kg:5400,f:3.6,mal:15500,gun:5,sulu:1,b:["ic","mar"],il:[42,26,3,38],renk:"#6aa34c"},
-  mercimek:{ad:"Kırmızı mercimek",ic:"🫘",tip:"tarla",kg:120,f:48,mal:3600,gun:3.5,sulu:0,b:["gd"],il:[63,47,2],renk:"#c9773e"},
-  celtik:{ad:"Çeltik",ic:"🍚",tip:"tarla",kg:830,f:24,mal:10500,gun:5,sulu:1,b:["mar","kar"],il:[22,57,17],renk:"#a7c45a"},
-  patates:{ad:"Patates",ic:"🥔",tip:"tarla",kg:2700,f:12,mal:28000,gun:4.5,sulu:1,b:["ic","akd"],il:[51,35,42],renk:"#5f9a46"},
-  domates:{ad:"Domates",ic:"🍅",tip:"sera",kg:6600,f:20,mal:110000,gun:4,tekrar:4,b:["akd"],il:[7,33,48],renk:"#e0503a"},
-  biber:{ad:"Biber",ic:"🫑",tip:"sera",kg:4600,f:32,mal:125000,gun:4,tekrar:4,b:["akd","ege"],il:[7,33,31],renk:"#4fae3c"},
-  cilek:{ad:"Çilek",ic:"🍓",tip:"sera",kg:1800,f:95,mal:150000,gun:4,tekrar:4,b:["akd","mar"],il:[33,9,16],renk:"#e2394d"},
-  zeytin:{ad:"Zeytin",ic:"🫒",tip:"bahce",kg:410,f:65,mal:12000,fidan:45000,gun:8,tekrar:6,b:["ege","mar","akd"],il:[10,9,35,31],renk:"#7d8f3a"},
-  uzum:{ad:"Üzüm",ic:"🍇",tip:"bahce",kg:1040,f:28,mal:16000,fidan:55000,gun:7,tekrar:5,b:["ege","gd"],il:[45,20,35],renk:"#7b4a8f"},
-  incir:{ad:"İncir",ic:"🟣",tip:"bahce",kg:490,f:70,mal:18000,fidan:60000,gun:8,tekrar:6,b:["ege"],il:[9,35],renk:"#6d5a8a"},
-  findik:{ad:"Fındık",ic:"🌰",tip:"bahce",kg:130,f:170,mal:9000,fidan:50000,gun:9,tekrar:6,b:["kar"],il:[28,52,61,55],renk:"#8a6235"},
-  cay:{ad:"Çay",ic:"🍃",tip:"bahce",kg:860,f:23,mal:12000,fidan:40000,gun:7,tekrar:4,b:["kar"],il:[53,61,8],renk:"#3f8f4a"},
-  kayisi:{ad:"Kayısı",ic:"🍑",tip:"bahce",kg:510,f:45,mal:16000,fidan:55000,gun:8,tekrar:6,b:["dog","ic"],il:[44,23],renk:"#f0a040"},
-  portakal:{ad:"Portakal",ic:"🍊",tip:"bahce",kg:2400,f:16,mal:22000,fidan:60000,gun:8,tekrar:6,b:["akd"],il:[7,33,1,31],renk:"#f08a24"},
-  fistik:{ad:"Antep fıstığı",ic:"🥜",tip:"bahce",kg:60,f:420,mal:14000,fidan:65000,gun:10,tekrar:7,b:["gd"],il:[27,63,2],renk:"#9dbb5a"},
-  kiraz:{ad:"Kiraz",ic:"🍒",tip:"bahce",kg:440,f:85,mal:21000,fidan:70000,gun:8,tekrar:6,b:["ege","ic","mar"],il:[3,32,42,45],renk:"#b5182f"}
+  bugday:{ad:"Buğday",ic:"🌾",tip:"tarla",kg:530,f:13,mal:3200,gun:4,sulu:0,b:["ic","mar","gd","dog"],il:[42,26,6,21],renk:"#d8b552"},
+  arpa:{ad:"Arpa",ic:"🌾",tip:"tarla",kg:550,f:11,mal:2800,gun:3.5,sulu:0,b:["ic","dog","gd"],il:[42,6,51,40],renk:"#cdb86a"},
+  misir:{ad:"Mısır",ic:"🌽",tip:"tarla",kg:1430,f:12,mal:7200,gun:4.5,sulu:1,b:["akd","kar","ege","mar"],il:[1,80,55,72],renk:"#e1c440"},
+  aycicegi:{ad:"Ayçiçeği",ic:"🌻",tip:"tarla",kg:540,f:25,mal:4300,gun:4,sulu:0,b:["mar"],il:[22,39,59],renk:"#f0c22b"},
+  pamuk:{ad:"Pamuk",ic:"☁️",tip:"tarla",kg:460,f:38,mal:11500,gun:5.5,sulu:1,b:["gd","ege","akd"],il:[63,9,1,21],renk:"#eef0ea"},
+  pancar:{ad:"Şeker pancarı",ic:"🫜",tip:"tarla",kg:6200,f:3.6,mal:15500,gun:5,sulu:1,b:["ic","mar"],il:[42,26,3,38],renk:"#6aa34c"},
+  mercimek:{ad:"Kırmızı mercimek",ic:"🫘",tip:"tarla",kg:140,f:48,mal:3600,gun:3.5,sulu:0,b:["gd"],il:[63,47,2],renk:"#c9773e"},
+  celtik:{ad:"Çeltik",ic:"🍚",tip:"tarla",kg:950,f:24,mal:10500,gun:5,sulu:1,b:["mar","kar"],il:[22,57,17],renk:"#a7c45a"},
+  patates:{ad:"Patates",ic:"🥔",tip:"tarla",kg:3100,f:12,mal:28000,gun:4.5,sulu:1,b:["ic","akd"],il:[51,35,42],renk:"#5f9a46"},
+  domates:{ad:"Domates",ic:"🍅",tip:"sera",kg:7600,f:20,mal:110000,gun:4,tekrar:4,b:["akd"],il:[7,33,48],renk:"#e0503a"},
+  biber:{ad:"Biber",ic:"🫑",tip:"sera",kg:5300,f:32,mal:125000,gun:4,tekrar:4,b:["akd","ege"],il:[7,33,31],renk:"#4fae3c"},
+  cilek:{ad:"Çilek",ic:"🍓",tip:"sera",kg:2100,f:95,mal:150000,gun:4,tekrar:4,b:["akd","mar"],il:[33,9,16],renk:"#e2394d"},
+  zeytin:{ad:"Zeytin",ic:"🫒",tip:"bahce",kg:470,f:65,mal:12000,fidan:45000,gun:8,tekrar:6,b:["ege","mar","akd"],il:[10,9,35,31],renk:"#7d8f3a"},
+  uzum:{ad:"Üzüm",ic:"🍇",tip:"bahce",kg:1200,f:28,mal:16000,fidan:55000,gun:7,tekrar:5,b:["ege","gd"],il:[45,20,35],renk:"#7b4a8f"},
+  incir:{ad:"İncir",ic:"🟣",tip:"bahce",kg:560,f:70,mal:18000,fidan:60000,gun:8,tekrar:6,b:["ege"],il:[9,35],renk:"#6d5a8a"},
+  findik:{ad:"Fındık",ic:"🌰",tip:"bahce",kg:150,f:170,mal:9000,fidan:50000,gun:9,tekrar:6,b:["kar"],il:[28,52,61,55],renk:"#8a6235"},
+  cay:{ad:"Çay",ic:"🍃",tip:"bahce",kg:990,f:23,mal:12000,fidan:40000,gun:7,tekrar:4,b:["kar"],il:[53,61,8],renk:"#3f8f4a"},
+  kayisi:{ad:"Kayısı",ic:"🍑",tip:"bahce",kg:590,f:45,mal:16000,fidan:55000,gun:8,tekrar:6,b:["dog","ic"],il:[44,23],renk:"#f0a040"},
+  portakal:{ad:"Portakal",ic:"🍊",tip:"bahce",kg:2800,f:16,mal:22000,fidan:60000,gun:8,tekrar:6,b:["akd"],il:[7,33,1,31],renk:"#f08a24"},
+  fistik:{ad:"Antep fıstığı",ic:"🥜",tip:"bahce",kg:70,f:420,mal:14000,fidan:65000,gun:10,tekrar:7,b:["gd"],il:[27,63,2],renk:"#9dbb5a"},
+  kiraz:{ad:"Kiraz",ic:"🍒",tip:"bahce",kg:510,f:85,mal:21000,fidan:70000,gun:8,tekrar:6,b:["ege","ic","mar"],il:[3,32,42,45],renk:"#b5182f"}
 };
 const ET={ad:"Besi danası",ic:"🐂"};
 const TIPLER={
@@ -474,7 +475,7 @@ function plan(D){
     P.base=P.adet*(ic+22000)+sc;P.gun=3*gunM;P.net=P.adet*(ic+22000)*.015*sm*hayvanFit("sut",a.il)*hayM;P.litre=P.adet*[12,22,32][D.irk];
   }else if(D.tip==="besi"){
     const max=a.donum*8;P.adet=clamp(D.adet,1,max);P.max=max;const dc=[42000,65000,90000][D.irk],ye=[7000,8500,10000][D.irk];
-    P.base=P.adet*(dc+ye+14000);P.yenile=P.adet*(dc+ye);P.gun=[8,7,6][D.irk]*gunM;P.birim=(dc+ye)*(1+.0145*[8,7,6][D.irk]*hayvanFit("besi",a.il)*hayM);P.gelir=P.adet*P.birim;
+    P.base=P.adet*(dc+ye+14000);P.yenile=P.adet*(dc+ye);P.gun=[8,7,6][D.irk]*gunM;P.birim=(dc+ye)*(1+.0145*[8,7,6][D.irk]*hayvanFit("besi",a.il)*hayM)/.84;P.gelir=P.adet*P.birim;
   }else if(D.tip==="kanatli"){
     const max=a.donum*2;P.adet=clamp(D.adet,1,max);P.max=max;const kc=[70000,130000][D.kumes];
     P.base=P.adet*(95000+kc);P.gun=2.5*gunM;P.net=P.adet*(95000+kc)*.016*(D.kumes?1.12:1)*hayM;
@@ -573,7 +574,7 @@ function ihaleUret(){const ops=IHALE_T.filter(x=>x.m<=S.ofis+(Math.random()<.2?1
   const bedel=Math.round(rnd(T.b[0],T.b[1])/10000)*10000;
   S.ihaleler.push({id:uid(),ad:T.ad,kurum:T.k.replace("{il}",il.n),il:il.p,bedel,oran:rnd(.55,.72),sure:T.s,bitis:now()+rnd(1.2,3),m:T.m,teklif:0})}
 function ihaleSonuc(ih){
-  const rak=[...RAKIP].sort(()=>Math.random()-.5).slice(0,3+Math.floor(Math.random()*3)).map(a=>({ad:a,t:Math.round(ih.bedel*rnd(.76,1)/1000)*1000}));
+  const rak=[...RAKIP].sort(()=>Math.random()-.5).slice(0,3+Math.floor(Math.random()*3)).map(a=>({ad:a,t:Math.round(ih.bedel*rnd(.68,1)/1000)*1000}));
   ih.rakip=rak;const minR=Math.min(...rak.map(r=>r.t));
   if(!ih.teklif){ih.sonuc="yok";return}
   para(ih.teminat);
@@ -653,7 +654,7 @@ EKRAN.ana=()=>{const kr=S.krediler.slice().sort((a,b)=>a.sonraki-b.sonraki)[0];c
   const bos=S.arsalar.filter(a=>!S.projeler.some(p=>p.arsa===a.id&&p.durum!=="bitti")).length;
   return`<div class="cols"><div class="col">
     <div class="firm"><h2>${esc(S.firma)}</h2><div class="sub">Yönetim paneli · Kredi notu <b>${S.not} (${notAd(S.not)})</b></div></div>
-    <div class="kasacard"><div class="between"><div><div class="lbl">Kasa</div><div class="big num" data-live="kasa2"></div></div>${spark(S.kg||[],150,46,"var(--green)","Son 30 gün servet")}</div>
+    <div class="kasacard"><div class="between"><div><div class="lbl">Kasa</div><div class="big num" data-live="kasa2"></div></div><div class="sparkw">${spark(S.kg||[],150,46,"var(--green)","Son 30 gün servet")}<span>Servet · 30 gün</span></div></div>
       <div class="trio"><div><span class="lbl">Borç</span><b class="negc num">${tl(borc(),1)}</b></div><div><span class="lbl">Günlük gelir</span><b class="pos num">+${tl(gunlukGelir(),1)}</b></div><div><span class="lbl">Günlük maaş</span><b class="negc num">-${tl(gunlukMaas(),1)}</b></div></div></div>
     ${kr?`<button class="taksit" data-a="git" data-s="banka"><span><b>${kr.banka} taksiti</b> · ${tl(kr.taksit)} · <span data-kr="${kr.id}"></span></span><span>›</span></button>`:""}
     <div class="tiles">
@@ -747,15 +748,15 @@ function sceneSVG(D,P,st){st=st||{f:1,faz:"plan"};const c=URUN[D.urun]||{renk:"#
       s+=`<path d="M${x+3} 150 V112 Q${x+w/2} 84 ${x+w-3} 112 V150z" fill="${["#e8f2f2","#cfe8ee","#d8eef0"][D.seraTip||0]}" stroke="#9fb9bf" opacity=".93"/><path d="M${x+w/2} 150V92" stroke="#b5c9cc"/>`;
       const plants=faz!=="kurulum";if(plants)for(let k=0;k<4;k++){const px=x+w*(.18+k*.21);s+=`<rect x="${px-.6}" y="128" width="1.2" height="20" fill="#4f8a3a"/><circle cx="${px}" cy="130" r="4" fill="#5fa04a"/>${faz==="uretim"&&f<.4?"":`<circle cx="${px+2}" cy="136" r="2.6" fill="${c.renk}"/>`}`}}
     if(ins)s+=traktorSVG(40+f*700,130)}
-  else{const n=Math.min(40,P.adet||1),col=D.tip==="kanatli"?"#f4efe4":D.tip==="sut"?"#f2f2f2":"#8a5a34";const built=faz==="kurulum"?f:1;
+  else{const n=Math.min(40,P.adet||1),col=D.tip==="kanatli"?"#f4efe4":D.tip==="sut"?"#f2f2f2":"#8a5a34";const besi=D.tip==="besi",built=faz==="kurulum"&&!besi?f:1;
     const bh=56*Math.min(1,built*1.4);s+=`<rect x="40" y="${144-bh}" width="150" height="${bh}" fill="#9c4f35"/>`;
     if(built>.7)s+=`<path d="M32 90 L115 58 L198 90z" fill="#6b3324"/><rect x="100" y="112" width="30" height="32" fill="#f1e5c8"/><rect x="58" y="102" width="18" height="14" fill="#f6e3a8"/><rect x="154" y="102" width="18" height="14" fill="#f6e3a8"/>`;
     else s+=`<path d="M40 ${144-bh}V60M190 ${144-bh}V60M40 70H190M40 100H190" stroke="#b9a27a" stroke-width="2"/>`;
     s+=`<path d="M205 150 V104 H385 V150" fill="none" stroke="#c9b48a" stroke-width="2"/><path d="M205 120 H385" stroke="#c9b48a"/>`;
     if(D.tip==="kanatli"&&built>.7)s+=`<rect x="215" y="96" width="160" height="44" fill="#d9c9a0"/><path d="M209 98 L295 74 L381 98z" fill="#a08a5a"/>`;
-    const goster=faz!=="kurulum"||f>.8;if(goster)for(let i=0;i<n;i++){const x=218+(i%10)*16.5,y=118+Math.floor(i/10)*8;
+    const goster=besi||faz!=="kurulum"||f>.8;if(goster)for(let i=0;i<n;i++){const x=218+(i%10)*16.5,y=118+Math.floor(i/10)*8;
       s+=D.tip==="kanatli"?`<circle cx="${x}" cy="${y+26}" r="2.6" fill="${col}" stroke="#c9b48a" stroke-width=".4"/>`:`<ellipse cx="${x}" cy="${y+12}" rx="6.5" ry="4" fill="${col}" stroke="#333" stroke-width=".6"/><rect x="${x-4}" y="${y+15}" width="1.4" height="3" fill="#333"/><rect x="${x+3}" y="${y+15}" width="1.4" height="3" fill="#333"/>${D.tip==="sut"?`<circle cx="${x+1.5}" cy="${y+11}" r="1.6" fill="#222"/>`:""}`}
-    if(ins)s+=traktorSVG(30+f*600,140)}
+    if(ins&&!besi)s+=traktorSVG(30+f*600,140)}
   return s+`</svg>`}
 function traktorSVG(x,y){x=Math.min(x,330);return`<g transform="translate(${x} ${y})"><rect x="0" y="-14" width="26" height="12" rx="2" fill="#d9442b"/><rect x="14" y="-26" width="12" height="13" fill="#d9442b"/><rect x="16" y="-24" width="8" height="8" fill="#bfe1ee"/><circle cx="20" cy="0" r="8" fill="#222"/><circle cx="20" cy="0" r="3" fill="#e9b949"/><circle cx="3" cy="2" r="5" fill="#222"/><circle cx="3" cy="2" r="2" fill="#e9b949"/></g>`}
 function projeSahne(p){if(!p.D)return"";const P={alan:p.alan,adet:p.adet};let faz="uretim",f=1;
@@ -786,9 +787,9 @@ EKRAN.tasarla=p=>{const D=p.D,a=S.arsalar.find(x=>x.id===D.arsa),P=plan(D);
 function ozet(D,P){const lines=[];
   if(P.urun){const u=URUN[P.urun];lines.push(["Bölge uyumu",P.fit>1?"Yöresel ürün (+%20)":P.fit<1?"Uygun değil (-%40)":"Uygun"]);
     lines.push([P.tekrar?"Hasat başına ürün":"Beklenen hasat",`${ton(P.kg)} × ${tl(u.f*fiyatM(P.urun)*P.fm)}`]);
-    lines.push([P.tekrar?"Hasat başına ciro":"Tahmini ciro",tl(P.gelir)]);if(P.op)lines.push(["Hasat başına gider",tl(P.op)]);
+    lines.push([P.tekrar?"Hasat başına ciro":"Tahmini ciro",tl(P.gelir)]);lines.push(["Stopaj sonrası",tl(P.gelir*(1-stopaj()))]);if(P.op)lines.push(["Hasat başına gider",tl(P.op)]);
     lines.push(["İlk hasat",gunTxt(P.gun)+(P.tekrar?` · sonra ${P.tekrar} günde bir`:"")])}
-  else if(D.tip==="besi"){lines.push(["Besi süresi",gunTxt(P.gun)]);lines.push(["Satış değeri",`${P.adet} × ${tl(P.birim*fiyatM("et"))}`]);lines.push(["Tahmini ciro",tl(P.gelir*fiyatM("et"))]);lines.push(["Yeni dönem maliyeti",tl(P.yenile)])}
+  else if(D.tip==="besi"){lines.push(["Besi süresi",gunTxt(P.gun)]);lines.push(["Satış değeri",`${P.adet} × ${tl(P.birim*fiyatM("et"))}`]);lines.push(["Tahmini ciro",tl(P.gelir*fiyatM("et"))]);lines.push(["Stopaj sonrası",tl(P.gelir*fiyatM("et")*(1-stopaj()))]);lines.push(["Yeni dönem maliyeti",tl(P.yenile)])}
   else{lines.push(["Kurulum",gunTxt(P.gun)]);if(P.litre)lines.push(["Günlük süt",nf(P.litre)+" L"]);lines.push(["Günlük net gelir",`<span class="pos">+${tl(P.net)}</span>`]);lines.push(["Geri dönüş",Math.round(P.toplam/P.net)+" gün"])}
   return`<div class="panel sum"><div class="between"><b>${P.alan?P.alan+" dönüm":P.adet+(D.tip==="kanatli"?" bin tavuk":" baş")} · ${gunTxt(P.gun)}</b>${S.makine.traktor&&["tarla","bahce"].includes(D.tip)?'<span class="tag g">Traktör -%10</span>':""}</div>
     ${lines.map(l=>`<div class="sumline"><span>${l[0]}</span><b class="num">${l[1]}</b></div>`).join("")}
@@ -957,7 +958,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b
   case"arsasat2":{const i=S.arsalar.findIndex(x=>x.id===d.id);const v=Math.round(arsaDeger(S.arsalar[i])*.95);S.arsalar.splice(i,1);para(v);S.projeler=S.projeler.filter(p=>p.arsa!==d.id||p.durum!=="bitti");pencere(null);toast(`Arazi satıldı: +${tl(v,1)}`);ciz(1);break}
   case"teklif":{const ih=S.ihaleler.find(x=>x.id===d.id);const v=ih.teklif||Math.round(ih.bedel*.9/1000)*1000;
     pencere(`<h3>${esc(ih.ad)}</h3><div class="sub">${esc(ih.kurum)} · ${ih.sure} günlük iş</div><div class="sumline"><span>Tahmini bedel</span><b class="num">${tl(ih.bedel)}</b></div><div class="sumline"><span>Tahmini maliyet</span><b class="num">Genelde %55-%75</b></div>
-      ${sl("ihv","Teklifin",v,Math.round(ih.bedel*.6/1000)*1000,Math.round(ih.bedel*1.1/1000)*1000,1000,tl(v))}<div class="note">Teminat: ${tl(ih.bedel*.03)}. Rakipler genelde bedelin %76 ile %100'ü arasında teklif verir. Kazanırsan maliyet işe başlarken kasadan çıkar, hakediş iş bitince ödenir.</div>
+      ${sl("ihv","Teklifin",v,Math.round(ih.bedel*.6/1000)*1000,Math.round(ih.bedel*1.1/1000)*1000,1000,tl(v))}<div class="note">Teminat: ${tl(ih.bedel*.03)}. Rakipler çoğunlukla bedelin %70 ile %100'ü arasında teklif verir; düşük teklif kazanma şansını artırır ama maliyeti karşılamayabilir. Kazanırsan maliyet işe başlarken kasadan çıkar, hakediş iş bitince ödenir.</div>
       <div class="row"><button class="btn" data-a="kapatm">Vazgeç</button><button class="btn gold" data-a="teklif2" data-id="${ih.id}">Teklifi ver</button></div>`);M={t:"ih",id:ih.id};break}
   case"teklif2":{const ih=S.ihaleler.find(x=>x.id===d.id);const v=+$("#ihv").value;if(!ih.teklif){const tm=Math.round(ih.bedel*.03);if(!odeme(tm))break;ih.teminat=tm}ih.teklif=v;S.stat.teklif=(S.stat.teklif||0)+1;pencere(null);toast("Teklifin zarfa kondu.");ciz(1);break}
   case"vade":EKRAN.banka.v=+d.v;document.querySelectorAll("#vade button").forEach(x=>x.classList.toggle("on",x===b));krediHesap();break;
