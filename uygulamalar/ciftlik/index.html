@@ -256,8 +256,8 @@ input[type=range]{width:100%;accent-color:var(--green);height:22px}
 <script>
 "use strict";
 /* ================= Sabitler ================= */
-const GUN=45000;                 // bir oyun günü (ms)
-const OFFLINE_MAX=30;            // kapalıyken en çok işlenen gün
+const GUN=30000;                 // bir oyun günü (ms)
+const OFFLINE_MAX=60;            // kapalıyken en çok işlenen gün
 const SAVE_KEY="toprakAgasi.v1";
 const GUNLER=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
 const BOLGE={"marmara":"Marmara","ege":"Ege","akdeniz":"Akdeniz","ic-anadolu":"İç Anadolu","karadeniz":"Karadeniz","dogu-anadolu":"Doğu Anadolu","guneydogu-anadolu":"Güneydoğu Anadolu"};
@@ -268,35 +268,35 @@ const BASLANGIC_IL=42;
 
 // Ürünler. kg: dönüm başına verim, f: ₺/kg, mal: dönüm başına gider, gun: kurulumdan ilk hasada gün
 const URUN={
-  bugday:{ad:"Buğday",ic:"🌾",tip:"tarla",kg:530,f:13,mal:3200,gun:4,sulu:0,b:["ic","mar","gd","dog"],il:[42,26,6,21],renk:"#d8b552"},
-  arpa:{ad:"Arpa",ic:"🌾",tip:"tarla",kg:550,f:11,mal:2800,gun:3.5,sulu:0,b:["ic","dog","gd"],il:[42,6,51,40],renk:"#cdb86a"},
-  misir:{ad:"Mısır",ic:"🌽",tip:"tarla",kg:1430,f:12,mal:7200,gun:4.5,sulu:1,b:["akd","kar","ege","mar"],il:[1,80,55,72],renk:"#e1c440"},
-  aycicegi:{ad:"Ayçiçeği",ic:"🌻",tip:"tarla",kg:540,f:25,mal:4300,gun:4,sulu:0,b:["mar"],il:[22,39,59],renk:"#f0c22b"},
-  pamuk:{ad:"Pamuk",ic:"☁️",tip:"tarla",kg:460,f:38,mal:11500,gun:5.5,sulu:1,b:["gd","ege","akd"],il:[63,9,1,21],renk:"#eef0ea"},
-  pancar:{ad:"Şeker pancarı",ic:"🫜",tip:"tarla",kg:6200,f:3.6,mal:15500,gun:5,sulu:1,b:["ic","mar"],il:[42,26,3,38],renk:"#6aa34c"},
-  mercimek:{ad:"Kırmızı mercimek",ic:"🫘",tip:"tarla",kg:140,f:48,mal:3600,gun:3.5,sulu:0,b:["gd"],il:[63,47,2],renk:"#c9773e"},
-  celtik:{ad:"Çeltik",ic:"🍚",tip:"tarla",kg:950,f:24,mal:10500,gun:5,sulu:1,b:["mar","kar"],il:[22,57,17],renk:"#a7c45a"},
-  patates:{ad:"Patates",ic:"🥔",tip:"tarla",kg:3100,f:12,mal:28000,gun:4.5,sulu:1,b:["ic","akd"],il:[51,35,42],renk:"#5f9a46"},
-  domates:{ad:"Domates",ic:"🍅",tip:"sera",kg:7600,f:20,mal:110000,gun:4,tekrar:4,b:["akd"],il:[7,33,48],renk:"#e0503a"},
-  biber:{ad:"Biber",ic:"🫑",tip:"sera",kg:5300,f:32,mal:125000,gun:4,tekrar:4,b:["akd","ege"],il:[7,33,31],renk:"#4fae3c"},
-  cilek:{ad:"Çilek",ic:"🍓",tip:"sera",kg:2100,f:95,mal:150000,gun:4,tekrar:4,b:["akd","mar"],il:[33,9,16],renk:"#e2394d"},
-  zeytin:{ad:"Zeytin",ic:"🫒",tip:"bahce",kg:470,f:65,mal:12000,fidan:45000,gun:8,tekrar:6,b:["ege","mar","akd"],il:[10,9,35,31],renk:"#7d8f3a"},
-  uzum:{ad:"Üzüm",ic:"🍇",tip:"bahce",kg:1200,f:28,mal:16000,fidan:55000,gun:7,tekrar:5,b:["ege","gd"],il:[45,20,35],renk:"#7b4a8f"},
-  incir:{ad:"İncir",ic:"🟣",tip:"bahce",kg:560,f:70,mal:18000,fidan:60000,gun:8,tekrar:6,b:["ege"],il:[9,35],renk:"#6d5a8a"},
-  findik:{ad:"Fındık",ic:"🌰",tip:"bahce",kg:150,f:170,mal:9000,fidan:50000,gun:9,tekrar:6,b:["kar"],il:[28,52,61,55],renk:"#8a6235"},
-  cay:{ad:"Çay",ic:"🍃",tip:"bahce",kg:990,f:23,mal:12000,fidan:40000,gun:7,tekrar:4,b:["kar"],il:[53,61,8],renk:"#3f8f4a"},
-  kayisi:{ad:"Kayısı",ic:"🍑",tip:"bahce",kg:590,f:45,mal:16000,fidan:55000,gun:8,tekrar:6,b:["dog","ic"],il:[44,23],renk:"#f0a040"},
-  portakal:{ad:"Portakal",ic:"🍊",tip:"bahce",kg:2800,f:16,mal:22000,fidan:60000,gun:8,tekrar:6,b:["akd"],il:[7,33,1,31],renk:"#f08a24"},
-  fistik:{ad:"Antep fıstığı",ic:"🥜",tip:"bahce",kg:70,f:420,mal:14000,fidan:65000,gun:10,tekrar:7,b:["gd"],il:[27,63,2],renk:"#9dbb5a"},
-  kiraz:{ad:"Kiraz",ic:"🍒",tip:"bahce",kg:510,f:85,mal:21000,fidan:70000,gun:8,tekrar:6,b:["ege","ic","mar"],il:[3,32,42,45],renk:"#b5182f"}
+  bugday:{ad:"Buğday",ic:"🌾",tip:"tarla",kg:640,f:13,mal:3200,gun:4,sulu:0,b:["ic","mar","gd","dog"],il:[42,26,6,21],renk:"#d8b552"},
+  arpa:{ad:"Arpa",ic:"🌾",tip:"tarla",kg:660,f:11,mal:2800,gun:3.5,sulu:0,b:["ic","dog","gd"],il:[42,6,51,40],renk:"#cdb86a"},
+  misir:{ad:"Mısır",ic:"🌽",tip:"tarla",kg:1790,f:12,mal:7200,gun:4.5,sulu:1,b:["akd","kar","ege","mar"],il:[1,80,55,72],renk:"#e1c440"},
+  aycicegi:{ad:"Ayçiçeği",ic:"🌻",tip:"tarla",kg:700,f:25,mal:4300,gun:4,sulu:0,b:["mar"],il:[22,39,59],renk:"#f0c22b"},
+  pamuk:{ad:"Pamuk",ic:"☁️",tip:"tarla",kg:510,f:38,mal:11500,gun:5.5,sulu:1,b:["gd","ege","akd"],il:[63,9,1,21],renk:"#eef0ea"},
+  pancar:{ad:"Şeker pancarı",ic:"🫜",tip:"tarla",kg:6800,f:3.6,mal:15500,gun:5,sulu:1,b:["ic","mar"],il:[42,26,3,38],renk:"#6aa34c"},
+  mercimek:{ad:"Kırmızı mercimek",ic:"🫘",tip:"tarla",kg:160,f:48,mal:3600,gun:3.5,sulu:0,b:["gd"],il:[63,47,2],renk:"#c9773e"},
+  celtik:{ad:"Çeltik",ic:"🍚",tip:"tarla",kg:1170,f:24,mal:10500,gun:5,sulu:1,b:["mar","kar"],il:[22,57,17],renk:"#a7c45a"},
+  patates:{ad:"Patates",ic:"🥔",tip:"tarla",kg:3300,f:12,mal:28000,gun:4.5,sulu:1,b:["ic","akd"],il:[51,35,42],renk:"#5f9a46"},
+  domates:{ad:"Domates",ic:"🍅",tip:"sera",kg:8300,f:20,mal:110000,gun:4,tekrar:4,b:["akd"],il:[7,33,48],renk:"#e0503a"},
+  biber:{ad:"Biber",ic:"🫑",tip:"sera",kg:5700,f:32,mal:125000,gun:4,tekrar:4,b:["akd","ege"],il:[7,33,31],renk:"#4fae3c"},
+  cilek:{ad:"Çilek",ic:"🍓",tip:"sera",kg:2200,f:95,mal:150000,gun:4,tekrar:4,b:["akd","mar"],il:[33,9,16],renk:"#e2394d"},
+  zeytin:{ad:"Zeytin",ic:"🫒",tip:"bahce",kg:600,f:65,mal:12000,fidan:45000,gun:8,tekrar:6,b:["ege","mar","akd"],il:[10,9,35,31],renk:"#7d8f3a"},
+  uzum:{ad:"Üzüm",ic:"🍇",tip:"bahce",kg:1470,f:28,mal:16000,fidan:55000,gun:7,tekrar:5,b:["ege","gd"],il:[45,20,35],renk:"#7b4a8f"},
+  incir:{ad:"İncir",ic:"🟣",tip:"bahce",kg:690,f:70,mal:18000,fidan:60000,gun:8,tekrar:6,b:["ege"],il:[9,35],renk:"#6d5a8a"},
+  findik:{ad:"Fındık",ic:"🌰",tip:"bahce",kg:190,f:170,mal:9000,fidan:50000,gun:9,tekrar:6,b:["kar"],il:[28,52,61,55],renk:"#8a6235"},
+  cay:{ad:"Çay",ic:"🍃",tip:"bahce",kg:1190,f:23,mal:12000,fidan:40000,gun:7,tekrar:4,b:["kar"],il:[53,61,8],renk:"#3f8f4a"},
+  kayisi:{ad:"Kayısı",ic:"🍑",tip:"bahce",kg:680,f:45,mal:16000,fidan:55000,gun:8,tekrar:6,b:["dog","ic"],il:[44,23],renk:"#f0a040"},
+  portakal:{ad:"Portakal",ic:"🍊",tip:"bahce",kg:3400,f:16,mal:22000,fidan:60000,gun:8,tekrar:6,b:["akd"],il:[7,33,1,31],renk:"#f08a24"},
+  fistik:{ad:"Antep fıstığı",ic:"🥜",tip:"bahce",kg:90,f:420,mal:14000,fidan:65000,gun:10,tekrar:7,b:["gd"],il:[27,63,2],renk:"#9dbb5a"},
+  kiraz:{ad:"Kiraz",ic:"🍒",tip:"bahce",kg:620,f:85,mal:21000,fidan:70000,gun:8,tekrar:6,b:["ege","ic","mar"],il:[3,32,42,45],renk:"#b5182f"}
 };
 const ET={ad:"Besi danası",ic:"🐂"};
 const TIPLER={
   tarla:{ad:"Tarla",lvl:0},kanatli:{ad:"Kanatlı",lvl:0},sera:{ad:"Sera",lvl:1},sut:{ad:"Süt çiftliği",lvl:1},bahce:{ad:"Bahçe",lvl:2},besi:{ad:"Besi",lvl:2}
 };
 const OFIS=[
-  {ad:"Konteyner ofis",max:2,c:0},{ad:"Köy ofisi",max:3,c:1500000},{ad:"Kasaba bürosu",max:5,c:6000000},
-  {ad:"Tarım plaza",max:8,c:25000000},{ad:"Holding kulesi",max:12,c:120000000}
+  {ad:"Konteyner ofis",max:3,c:0},{ad:"Köy ofisi",max:5,c:1500000},{ad:"Kasaba bürosu",max:8,c:6000000},
+  {ad:"Tarım plaza",max:12,c:25000000},{ad:"Holding kulesi",max:18,c:120000000}
 ];
 const DONATI={
   kuyu:{ad:"Sondaj kuyusu",d:"Kuru arazide sulu tarım yapılabilir",t:["tarla","sera","bahce"],c:()=>380000},
@@ -324,11 +324,11 @@ const MAKINE={
   bicer:{ad:"Biçerdöver",d:"Tarlada hasat kaybı azalır: verim %6 artar",c:6500000}
 };
 const YATIRIM=[
-  {k:"sulama",ad:"Sulama kooperatifi payı",c:600000,g:4800},
-  {k:"depo",ad:"Lisanslı depo hissesi",c:2500000,g:20000},
-  {k:"tohum",ad:"Tohum ıslah merkezi ortaklığı",c:9000000,g:72000},
-  {k:"biyogaz",ad:"Bölgesel biyogaz tesisi",c:30000000,g:240000},
-  {k:"terminal",ad:"Tarım ihracat terminali payı",c:120000000,g:960000}
+  {k:"sulama",ad:"Sulama kooperatifi payı",c:600000,g:6000},
+  {k:"depo",ad:"Lisanslı depo hissesi",c:2500000,g:25000},
+  {k:"tohum",ad:"Tohum ıslah merkezi ortaklığı",c:9000000,g:90000},
+  {k:"biyogaz",ad:"Bölgesel biyogaz tesisi",c:30000000,g:300000},
+  {k:"terminal",ad:"Tarım ihracat terminali payı",c:120000000,g:1200000}
 ];
 const IHALE_T=[
   {ad:"Park ve refüj ağaçlandırma",k:"{il} Belediyesi",m:0,b:[1.2e6,3e6],s:3},
@@ -480,13 +480,13 @@ function plan(D){
     P.gelir=P.kg*piyasa(D.urun)*P.fm;
   }else if(D.tip==="sut"){
     const max=a.donum*5;P.adet=clamp(D.adet,1,max);P.max=max;const ic=[75000,115000,170000][D.irk],sc=[0,450000,2600000][D.sagim],sm=[1,1.12,1.28][D.sagim];
-    P.base=P.adet*(ic+22000)+sc;P.gun=3*gunM;P.net=P.adet*(ic+22000)*.015*sm*hayvanFit("sut",a.il)*hayM;P.litre=P.adet*[12,22,32][D.irk];
+    P.base=P.adet*(ic+22000)+sc;P.gun=3*gunM;P.net=P.adet*(ic+22000)*.022*sm*hayvanFit("sut",a.il)*hayM;P.litre=P.adet*[12,22,32][D.irk];
   }else if(D.tip==="besi"){
     const max=a.donum*8;P.adet=clamp(D.adet,1,max);P.max=max;const dc=[42000,65000,90000][D.irk],ye=[7000,8500,10000][D.irk];
-    P.base=P.adet*(dc+ye+14000);P.yenile=P.adet*(dc+ye);P.gun=[8,7,6][D.irk]*gunM;P.birim=(dc+ye)*(1+.0145*[8,7,6][D.irk]*hayvanFit("besi",a.il)*hayM)/.84;P.gelir=P.adet*P.birim;
+    P.base=P.adet*(dc+ye+14000);P.yenile=P.adet*(dc+ye);P.gun=[8,7,6][D.irk]*gunM;P.birim=(dc+ye)*(1+.021*[8,7,6][D.irk]*hayvanFit("besi",a.il)*hayM)/.84;P.gelir=P.adet*P.birim;
   }else if(D.tip==="kanatli"){
     const max=a.donum*2;P.adet=clamp(D.adet,1,max);P.max=max;const kc=[70000,130000][D.kumes];
-    P.base=P.adet*(95000+kc);P.gun=2.5*gunM;P.net=P.adet*(95000+kc)*.016*(D.kumes?1.12:1)*hayM;
+    P.base=P.adet*(95000+kc);P.gun=2.5*gunM;P.net=P.adet*(95000+kc)*.024*(D.kumes?1.12:1)*hayM;
   }
   if(S.indirim)P.indirim=Math.round(P.base*S.indirim);
   for(const k in DONATI){const d=DONATI[k];if(!d.t.includes(D.tip)||!D.don[k])continue;if(k==="kuyu"&&a.su!=="kuru")continue;const c=d.c(P);P.don+=c;P.kalem.push([d.ad,c])}
@@ -883,13 +883,13 @@ EKRAN.hal=()=>{const sat=k=>S.projeler.filter(p=>p.urun===k&&p.stok>0).reduce((a
   <div class="hal">${rows.map(r=>{const d=degisim(r.k);return`<div class="hrow"><span class="hic">${r.ic}</span><span class="hn"><b>${r.ad}</b>${r.hm!==undefined?`<small class="sub">Hasat: ${MEVSIM[r.hm]}${r.hm===mevsim()?" (fiyat düşük)":(r.hm+2)%4===mevsim()?" (fiyat yüksek)":""}</small>`:""}${r.stok?`<small class="pos">${ton(r.stok)} stokta</small>`:""}</span>${spark((S.fg||{})[r.k],90,30,d>=0?"var(--green)":"var(--red)",r.ad+" fiyat seyri")}<span class="hp num"><b>${r.b==="kg"?tl(r.f)+"/kg":nf(r.f)}</b><small class="${d>0?"pos":d<0?"negc":""}">${d>0?"▲":d<0?"▼":"·"} %${Math.abs(d*100).toFixed(1).replace(".",",")}</small></span></div>`}).join("")}</div>`};
 
 const GOREV=[
-  {ad:"İlk araziyi al",d:"Haritadan bir ilçe seç ve tapu al.",ok:()=>S.arsalar.length>=1,o:250000},
-  {ad:"İlk projeyi başlat",d:"Arazinde tarla ya da kümes kur.",ok:()=>S.projeler.some(p=>p.D),o:150000},
-  {ad:"İlk hasadı kaldır",d:"Ekin olgunlaşınca hasadı kaldır.",ok:()=>S.stat.hasat>=1,o:200000},
-  {ad:"Tüccarla anlaş",d:"Bir tüccarla pazarlık edip satış yap.",ok:()=>(S.stat.pazarlik||0)>=1,o:250000},
-  {ad:"Personel al",d:"Ziraat mühendisi ya da başka bir çalışan işe al.",ok:()=>Object.values(S.personel).some(Boolean),o:300000},
-  {ad:"İkinci ili aç",d:"Haritadan yeni bir şehir aç.",ok:()=>S.acik.length>=2,o:500000},
-  {ad:"İhaleye teklif ver",d:"Kamu ihalelerinden birine zarf at.",ok:()=>(S.stat.teklif||0)>=1,o:300000},
+  {ad:"İlk araziyi al",d:"Haritadan bir ilçe seç ve tapu al.",ok:()=>S.arsalar.length>=1,o:500000},
+  {ad:"İlk projeyi başlat",d:"Arazinde tarla ya da kümes kur.",ok:()=>S.projeler.some(p=>p.D),o:300000},
+  {ad:"İlk hasadı kaldır",d:"Ekin olgunlaşınca hasadı kaldır.",ok:()=>S.stat.hasat>=1,o:500000},
+  {ad:"Tüccarla anlaş",d:"Bir tüccarla pazarlık edip satış yap.",ok:()=>(S.stat.pazarlik||0)>=1,o:500000},
+  {ad:"Personel al",d:"Ziraat mühendisi ya da başka bir çalışan işe al.",ok:()=>Object.values(S.personel).some(Boolean),o:600000},
+  {ad:"İkinci ili aç",d:"Haritadan yeni bir şehir aç.",ok:()=>S.acik.length>=2,o:1000000},
+  {ad:"İhaleye teklif ver",d:"Kamu ihalelerinden birine zarf at.",ok:()=>(S.stat.teklif||0)>=1,o:600000},
   {ad:"Köy ofisine taşın",d:"Merkezini büyüt, sera ve süt çiftliği açılsın.",ok:()=>S.ofis>=1,o:750000},
   {ad:"Sera ya da süt çiftliği kur",d:"Yeni açılan türlerden birini dene.",ok:()=>S.projeler.some(p=>p.tip==="sera"||p.tip==="sut"),o:1000000},
   {ad:"Bir ihale kazan",d:"En düşük geçerli teklifi ver.",ok:()=>(S.stat.ihaleK||0)>=1,o:1500000},
@@ -991,7 +991,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b
   case"yariPaz":{const o=S.teklifler.find(x=>x.id===d.id);if(!o)break;if(o.pazarlik>=2){toast(`${o.kim}: "Daha fazla inemem evladım."`);break}o.pazarlik++;
     if(Math.random()<.55){o.pay=Math.max(.25,o.pay-.05);toast(`${o.kim}: "Peki, %${Math.round(o.pay*100)} olsun."`,"ev")}else{S.teklifler=S.teklifler.filter(x=>x!==o);toast(`${o.kim} kırıldı, teklifini geri çekti.`,"bad")}ciz(1);break}
   case"yardim":pencere(`<h3>Nasıl oynanır?</h3><div class="note" style="font-size:13px;line-height:1.6">
-    1. Haritadan bir il seç. Konya açık, diğer illeri parayla açarsın.<br>2. İlçe seçip portföyden tapu al. Toprak sınıfı ve su durumu verimi belirler.<br>3. Araziye proje kur: tarla, sera, bahçe, süt çiftliği, besi ya da kanatlı. Bölgenin yöresel ürünü %20 fazla verir.<br>4. Ekin olgunlaşınca hasadı kaldır, tüccarla pazarlık et ya da hale ver. Süt ve yumurta tesisleri her gün gelir getirir.<br>5. Görevler ilk adımlarda yol gösterir. Para biriktikçe ihalelere gir, kredi çek, personel ve makine al, merkezini büyüt.<br>Bir oyun günü yaklaşık 45 saniye. Oyun kapalıyken de en fazla ${OFFLINE_MAX} gün işler.</div><button class="btn gold" data-a="kapatm">Başla</button>`);M={t:"x"};break;
+    1. Haritadan bir il seç. Konya açık, diğer illeri parayla açarsın.<br>2. İlçe seçip portföyden tapu al. Toprak sınıfı ve su durumu verimi belirler.<br>3. Araziye proje kur: tarla, sera, bahçe, süt çiftliği, besi ya da kanatlı. Bölgenin yöresel ürünü %20 fazla verir.<br>4. Ekin olgunlaşınca hasadı kaldır, tüccarla pazarlık et ya da hale ver. Süt ve yumurta tesisleri her gün gelir getirir.<br>5. Görevler ilk adımlarda yol gösterir. Para biriktikçe ihalelere gir, kredi çek, personel ve makine al, merkezini büyüt.<br>Bir oyun günü ${GUN/1000} saniye. Oyun kapalıyken de en fazla ${OFFLINE_MAX} gün işler.</div><button class="btn gold" data-a="kapatm">Başla</button>`);M={t:"x"};break;
   case"odul":{const g=GOREV[S.gorev||0];if(g&&g.ok()){para(g.o);S.gorev=(S.gorev||0)+1;toast(`Görev tamam: ${g.ad}. +${tl(g.o,1)}`,"ev");ciz(1)}break}
   case"cark":cark();break;case"cevir":cevir();break;
   }
