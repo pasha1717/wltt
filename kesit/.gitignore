@@ -4,3 +4,4 @@ modeller/
 client_secret*.json
 token.json
 kanallar.txt
+__pycache__/
