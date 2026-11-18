@@ -516,7 +516,7 @@ def aciklama_yaz(b, uretilen, cikti):
         et = " ".join("#" + re.sub(r"\W", "", e) for e in s.get("etiketler", []) if e)
         sat += [f"## {f.name}", "", f"**Başlık:** {s['baslik']}", "",
                 f"{s.get('aciklama', '')}".strip(), "", f"Kaynak: {b['kanal']} yayını", "",
-                f"{et} #shorts".strip(), "", f"(Yayındaki an: {int(s['bas']) // 60}:{int(s['bas']) % 60:02d})", ""]
+                (et if "#shorts" in et.lower() else f"{et} #shorts").strip(), "", f"(Yayındaki an: {int(s['bas']) // 60}:{int(s['bas']) % 60:02d})", ""]
     (cikti / "aciklamalar.md").write_text("\n".join(sat), encoding="utf-8")
 
 
