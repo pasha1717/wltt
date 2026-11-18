@@ -443,7 +443,7 @@ def altyazi_yaz(kelimeler, bas, son, dil, dosya, mod, baslik="", sansur=True):
     kel = [w for w in kelimeler if w["b"] >= bas - 0.1 and w["s"] <= son + 0.1 and w["k"]]
     if sansur:
         kel = [{**w, "k": maskele(w["k"])} if kufur_mu(w["k"]) else w for w in kel]
-    alt = {"bulanik": 420, "yatay": 70}.get(mod, 560)
+    alt = {"bulanik": 420, "yatay": 190}.get(mod, 560)  # yatayda oyunun kendi altyazısının üstünde
     gx, gy = (1920, 1080) if mod == "yatay" else (1080, 1920)
     fa, fb, hiza_b = (58, 44, 7) if mod == "yatay" else (80, 62, 8)
     satirlar = ["[Script Info]", "ScriptType: v4.00+", f"PlayResX: {gx}", f"PlayResY: {gy}", "",
