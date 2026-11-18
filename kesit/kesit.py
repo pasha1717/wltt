@@ -24,7 +24,9 @@ CEREZ = []  # --cerez ile doldurulur (YouTube "bot değilim" doğrulaması için
 
 
 def ytdlp_temel():
-    cmd = [sys.executable, "-m", "yt_dlp", "-q", "--no-warnings", "--no-playlist", "-N", "8"] + CEREZ
+    cmd = [sys.executable, "-m", "yt_dlp", "-q", "--no-warnings", "--no-playlist", "-N", "8",
+           # "Too Many Requests" (429) gibi geçici engellerde bekleyip yeniden dene
+           "--extractor-retries", "6", "--retry-sleep", "extractor:exp=10:300", "--retry-sleep", "http:exp=5:120"] + CEREZ
     if not shutil.which("deno") and shutil.which("node"):
         cmd += ["--js-runtimes", "node:" + shutil.which("node")]
     return cmd
@@ -74,6 +76,7 @@ def bilgi_al(url, is_dizini):
         ipucu = "\nYouTube doğrulama istiyorsa: --cerez chrome (ya da firefox, edge)" if "bot" in hata else ""
         sys.exit(f"Yayın bilgisi alınamadı: {hata}{ipucu}")
     j = json.loads(r.stdout)
+    (is_dizini / "vod.info.json").write_text(r.stdout)  # sonraki indirmeler platforma yeniden sormasın
     b = {"url": url, "baslik": j.get("title") or "", "sure": j.get("duration") or 0,
          "kanal": j.get("uploader") or j.get("channel") or j.get("uploader_id") or "",
          "platform": j.get("extractor_key", ""), "canli": j.get("live_status") == "is_live" or bool(j.get("is_live"))}
@@ -82,6 +85,24 @@ def bilgi_al(url, is_dizini):
 
 
 # ---------- 2. Ses ve gürültü haritası ----------
+def indir(b, is_dizini, secenekler):
+    """Önce kayıtlı bilgiyle (platforma istek atmadan) indir; olmazsa adresle, 429'da bekleyerek tekrar dene."""
+    import time
+    info = is_dizini / "vod.info.json"
+    for deneme in range(5):
+        kaynak = ["--load-info-json", str(info)] if info.exists() and deneme == 0 else [b["url"]]
+        r = subprocess.run(ytdlp_temel() + secenekler + kaynak, capture_output=True, text=True)
+        if r.returncode == 0:
+            return
+        hata = (r.stderr.strip().splitlines() or ["?"])[-1]
+        if deneme == 0 and info.exists():
+            continue  # kayıtlı adresin süresi dolmuş olabilir: hemen adresle dene
+        bekle = 60 * 2 ** deneme
+        print(f"  indirme başarısız ({hata[:120]}); {bekle} sn sonra tekrar", flush=True)
+        time.sleep(bekle)
+    sys.exit(f"İndirilemedi: {hata}")
+
+
 def ses_indir(b, is_dizini, aralik):
     hedef = is_dizini / "ses.m4a"
     if hedef.exists():
@@ -89,7 +110,7 @@ def ses_indir(b, is_dizini, aralik):
     cmd = ytdlp_temel() + ["-f", "ba/bestaudio/worst", "-o", str(is_dizini / "ses_ham.%(ext)s")]
     if aralik:
         cmd += ["--download-sections", f"*{aralik[0]}-{aralik[1]}"]
-    calistir(cmd + [b["url"]])
+    indir(b, is_dizini, cmd[len(ytdlp_temel()):])
     ham = next(is_dizini.glob("ses_ham.*"))
     calistir(["ffmpeg", "-v", "error", "-y", "-i", ham, "-vn", "-ac", "1", "-c:a", "aac", "-b:a", "96k", hedef])
     ham.unlink()
@@ -262,7 +283,7 @@ def sec(metinler, b, adet, is_dizini, llm, mod):
                      "tek başına anlaşılan anlar.\n")
         istem = (
             f"Bir canlı yayından ({b['kanal']}, \"{b['baslik']}\") aday bölümler aşağıda. Saniyeler yayının başından itibaren.\n"
-            + hedef +
+            + hedef
             + ("Bunlar uzun bir YouTube 'funny moments' derlemesinin bölümleri olacak; en iyisini ilk sıraya koy.\n" if UZUN else "")
             + f"Her seçim {'20-89' if UZUN else '15-58'} sn olsun, adayın bas-son aralığında kalsın, bir cümlenin ortasında başlayıp bitmesin.\n"
             "Başlık kısa ve merak uyandırıcı olsun (en fazla 45 karakter, emoji yok), yayının dilinde yaz.\n"
@@ -468,9 +489,9 @@ def kesitleri_uret(b, secim, metinler, is_dizini, cikti, model_adi, kanca=True, 
         pay = 2.0
         ham = is_dizini / f"ham_{anahtar}.mp4"
         if not ham.exists():
-            calistir(ytdlp_temel() + ["-f", "bv*[height<=1080][vcodec^=avc1]+ba/bv*[height<=1080]+ba/b[height<=1080]/b", "--merge-output-format", "mp4",
+            indir(b, is_dizini, ["-f", "bv*[height<=1080][vcodec^=avc1]+ba/bv*[height<=1080]+ba/b[height<=1080]/b", "--merge-output-format", "mp4",
                                       "--download-sections", f"*{max(0, s['bas'] - pay)}-{s['son'] + pay}",
-                                      "-o", str(ham), b["url"]])
+                                      "-o", str(ham)])
         W, H, yuz = (0, 0, None) if UZUN else yuz_bul(ham)
         mod, filtre = yerlesim(W, H, yuz)
         print(f"  kesit {i}: {mod} yerleşim")
