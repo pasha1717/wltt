@@ -12,5 +12,6 @@ node kopru.js --deneme --oyun fetih
 
 ## Fetih'te hazır marş
 
-`fetih-muzik/liste.js`: `ceddin-deden.mp3` kaydının ölçülmüş vuruşları. Ses dosyası depoda yok (telif); kendi kopyanı
-`oyunlar/fetih/muzik/ceddin-deden.mp3` olarak koy, `liste.js`'i yanına indir.
+Zip, `oyunlar/fetih/muzik/` içinde Ceddin Deden kaydını (`ceddin-deden.mp3`) ve vuruş listesini (`liste.js`) taşır.
+Köprü açılınca "Müzik: 1 hazır parça" yazar. Oyunun kendi havalarına dönmek için `oyunlar/fetih/muzik` klasörünü sil.
+Kaydın kullanım hakkı depo sahibine aittir; telifliyse TikTok yayında sesi kısabilir.
